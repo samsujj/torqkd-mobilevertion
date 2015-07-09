@@ -1,0 +1,72 @@
+<!--<style>
+label.has-error{
+	color: #f8931f !important;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100% !important;
+    display: inline-block;
+    margin: 0px auto !important;
+    padding: 0 !important;
+    text-align: left !important;
+    font-weight: normal !important;
+}
+.form-group{
+	margin:0 !important;
+	width:100% !important;
+}
+</style>-->
+<div class="next-body">
+  <div class="register_wrapper">
+    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
+    <div class="menupart"><img  alt="#" src="images/bgimage4.png" ></div>
+    <div class="activities_contain">
+      <h2><img  alt="#" src="images/invitefrds.jpg"></h2>
+     
+    <div class="inviteFriends"> 
+	<form angular-validator-submit="sendEmail()" name="sendEmailForm" class="form-horizontal" novalidate angular-validator>
+   
+    <h4>Enter Your Friends' Email Addresses</h4>
+	<div>
+    <textarea id="friend_emails" name="senderList" placeholder="ADD EMAIL ADDRESSES SEPARATED BY COMMAS"
+						validate-on="sub"
+                        class = "form-control"
+                        ng-model = "form.senderList"
+                        required-message="'Please Enter Sender Email.'"
+                        required></textarea> 
+    </div>
+	<h5>Email Message</h5>
+    <textarea id="email_text"  name="mailBody"
+						validate-on="sub"
+                        class = "form-control"
+                        ng-model = "form.mailBody"
+                        required-message="'Please Enter Mail Body.'"
+                        required></textarea>
+    <input class="see-btn2" type="submit" value="EMAIL" >
+	</form>
+      
+    <h6>INVITE FRIENDS VIA YOUR ONLINE ADDRESS BOOK</h6>
+      
+    <select id="social_select" ng-model="social_select">
+		<option value="" data-original-title="">SELECT SERVICE</option>
+		<option value="fb" data-original-title="">FACEBOOK</option>
+	</select>
+
+
+<input class="see-btn2" type="button" value="INVITE" ng-click="social_share()" name="inviter_submit" data-original-title="">
+<div style="clear:both;"></div>
+
+     <input  class="activities-submit" type="button" ng-click="next_n()" value="next step" >  
+      
+      </div> 
+        
+   
+        
+       
+       
+       
+       
+        
+    </div>
+  </div>
+  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+</div>

@@ -1,0 +1,83 @@
+<html lang="en" ng-app="torqdTest">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<base ng-init="baseUrl = 'http://192.168.0.131/torqkd'" />
+
+<script type="text/javascript">
+    FileAPI = {
+      debug: true,
+      forceLoad: true, html5: false, //to debug flash in HTML5 browsers
+      wrapInsideDiv: true, //experimental for fixing css issues
+      //only one of jsPath or jsUrl.
+      //jsPath: '/js/FileAPI.min.js/folder/',
+      jsUrl: 'js/FileAPI.min.js',
+
+      //only one of staticPath or flashUrl.
+      //staticPath: '/flash/FileAPI.flash.swf/folder/'
+      flashUrl: 'js/FileAPI.flash.swf'
+    };
+  </script>
+
+  <title>Torqkd Demo</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="all" />
+  <link rel="stylesheet" href="css/popupwindow.css">
+  <link rel="stylesheet" href="css/ngDialog.css">
+  <link rel="stylesheet" href="css/ngDialog-theme-default.css">
+  <link rel="stylesheet" href="css/topcoat-mobile-light.min.css"/>
+  <link rel="stylesheet" href="css/ng-mobile-menu.min.css">
+ 
+<style>
+        #sp-page {
+            background-color: #DFE2E2;
+        }
+        #sp-page > p {
+            padding: 10px;
+        }
+    </style>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/angular.js"></script>
+  <script src="js/ui-bootstrap-0.13.0.min.js"></script>
+  <script src="js/imgLiquid-min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-mobile.js"></script>
+  <script src="js/angular-cookies.js"></script>
+  <script src="js/angular-animate.min.js"></script>
+  <script src="js/angular-touch.min.js"></script>
+  <script src="js/TweenMax.min.js"></script>
+  <script src="js/angular-route.js"></script>
+  <script src="js/lodash.underscore.js"></script>
+  <script src="js/angular-google-maps-dev-mapped.js"></script>
+  <script src="js/angular-sanitize.min.js"></script>
+  <script src="js/videogular.js"></script>
+  <script src="js/ng-file-upload.js"></script>
+  <script src="js/ngDialog.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="js/angular-youtube-embed.js"></script>
+  <script src="http://code.highcharts.com/stock/highstock.src.js"></script>
+  <script src="js/highcharts-ng.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <script src="js/angular-simple-slider.js"></script>
+ <script type="text/javascript" src="js/ng-mobile-menu.min.js"></script>
+ <script src="js/html2canvas.js"></script>
+ <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/angular-validator.js"></script>
+  
+ 
+</head>
+<body>
+<div id="fb-root"></div>
+
+  <div ng-view></div>
+  
+  <script type="text/ng-template" id="firstDialogId">
+        <div class="ngdialog-message">
+            <div class="video-container"><iframe src="https://www.youtube.com/embed/kkUZRGrF9Ig?rel=0&autoplay=0" frameborder="0" allowfullscreen></iframe></div>
+        </div>
+    </script>
+
+</body>
+</html>

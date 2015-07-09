@@ -1,0 +1,67 @@
+<style>
+
+.newPopup .ngdialog-content{
+	animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+
+	position:relative;
+	margin:0 auto;
+	width:291px;
+	height:189px;
+		background: url({{baseUrl}}/torqkd_demo/images/hover_mobile.png) no-repeat;
+
+}
+</style>
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+	<div class="community">
+		<h4 ng-show="isFrndList">Friends</h4><br />
+		<h4 ng-show="isConnectList">Community</h4><br />
+			
+		<div ng-show="isFrndList" class="left-text">Below are all of your Torqkd friends. To remove a friendship connection, place your mouse over the friend's profile picture and click "remove" on the pop-up window. </div>
+		<div ng-show="isConnectList" class="left-text">Below are individuals that participate in the Torqkd community. To view the sports they follow, place your mouse on their image. Click "connect" to initate a friendship request. </div>
+		
+		<div class="right-text">
+			<img  src="{{user_image}}" style="float: left;">
+			<p><strong>Pending Friendship</strong><br/>Orange border indicates a pending friendship request</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="clear"></div>
+		
+		<!--<a href="#" class="back"> Back</a>-->
+		
+		<div class="clear"></div>
+		
+		<div class="search-new">
+			<div class="select-div">
+				<label>Search By Name :</label> <input ng-model="searchText.user_name" class="inputsearch">
+				<div class="clear"></div>
+			</div>
+			
+			<div class="select-div">
+				<label> Search By Sports :    </label>
+				<select id="select-search" ng-model="searchText.spList">
+					<option value="" selected="selected">SELECT ONE</option>
+				
+                </select>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="bottom-img">
+			<div class="img-con">
+				<div ng-repeat="item in frnddet | filter:searchText">
+					<img ng-class="(item.status == 1 || item.frnd_type == 1 || item.frnd_type == 2)?'fr_request':''" src="{{item.user_image}}" ng-click="userDet(item,$index)" style="cursor:pointer;">
+				</div>
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>

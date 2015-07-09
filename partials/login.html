@@ -1,0 +1,82 @@
+<!--<style>
+label.has-error{
+	color: #f8931f !important;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 84% !important;
+    display: block;
+    margin: 0px auto !important;
+    padding: 0 !important;
+    text-align: left !important;
+    font-weight: normal !important;
+}
+.form-group{
+	margin:0 !important;
+	width:100% !important;
+}
+</style>-->
+
+<div class="login-body">
+  <div class="login-top">
+     <div class="login-wrapper">    <div class="logo" > <a href="#/index"> <img  src="images/logo.png" alt="#"/>   </a> </div></div>
+  </div>
+<div class="login-box">
+  <form angular-validator-submit="submitloginForm()" name="loginForm" class="form-horizontal" novalidate angular-validator> 
+		<label class="has-error" ng-show="msgFlag">Incorrect Login Information..</label>
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<input type="email" id="UserManager_email" name="email" placeholder="EMAIL"
+						validate-on="blur"
+                        class = "form-control UserLogIn_email"
+                        ng-model = "form.email"
+                        required-message="'Email cannot be blank.'"
+						invalid-message="'Enter valid email address.'"
+                        required>
+			</div>
+		</div>
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
+						validate-on="dirty"
+                        class = "form-control UserLogIn_password"
+                        ng-model = "form.password"
+                        required-message="'Password cannot be blank.'"
+                        required>
+			</div>
+		</div>
+
+   <div class="remember-div">
+<input id="remember_me" type="checkbox" value="1" name="remember" ng-model="form.remember" >
+<span data-original-title="">Remember Me</span>
+<div class="clear"></div>
+  </div>
+						
+<button  class="loginbtn"  type="submit">LogIn</button>
+		</form>
+		<div class="login-bottom-div">
+<a  href="#/signup" class="link1">Register for an Account</a>
+<a  href="javascript:void(0)" class="link2">Forgot Password?</a>
+<div class="clear"></div>
+</div>
+
+		</div>
+
+		 
+  
+  <div class="footer-menu2">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+  
+  
+  
+
+
+</div>

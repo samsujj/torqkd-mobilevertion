@@ -1,0 +1,122 @@
+<div class="register-body">
+  <div class="register_wrapper">
+    <div class="logo" > <a href="#/index"> <img  src="images/logo.png" alt="#"/> </a> </div>
+    <div class="menupart"><img src="images/bgimage.png" alt="#"></div>
+    <div class="register_form">
+	<form angular-validator-submit="submitsignUpForm()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+      <h1><img alt="#" src="images/getstarted.jpg"></h1>
+      
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+				<input type="text" id="UserManager_lname" name="UserManager[fname]" placeholder="FIRST NAME"
+						validate-on="blur"
+                        class = "form-control register_input"
+                        ng-model = "form.fname"
+                        required-message="'First Name cannot be blank.'"
+                        required>
+			</div>
+		</div>
+
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+				<input type="text" id="UserManager_lname" name="UserManager[lname]" placeholder="LAST NAME"
+						validate-on="blur"
+                        class = "form-control register_input"
+                        ng-model = "form.lname"
+                        required-message="'Last Name cannot be blank.'"
+                        required>
+			</div>
+		</div>
+
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+				<input type="email" id="UserManager_email" name="UserManager[email]" placeholder="YOUR EMAIL"
+						validate-on="blur"
+                        class = "form-control register_input"
+                        ng-model = "form.email"
+                        required-message="'Email cannot be blank.'"
+						invalid-message="'Enter valid email address.'"
+                        required>
+			</div>
+		</div>
+
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<input type="email" name="UserManager[email2]" placeholder="CONFIRM YOUR EMAIL"
+						validate-on="dirty"
+                        class = "form-control register_input"
+                        ng-model = "form.email2"
+						validator = "form.email === form.email2"
+                        invalid-message = "'Emails do not match!'"
+                        >
+			</div>
+		</div>
+
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+				<input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
+						validate-on="dirty"
+                        class = "form-control register_input"
+                        ng-model = "form.password"
+                        required-message="'Password cannot be blank.'"
+                        required>
+			</div>
+		</div>
+
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<input type="password" id="UserManager_password2" name="UserManager[password2]" placeholder="CONFIRM PASSWORD"
+						validate-on="dirty"
+                        class = "form-control register_input"
+                        ng-model = "form.password2"
+                        validator = "form.password === form.password2"
+                        invalid-message = "'Passwords do not match!'"
+                        >
+			</div>
+		</div>
+ 
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+				<input type="text" id="UserManager_city" name="UserManager[city]" placeholder="CITY"
+						validate-on="blur"
+                        class = "form-control register_input"
+                        ng-model = "form.city"
+                        required-message="'City cannot be blank.'"
+                        required>
+			</div>
+		</div>
+ 
+        <div class="form-group">
+			<div class="col-sm-10" style="width:100%; padding:0;">
+				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+						
+				<select id="UserManager_state" name="UserManager[state]" class = "register_select form-control" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
+					<option value="">SELECT YOUR STATE</option>
+				</select>
+						
+						
+			</div>
+		</div>
+         
+         
+         <p style="font-size: 11px;" >
+By proceeding to the next step, you agree to our
+<a style="color: #ff0000;" href="javascript:void(0)" > terms of service </a>
+as well as our
+<a  style="color: #ff0000;" href="javascript:void(0)"> privacy </a>
+.
+</p>
+
+
+<button  class="NextStep_btn" type="submit">NEXT</button>
+   </form>     
+        
+    </div>
+  </div>
+  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+</div>

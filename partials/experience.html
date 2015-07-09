@@ -1,0 +1,75 @@
+<style type="text/css">
+.ngdialog-content{ background-color: #f6f9fa !important;
+    border: 5px solid #f7941e !important;
+    border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+
+</style>
+
+<div class="experience-wrapper">
+  <div class="logo" > 
+  <a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo.png"/> </a> 
+  <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo.png"/> </a> 
+
+</div>
+  
+  <div class="mobile-join-btn"  ng-if="(sessUser==0)"> <a href="#/signup">JOIN</a></div>
+  
+  <div class="spSlider" ng-include="'partials/experience_1.html'"></div>
+ 
+
+<div class="video-contain" ng-include="'partials/experience_2.html'""></div>
+
+
+<div ng-include="'partials/social_tab.html'""></div>
+  
+  
+            
+  <div class="tab-bottom-con">
+  
+    <div class="link2" ><a href="javascript:void(0);">VIEW ROUTES</a></div> 
+
+
+<div class="albums-div" ng-include="'partials/experience_3.html'"></div>
+
+
+<div class="link1" ><a href="javascript:void(0);">FORUMS</a></div>
+
+
+<div class="albums-div">
+	<a  href="javascript:void(0);">
+		<img alt="" src="images/hs1-0-02.jpg">
+		<h2 data-original-title="">ALBUMS</h2>
+	</a>
+</div>
+
+
+<div class="albums-div" ng-include="'partials/experience_4.html'"></div>
+
+
+
+<div class="albums-div" style="padding:0; width:100%;" ng-include="'partials/experience_5.html'"></div>
+
+<div class="banner2" ng-include="'partials/experience_6.html'"></div>
+<div style="clear:both;"></div>
+
+<div class="banner2" ng-include="'partials/experience_7.html'"></div>
+<div style="clear:both;"></div>
+
+
+
+  </div>
+  
+ 
+  
+ <div class="footer-menu1">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div> 
+</div>

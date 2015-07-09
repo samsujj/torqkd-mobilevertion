@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Torqkd</title>
+<link href="css/style.css" type="text/css" rel="stylesheet" media="all" />
+</head>
+<body>
+<div class="connect-body">
+  <div class="register_wrapper">
+    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
+    <div class="menupart"><img  alt="#" src="images/bgimage3.png" ></div>
+    <div class="activities_contain">
+      <h1><img  alt="#" src="images/ctop.jpg"></h1>
+      
+      <p style="font-size:12px;" data-original-title="">Click on the profile pictures to connect with other outdoor sports enthusiasts.</p>
+      
+     <div class="top-text"> <h4 style="color:#f8931f; margin: 10px 0; font-family: reservation; font-size: 13px; font-weight: normal; font-style: normal;">
+<span id="friend-count" style="color:##f8931f;">{{count}}</span>
+Friendship requested
+</h4>
+</div>
+        
+    <div class="connect-img">
+		<a href="javascript:void(0)" ng-click="selectUser(n.id); actClass = !actClass" ng-class="actClass ? 'active-pic' : ''" ng-repeat="n in userList" >
+			<img alt="#" src="{{baseUrl}}/uploads/user_image/thumb/{{n.image}}">
+		</a>
+
+<div class="clear"></div>
+     
+     </div>   
+     <input  class="activities-submit" type="button" ng-click="next_c()" value="next step" >     
+        
+       <div class="skip connectskip">
+<a href="javascript:void(0);" data-original-title="">SKIP »</a>
+</div> 
+    </div>
+  </div>
+  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+</div>
+</body>
+</html>

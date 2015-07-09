@@ -1,0 +1,26 @@
+<div>
+    <div id="tabs">
+        <ul>
+            <li ng-repeat="tab in tabs" 
+                ng-class="{active:isActiveTab(tab.url)}" 
+                ng-click="onClickTab(tab)">{{tab.title}}</li>
+        </ul>
+        <div id="mainView">
+            <div ng-include="currentTab"></div>
+        </div>
+    </div>
+    <script type="text/ng-template" id="social.tpl.html">
+		<div id="viewOne" ng-include="'partials/social.html'"></div>
+	</script>
+	
+	<script type="text/ng-template" id="events.tpl.html">
+		<div id="viewTwo" ng-include="'partials/events.html'"></div>
+	</script>
+	
+	<script type="text/ng-template" id="groups.tpl.html">
+		<div id="viewThree" ng-include="'partials/groups.html'"></div>
+	</script>
+	<script type="text/ng-template" id="stats.tpl.html">
+		<div id="viewFour" ng-include="'partials/stats.html'"></div>
+	</script>
+</div>

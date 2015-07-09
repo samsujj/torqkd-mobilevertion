@@ -1,0 +1,35 @@
+<div class="activities-body">
+  <div class="register_wrapper">
+    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
+	
+    <div class="menupart"><img  alt="#" src="images/bgimage2.png" ></div>
+	
+    <div class="activities_contain">
+	
+      <h2><img  alt="#" src="images/selectsports.png"></h2>
+      
+      <div class="sports-table">
+	  
+		<div ng-repeat="n in sportsList">
+	  
+		<h3> {{n.name}}</h3>
+		<ul>
+			<li ng-repeat="m in n.ch">
+				<a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selectSp(m.id); actClass = !actClass"  ng-class="actClass ? 'activeimg' : ''" ><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+				<strong> {{m.name}}</strong>
+			</li>
+		</ul>
+		<div class="clear"></div>
+		
+		</div>
+	  
+ 
+  <input  class="activities-submit" type="button" ng-click="next_a()" value="next step" >
+   
+      </div>
+        
+        
+    </div>
+  </div>
+  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+</div>

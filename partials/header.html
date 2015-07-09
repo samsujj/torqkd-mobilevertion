@@ -1,0 +1,9 @@
+<div class="logo" > 
+<a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo.png"/> </a> 
+<a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo.png"/> </a> 
+</div>
+  
+  
+  <div class="mobile-menu"><a href="javascript:void(0)" ng-click="$spMenu.toggle()"><img src="images/menu.png" alt="#"></a></div>
+  <div class="logout"><a href="javascript:void(0)"><img alt="#" src="images/gear2.png" ></a></div>
+  <div class="clear"></div>

@@ -1,0 +1,29 @@
+<div class="event-tab" ng-repeat="item in eventList track by item.id">
+	<div class="left-part">
+	<h4 style="color:#f79213; font-family: 'reservation'; font-size: 10px;">{{item.sport_name}}</h4>
+	<img alt="#" src="{{item.sport_image}}">
+	</div>
+	<div class="right-part" style="margin-bottom:5px;" >
+	<h1>{{item.name}}</h1>
+	<h3>{{item.address}}</h3>
+	<div class="clear"></div>
+	<div class="date-contain">
+	<span>Date</span>
+	<br />
+	{{item.date}}
+	<br />
+	<span>Time</span>
+	<br />
+	{{item.time}}
+	</div>
+	<div class="event-menu">
+	<a class="viewgrp" style="background: none; border: none; color: #4f5052!important; padding: 0px; box-shadow: none; " href="#/event-details/{{item.id}}">View Event</a>
+	</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<span class="empty" ng-hide="eventList.length">No results found.</span>
+<div ng-show="viewMoreEvent" class="viewMore"><a href="javascript:void(0);" ng-click="viewMoreEvent1()">View More</a></div>
+<div ng-show="viewMoreLoad" class="viewMore"><img src="images/loading_list.gif" /></div>
+

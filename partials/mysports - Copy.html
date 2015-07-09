@@ -1,0 +1,35 @@
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+
+	<div>Sports</div>
+	
+	<div>
+		<img  src="{{user_image}}">
+	</div>
+	
+	<div class="sports-table">
+	  
+		<div ng-repeat="n in sportsList">
+	  
+		<h3> {{n.name}}</h3>
+		<ul>
+			<li ng-repeat="m in n.ch">
+				<a href="javascript:void(0);" style="margin-bottom: 0px;" ><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+				<strong> {{m.name}}</strong>
+			</li>
+		</ul>
+		<div class="clear"></div>
+		
+		</div>
+   
+      </div>
+        
+
+
+
+</div>

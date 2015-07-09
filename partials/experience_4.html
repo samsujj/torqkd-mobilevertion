@@ -1,0 +1,21 @@
+<style>
+.videogular-container {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+}
+audio, canvas, progress, video{ width:100%;}
+
+</style>
+<div ng-hide="{{maintv.type}}" class="videogular-container">
+	<videogular vg-auto-play="autoplay">
+        <vg-media vg-src="vidsources" vg-native-controls="true" vg-loop="true"></vg-media>
+        
+    </videogular>
+	<h3>TORQK'D TV</h3>
+</div>
+<div ng-show="{{maintv.type}}">
+
+</div>
+

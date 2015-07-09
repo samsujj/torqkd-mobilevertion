@@ -1,0 +1,15 @@
+<simple-slider class="gallery1">
+
+	<div ng-repeat="item in slides track by item.id">
+			<img src="{{baseUrl}}/uploads/sports_image/additional/thumb/{{item.additional_image}}" alt="#" style="width:100%;" />
+			<div class="h2text">{{item.sport_name}}</div>
+			<span>
+				<div class="text-div">{{item.tag}}</div>
+				<div class="more"><a href="javascript:void(0)">MORE &raquo;</a> </div>
+				<div class="clear"></div>
+			</span> 
+	</div>
+    
+
+</simple-slider>
+

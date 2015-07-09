@@ -1,0 +1,306 @@
+<style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+
+<div id="sp-page" >
+    <div class="createevent-body">
+      
+<div class="left-part">
+
+  <h2>{{heading}}</h2>
+        <form angular-validator-submit="submiteventForm()" name="eventForm" class="form-horizontal" novalidate angular-validator>
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+                    <input type="text" id="Event_name" name="Event[name]" placeholder="EVENT NAME"
+                           validate-on="blur"
+                           class = "form-control input1"
+                           ng-model = "form.name"
+                           required-message="'Name cannot be blank.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <textarea id="Event_description" name="Event[description]" class="form-control input2" placeholder="DESCRIPTION" ng-model="form.description"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <select id="UserManager_group_id" name="UserManager[group_id]" class = "form-control input10" ng-model = "form.group_id" ng-options="item.name for item in groupList  track by item.id">
+                        <option value="">GROUP EVENT?</option>
+                    </select>
+
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <div class="text-part">
+                If you would like to attch your event to a group to which you belong, select the group in the dropwn down above. Note that all other admins of that group can modify the event.<br />
+                <br />
+                As a site admin, you see all group events, users will only be able to choose groups they are admins of.
+            </div>
+
+            <h3>When</h3>
+
+            <div class="form-part">
+                <div class="when-form">
+                    <span>Date:</span>
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                          
+                            <input type="text" id="Event_from_date" name="Event[from_date]" placeholder="FROM DATE"
+                                   validate-on="blur"
+                                   class = "form-control input-form"
+                                   ng-model = "form.from_date"
+                                   datepicker-popup="{{format}}"
+                                   is-open="opened" ng-required="true" close-text="Close" show-weeks="false"
+                                   ng-focus="open($event)"
+                                   required-message="'Date cannot be blank.'"
+                                   required>
+                        </div>
+                    </div>
+                    <span>To:</span>
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            
+                            <input type="text" id="Event_to_date" name="Event[to_date]" placeholder="TO DATE"
+                                   validate-on="blur"
+                                   class = "form-control input-form"
+                                   ng-model = "form.to_date"
+                                   datepicker-popup="{{format}}"
+                                   is-open="opened1" ng-required="true" close-text="Close" show-weeks="false"
+                                   ng-focus="open1($event)"
+                                   required-message="'Date cannot be blank.'"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <span ng-show="!form.checked">Time:</span>
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                          
+                            <!--<input ng-if="!form.checked" type="text" id="Event_start_time" name="Event[start_time]" placeholder="START TIME"
+                                   validate-on="blur"
+                                   class = "form-control input-form"
+                                   ng-model = "form.start_time"
+                                   required-message="'TIME cannot be blank.'"
+                                   required>-->
+                                   <div class="time-div">
+
+                            <select ng-show="!form.checked" id="Event_start_time_hour" name="Evet[start_time_hour]" class = "form-control input10" ng-model = "form.start_time_hour">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <select ng-show="!form.checked" id="Event_start_time_min" name="Evet[start_time_min]" class = "form-control input10" ng-model = "form.start_time_min">
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                            <select ng-show="!form.checked" id="Event_start_time_meridian" name="Evet[start_time_meridian]" class = "form-control input10" ng-model = "form.start_time_meridian">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                            
+                              <div class="clear"></div>
+                             </div>
+                        </div>
+                    </div>
+
+                    <span ng-show="!form.checked">To:</span>
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            
+                            <!--<input ng-if="!form.checked" type="text" id="Event_end_time" name="Event[end_time]" placeholder="END TIME"
+                                   validate-on="blur"
+                                   class = "form-control input-form"
+                                   ng-model = "form.end_time"
+                                   required-message="'TIME cannot be blank.'"
+                                   required>-->
+                                      <div class="time-div">
+
+                            <select ng-show="!form.checked" id="Event_end_time_hour" name="Evet[end_time_hour]" class = "form-control input10" ng-model = "form.end_time_hour">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <select ng-show="!form.checked" id="Event_end_time_min" name="Evet[end_time_min]" class = "form-control input10" ng-model = "form.end_time_min">
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                            <select ng-show="!form.checked" id="Event_end_time_meridian" name="Evet[end_time_meridian]" class = "form-control input10" ng-model = "form.end_time_meridian">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                                <div class="clear"></div>
+                             </div>
+
+                        </div>
+                    </div>
+
+                    <div class="clear"></div><br />
+
+                    All day&nbsp;&nbsp;<input ng-model="form.checked" value="1" type="checkbox" ng-checked="form.all_day" />
+                </div>
+            </div>
+
+            <h3>Where </h3>
+
+            <div class="when-form2">
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">
+                        <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+                        <input type="text" id="Event_location" name="Event[location]" placeholder="LOCATION NAME"
+                               validate-on="blur"
+                               class = "form-control input1"
+                               ng-model = "form.location"
+                               required-message="'Location cannot be blank.'"
+                               required>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+                <p style="width:95%; padding-bottom:10px; font-style: italic;">Create a location or start typing to search a previously created location.</p>
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+                        <input type="text" id="Event_address" name="Event[address]" placeholder="ADDRESS"
+                               validate-on="blur"
+                               class = "form-control input1"
+                               ng-model = "form.address"
+                               required-message="'Address cannot be blank.'"
+                               required>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+                        <input type="text" id="Event_city" name="Event[city]" placeholder="CITY"
+                               validate-on="blur"
+                               class = "form-control input1"
+                               ng-model = "form.city"
+                               required-message="'City cannot be blank.'"
+                               required>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+
+                        <select id="Event_state" name="Evet[state]" class = "form-control input10" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
+                            <option value="">SELECT YOUR STATE</option>
+                        </select>
+
+
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">
+                        <input type="text" id="Event_zip" name="Event[zip]" placeholder="ZIP"
+                               class = "form-control input1"
+                               ng-model = "form.zip"
+                               >
+                    </div>
+                </div>
+
+
+
+                <select id="Event_country" name="Event[country]" class = "form-control input10" ng-model = "form.country">
+                    <option value="">UNITED STATES</option>
+                </select>
+
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0;">
+                        <input type="url" id="Event_register_url" name="Event[register_url]" placeholder="REGISTRATION URL"
+                               validate-on="blur"
+                               class = "form-control input1"
+                               invalid-message="'Please Enter URL.'"
+                               ng-model = "form.register_url"
+                                >
+                    </div>
+                </div>
+
+            </div>
+
+            <h3>Event Photo </h3>
+            <div class="uploadbox" style="position:relative;">
+                <div id="blah" ng-show="eventImage"> <img src="{{eventImage}}"></div>
+                <input type="button" value="+" class="upload-btn" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                <a rel="tooltip" title="Please Upload An Image Bigger Than 600X300"  style=" margin-left:25px;"><img src="images/help.png"></a>
+
+
+            </div>
+
+
+<div class="right-part">
+            <h1> Sport</h1>
+            <div class="sports-table">
+
+                <div ng-repeat="n in sportsList">
+
+                    <h3> {{n.name}}</h3>
+                    <ul>
+                        <li ng-repeat="m in n.ch">
+                            <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="form.sports_id = m.id; selsp(); actClass = !actClass" ng-class="(actClass || form.sports_id == m.id) ? 'activeimg' : ''" ><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+                            <strong> {{m.name}}</strong>
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+
+                </div>
+
+
+            </div>
+</div>
+
+
+
+
+
+            <button  class="event-btn" type="submit"></button>
+
+        </form>
+    </div>
+    </div>
+</div>

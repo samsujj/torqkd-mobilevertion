@@ -1,0 +1,99 @@
+<style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+        <div class="map_left-con">
+            <div class="header_msg">{{evetDet.name}}</div>
+     
+            <h2>{{evetDet.from_date1}}</h2>
+
+            <h3>DATE/TIME</h3>
+<span>Date(s): {{evetDet.from_date}}-{{evetDet.to_date}}</span><br>
+<span ng-show="evetDet.all_day==1">All Day</span>
+<span ng-hide="evetDet.all_day==1">Time(s): {{evetDet.start_time}}-{{evetDet.end_time}}</span>
+
+            <h3>LOCATION</h3>
+<span>{{evetDet.location}}<br />
+
+    {{evetDet.address}},{{evetDet.city}},{{evetDet.state}}
+</span>
+
+
+            <h3>SPORT</h3>
+            <span>{{evetDet.sports_name}}</span>
+
+            <h3>EVENT DESCRIPTION</h3>
+            <article>{{evetDet.description}}</article>
+            <img ng-show="evetDet.image" src="{{baseUrl}}/uploads/event_image/thumb/{{evetDet.image}}"  style=" margin: 10px 0; display:block; float:left;  max-width:300px;max-height:300px;" />
+            <div style="clear:both;"></div>
+            <div style="clear:both;overflow: hidden;"></div>
+            <a ng-show="evetDet.register_url" class="viewgrp" href="{{evetDet.register_url}}" target="_blank" style="background: #f7941e none repeat scroll 0 0;
+    border: 2px solid #fff;
+    box-shadow: none;
+    clear: both;
+    color: #58595b!important;
+    display: inline-block;
+    float: none;
+    font-family: veneerregular;
+    font-size: 22px!important;
+    margin: 5px auto;
+    overflow: hidden;
+    padding: 7px 9px 4px 9px!important;" data-original-title="">Register</a>
+
+
+            <a class="viewgrp" ng-show="sessUser==evetDet.created_by" href="#/edit-event/{{evetDet.id}}" style="background: #f7941e none repeat scroll 0 0;
+    border: 2px solid #fff;
+    box-shadow: none;
+    clear: both;
+    color: #58595b!important;
+    display: inline-block;
+    float: none;
+    font-family: veneerregular;
+    font-size: 22px!important;
+    margin: 5px auto;
+    overflow: hidden;
+    padding: 7px 9px 4px 9px!important;" data-original-title="">Edit This Event</a>
+
+            <div style="clear:both;overflow: hidden;"></div>
+
+
+
+
+        </div>
+
+        <div class="map-canvas-main">
+        
+           <div class="map-canvas">
+            <ui-gmap-google-map id="map"
+                                center="map.center"
+                                pan="map.pan"
+                                zoom="map.zoom"
+                                draggable="true"
+                    >
+                <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' >
+
+                </ui-gmap-markers>
+
+
+            </ui-gmap-google-map>
+
+ </div>
+        </div>
+
+        <div style="clear:both;"></div>
+        <br>
+        <a href="javascript:history.go(-1)" style="color: #545455; font-family: veneerregular; font-size: 26px; padding:50px 0 0 0; overflow: hidden;">BACK</a>
+
+    </div>
+</div>

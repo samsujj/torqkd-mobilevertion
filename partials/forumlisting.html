@@ -1,0 +1,88 @@
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+<div class="forumpress-table">
+	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
+	
+	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
+	
+	<div class="rowone" ng-show="sessUser > 0">
+
+        <div class="left-img1">
+			<img style="width: 60px; height: 60px;" src="{{user_image}}"  alt="#"  width="100px"/>
+		</div>
+        <div class="clear"></div>
+    </div>
+	
+    
+    <h2 style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%">
+<a href="#">Forum</a>
+</h2>
+
+	<div ng-repeat="item in forumList">
+		<div  class="top-row">
+			<div style="border:none; padding:0 2%; height:auto;" class="div1"><a href="javascript:void(0);" style="color: #f7941e;">{{item.sport_name}}</a></div>
+			
+			<div style="border:none;  padding:0 2% height:auto;;"  class="div3">POST</div>
+			
+			<div style="border:none;  padding:0 2%; height:auto;"  class="div4">LATEST POST</div>
+			
+			<div class="clear"></div>
+		</div>
+		
+		<div ng-repeat="forum in item.forumL" class="table-row2">
+		
+			<div class="div1">
+				<div>
+					<strong><a href="javascript:void(0)">{{forum.name}}</a></strong><br/>
+					<div ng-bind-html="forum.description">
+					</div>
+				</div>
+			</div>
+			
+			<div class="div3">
+				<div style="display:block; line-height: 100px; ">{{forum.no_post}}</div>
+			</div>
+			
+			<div style="border-right:none;"  class="div4">
+				<div ng-show="!forum.lpost">No topics yet</div>
+				<div ng-show="forum.lpost">
+					<a style="font-size:14px;" href="#">{{forum.lpostArr.title}}</a>
+					<div>
+						<strong>{{forum.lpostArr.time}} - </strong> {{forum.lpostArr.user_name}}</div>
+				</div>
+			</div>
+			
+			<div class="clear"></div>
+
+		</div>	
+	</div>
+    
+    
+    </div>
+    
+
+</div>
+
+
+ <div class="clear"></div>
+
+<div class="footer-menu1">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+
+</div>

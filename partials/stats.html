@@ -1,0 +1,43 @@
+<table width="100%" ng-repeat="(key, item) in highchartsNG">
+
+<tr>
+
+    <td class="first-td" style="padding-bottom:10px;" width="10%">
+
+    <h4 style="color:#f79213">{{chartdata[key].sport_name}}</h4>
+
+    <img src="{{baseUrl}}/uploads/sports_image/thumb/{{chartdata[key].imag_name}}" alt=""  style="margin-top:10px;  width:52px;"/></td>
+
+    <td>{{chartdata[key].activity_no}} <br />
+    <span>Activities</span></td>
+
+    <td >{{chartdata[key].total_dis}} <br />
+    <span>Distance</span></td>
+
+    <td > {{chartdata[key].total_time}}<br/>
+
+<span style="text-align:left">Time</span></td>
+
+  </tr>
+
+  <tr>
+
+  <td  valign="top" align="left" width="100%"  colspan="5">
+  
+  <highchart id="chart1" config="item"></highchart>
+  
+  <div class="stat-table2" style="padding:10px 0; "><a href="#" class="stat-view-btn">View Details</a></div>
+  </td>
+  
+  <tr>
+
+  <td  valign="bottom" colspan="5" style="padding:0; border-top: solid 1px #555555; padding:15px 0 0 0; margin-bottom:10px;">
+  
+ </tr>
+
+</table>
+
+<span class="empty" ng-hide="highchartsNG.length">No results found.</span>
+
+
+
