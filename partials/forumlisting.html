@@ -21,13 +21,13 @@
     </div>
 	
     
-    <h2 style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%">
-<a href="#">Forum</a>
-</h2>
+    <h2>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+    </h2>
 
 	<div ng-repeat="item in forumList">
 		<div  class="top-row">
-			<div style="border:none; padding:0 2%; height:auto;" class="div1"><a href="javascript:void(0);" style="color: #f7941e;">{{item.sport_name}}</a></div>
+			<div style="border:none; padding:0 2%; height:auto;" class="div1"><a href="#/forum-listing1/{{item.id}}" style="color: #f7941e;">{{item.sport_name}}</a></div>
 			
 			<div style="border:none;  padding:0 2% height:auto;;"  class="div3">POST</div>
 			
@@ -40,7 +40,7 @@
 		
 			<div class="div1">
 				<div>
-					<strong><a href="javascript:void(0)">{{forum.name}}</a></strong><br/>
+					<strong><a href="#/forum-details/{{forum.id}}">{{forum.name}}</a></strong><br/>
 					<div ng-bind-html="forum.description">
 					</div>
 				</div>

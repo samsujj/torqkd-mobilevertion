@@ -1,0 +1,29 @@
+<div ng-repeat="item in groupMmber track by item.id">
+    <div>
+        <div>
+            <a href="{{baseUrl}}/torqkd_demo/#/profile/{{item.user_id}}">
+
+                <img src="{{item.user_image}}" alt="{{item.user_name}}" style="margin:-4px 0 0 0; max-width:50px;max-height:50px;" />
+            </a>
+
+        </div>
+
+        <div>
+            <h5 style="padding:0; font-size:18px;"><a style="font-size: 16px;font-weight: normal;" href="{{baseUrl}}/torqkd_demo/#/profile/{{item.user_id}}">{{item.user_name}}</a></h5>
+            <span class="activity" style="font-size:12px;">joined {{item.time}} ago</span>
+
+            <a  ng-repeat="item1 in item.sports" href="javascript:void(0);" style="margin: 2px;display: inline-block;" title="{{item1.spname}}"><img src="{{item1.spimage}}" width="25"  alt="#" /></a>
+
+            <div style="clear: both;height: 15px;width: 100%">&nbsp;</div>
+
+            <p style="font-size:14px; display: inline;" ng-if="item.is_admin==1">Admin</p>
+            <p style="font-size:14px; display: inline; cursor:pointer;  margin-right: 25px;" ng-if="isAdmin > 0 && item.is_admin==0" ng-click="addAsAdmin(item)">Add This Member As Admin</p>
+            <p class="concls" style="font-size:14px; cursor:pointer;  display: inline;" ng-if="item.sess_id > 0 && item.user_id != item.sess_id && item.frndship==0" ng-click="addFriend(item)" >CONNECT +</p>
+
+        </div>
+
+
+        <div class="clear"> </div>
+
+    </div>
+</div>

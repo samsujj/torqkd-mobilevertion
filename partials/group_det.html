@@ -1,0 +1,199 @@
+<style>
+
+.ngdialog-content{ 
+    border: 5px solid #f7941e !important;
+    border-radius: 0 !important; padding:25px 0!important; }
+
+
+#tabs{ margin-top:25px;}
+.newPopup .ngdialog-content{
+	position:relative;
+	margin:0 auto;
+	width:291px;
+	height:129px;
+	padding:3px 12px;
+	animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	background: url({{baseUrl}}/torqkd_demo/images/hover_mobile.png) no-repeat;
+	
+	}
+.youtubePopup .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 12px;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	}
+.confirmPopup .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 12px;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	}
+</style>
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+
+<div class="top-part">
+    
+    <div class="top-partcon-left">
+                 <div class="profile-img">
+                <img src="{{groupDet.imgSrc}}" alt="{{groupDet.name}}" width="100px" height="100px" style="cursor: pointer;" />
+                </div>
+        
+            <a href="javascript:void(0);" title="{{groupDet.sp_name}}">
+                <img width="40" alt="#" style=" margin:4px 4px 4px 0; overflow: hidden;" src="{{groupDet.spImgSrc}}" >
+            </a>
+            
+           </div> 
+           
+             
+        <div class="top-partcon-right">
+                <h2><a href="javascript:void(0);">{{groupDet.name}}</a></h2>
+                
+                    <p>{{groupDet.description}}</p>
+                    
+                      </div> 
+      
+                <div style="clear:both;"></div>
+                
+             <div class="left1">
+                <a ng-show="sessUser && !isMember" href="javascript:void(0);" ng-click="joingroup(groupDet.id)"> Join</a>
+                <a ng-show="sessUser && isMember" href="javascript:void(0);" ng-click="isLeaveGrp = !isLeaveGrp" > Joined<img src="images/icon-arrow-down.png" style="width:11px;"> </a>
+                <div ng-show="sessUser && isMember && isLeaveGrp" class="newlinkdiv"><a href="javascript:void(0);" ng-click="leavegroup(groupDet.id)" > Leave Group</a></div>
+</div>
+
+ <div class="right1">
+      <span class="highlight">{{groupDet.gType}} </span>
+    
+    </div>
+    
+            <div style="clear:both;"></div>
+   </div> 
+    
+
+
+
+    <div ng-show="sessUser" class="status-menu">
+        <div class="text-box">
+            <textarea ng-focus="isStatusInput=1" ng-model="statusText" placeholder="STATUS UPDATE" style="box-shadow:none;"></textarea>
+        </div>
+        <div class="menu1">
+
+            <a href="javascript:void(0);" ng-click="addVideo()" style="color: #fff;">
+                +<br />
+                VIDEO</a>
+        </div>
+        <div class="menu2">
+
+            <a href="javascript:void(0);" ng-click="addPhoto()" style="color: #fff;">
+                +<br />
+
+                Photo</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="status-input" ng-show="sessUser">
+        <div ng-show="isPhoto" style="padding-bottom:15px;">
+            <input ng-show="!isMobileApp" type="button" class="browsebtn" value="Click To Browse" ngf-drop ngf-select ng-model="statusImage" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"><br>
+            <div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progress + '%'"></div>
+            </div>
+            <a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/photo/sess_id/{{sessUser}}">Click To Browse</a>
+        </div>
+        <div ng-if="photoval">
+            <img src="{{baseUrl}}/uploads/status_img/{{photoval}}" />
+        </div>
+
+        <div ng-show="isVideo">
+            <input type="text" placeholder="Type to search / enter Youtube video url" ng-model="youtubeTxt" class="searchbox" ><br>
+            <input type="button" value="search" ng-click="youtubeSearch()" class="searchbtn"/><div  class="btnor">OR</div>
+            <input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="statusVideo" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+            <div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progress + '%'"></div>
+            </div>
+            <a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/video/sess_id/{{sessUser}}">Click To Browse</a>
+        </div>
+        <div ng-if="videoval1">
+            <div style="margin-bottom:10px;" class="embed-responsive embed-responsive-16by9 video-wrapper">
+                <youtube-video class="embed-responsive-item" video-id="videoval1"></youtube-video>
+            </div>
+        </div>
+
+        <div ng-if="videoval2">
+            <videogular ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+videoval2), type: 'video/mp4'}]" >
+                <vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
+            </videogular>
+        </div>
+
+        <div ng-show="isStatusInput">
+            <div>
+                <select ng-model="shareVal" >
+                    <option value="1">Community</option>
+                    <option value="2">Friends</option>
+                </select>
+
+
+                <input class="lrotbtn" ng-show="isRotateBtn" type="button" ng-click="imgRotate(1)" style="background: url({{baseUrl}}/torqkd_demo/images/rtal.png) no-repeat !important; height:32px; width:112px;">
+                <input class="rrotbtn" ng-show="isRotateBtn" type="button" ng-click="imgRotate(2)" style="background: url({{baseUrl}}/torqkd_demo/images/rtar.png) no-repeat !important; height:32px; width:112px;">
+
+                <input type="button" value="cancel" class="postbtn1" ng-click="cancelStatus()" >
+
+                <input type="button" value="POST" ng-click="postStatus()"  class="postbtn2">
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div ng-include="'partials/group_tab.html'"></div>
+
+
+    <div class="banner2" ng-include="'partials/experience_6.html'"></div>
+<div style="clear:both;"></div>
+
+<div class="banner3" ng-include="'partials/experience_7.html'"></div>
+<div style="clear:both;"></div>
+
+
+
+  
+ <div class="footer-menu1">
+ 
+ 
+
+			<script type="text/ng-template" id="youtubeVideo">
+				<div class="ngdialog-message">
+				<div class="youtubeVideo">
+					<div class="youtubeVideoBtn"><a href="javascript:void(0)" ng-hide="vidIndex==1" ng-click="vidIndex = vidIndex-1">Prev</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" ng-hide="vidIndex == vids.length" ng-click="vidIndex = vidIndex+1">Next</a></div>
+					<div ng-repeat="c in vids" ng-show="$index == (vidIndex-1)">
+						<div style="margin-bottom:10px;" class="embed-responsive embed-responsive-16by9 video-wrapper" >
+							<youtube-video class="embed-responsive-item" video-id="c.id.videoId"></youtube-video>
+						</div>
+						<h1>{{c.snippet.title}}</h1>
+						<a href="javascript:void(0)" ng-click="addYtVideo(c)" class="vidAddBtn">ADD</a>
+					</div>
+				<div>
+				</div>
+			</script>
+
+
+ 
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+</div>
+</div>

@@ -1,0 +1,72 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:25px 0!important; }
+
+    .confirmPopup .ngdialog-content{
+        position:relative;
+        margin:0 auto;
+        width:80%;
+        padding:3px 12px;
+        animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+    }
+
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+<div class="forumpress-table">
+	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
+	
+	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
+	
+	<div class="rowone" ng-show="sessUser > 0">
+
+        <div class="left-img1">
+			<img style="width: 60px; height: 60px;" src="{{user_image}}"  alt="#"  width="100px"/>
+		</div>
+        <div class="clear"></div>
+    </div>
+	
+    
+    <h2>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+    </h2>
+
+    <a href="#/new-topic/{{headingArr[2].id}}" ng-show="sessUser>0">New Topic</a>
+
+
+    <p>Move "{{topicTitle}}" to new forum:</p>
+    <select ng-model = "forumList" ng-change="moveTopic()" ng-options="item.name for item in allForum  track by item.id">
+        <option value="">Select One</option>
+    </select>
+
+    </div>
+    
+
+</div>
+
+
+ <div class="clear"></div>
+
+<div class="footer-menu1">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+
+</div>

@@ -1,0 +1,99 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:25px 0!important; }
+
+    .confirmPopup .ngdialog-content{
+        position:relative;
+        margin:0 auto;
+        width:80%;
+        padding:3px 12px;
+        animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+    }
+
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+<div class="forumpress-table">
+	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
+	
+	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
+	
+	<div class="rowone" ng-show="sessUser > 0">
+
+        <div class="left-img1">
+			<img style="width: 60px; height: 60px;" src="{{user_image}}"  alt="#"  width="100px"/>
+		</div>
+        <div class="clear"></div>
+    </div>
+	
+    
+    <h2>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+    </h2>
+
+    <div data-original-title="" class="top-heading"> <span data-original-title="" style="display:inline-block;">Post new Topic </span></div>
+
+
+    <form angular-validator-submit="addTopicForm()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+
+        <div class="form-group">
+            <div class="col-sm-10" style="width:100%; padding:0;">
+                <label>Subject <span>*</span></label>
+                <input type="text" id="Topic_title" name="Topic[title]"
+                       validate-on="blur"
+                       class = "form-control"
+                       ng-model = "form.title"
+                       required-message="'Subject cannot be blank.'"
+                       required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10" style="width:100%; padding:0;">
+                <label>Message <span>*</span></label>
+                <wysiwyg textarea-id="Topic_description"
+                         textarea-class="form-control"
+                         textarea-height="180px"
+                         textarea-name="Topic[description]"
+                         ng-model="form.description"
+                         enable-bootstrap-title="true"
+                         >
+                </wysiwyg>
+            </div>
+        </div>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    </div>
+    
+
+</div>
+
+
+ <div class="clear"></div>
+
+<div class="footer-menu1">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+
+</div>

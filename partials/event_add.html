@@ -265,7 +265,7 @@
 
             <h3>Event Photo </h3>
             <div class="uploadbox" style="position:relative;">
-                <div id="blah" ng-show="eventImage"> <img src="{{eventImage}}"></div>
+                <div id="blah" > <img ng-show="eventImage" src="{{eventImage}}"></div>
                 <input type="button" value="+" class="upload-btn" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
                 <a rel="tooltip" title="Please Upload An Image Bigger Than 600X300"  style=" margin-left:25px;"><img src="images/help.png"></a>
 

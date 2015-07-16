@@ -96,7 +96,7 @@
 		</div>
 		<div class="clear"></div>
     </div>
-	<div class="status-input">
+	<div class="status-input" id="statusinput" ng-show="currentUser==sessUser">
         <div ng-show="isPhoto" style="padding-bottom:15px;">
 			<input ng-show="!isMobileApp" type="button" class="browsebtn" value="Click To Browse" ngf-drop ngf-select ng-model="statusImage" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"><br>
 			<div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progress + '%'"></div>
@@ -137,6 +137,8 @@
 
             <input class="lrotbtn" ng-show="isRotateBtn" type="button" ng-click="imgRotate(1)" style="background: url({{baseUrl}}/torqkd_demo/images/rtal.png) no-repeat !important; height:32px; width:112px;">
             <input class="rrotbtn" ng-show="isRotateBtn" type="button" ng-click="imgRotate(2)" style="background: url({{baseUrl}}/torqkd_demo/images/rtar.png) no-repeat !important; height:32px; width:112px;">
+
+            <input type="hidden" ng-model="status_id" >
 
             <input type="button" value="cancel" class="postbtn1" ng-click="cancelStatus()" >
 
@@ -228,7 +230,6 @@
 
 <div class="banner3" ng-include="'partials/experience_7.html'"></div>
 <div style="clear:both;"></div>
-
 
 
   

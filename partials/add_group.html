@@ -1,0 +1,139 @@
+<style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+
+<div class="createevent-body">
+        <form angular-validator-submit="addGroupForm()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+        
+        <div class="left-part">
+            <h2>Create a Group</h2>
+            <p style="padding-bottom:20px;">Create a group and invite your friends to join by filling out the form below. </p>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+                    <input type="text" id="Group_name" name="Group[name]" placeholder="GROUP NAME"
+                           validate-on="blur"
+                           class = "form-control"
+                           ng-model = "form.name"
+                           required-message="'Name cannot be blank.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
+                    <textarea id="Group_description" name="Group[description]" placeholder="DESCRIPTION" class="form-control" validate-on="blur" ng-model="form.description" required-message="'Description cannot be blank.'"
+                              required></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>
+                        <input type="radio" ng-model="form.type" value="1">
+                        Public
+                    </label>
+                    <label>
+                        <input type="radio" ng-model="form.type" value="2">
+                        Private
+                    </label>
+                </div>
+            </div>
+
+
+            <h3>Group Photo </h3>
+            <div class="uploadbox" style="position:relative;">
+                <div id="blah" style="width: 170px; height:170px;" > <img src="{{groupImage}}" ng-show="groupImage"></div>
+                <input type="button" value="+" class="upload-btn" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                <div class="progress" ng-show="files[0].progress >= 0">	<div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div></div>
+
+
+            </div>
+
+            <h3>INVITE GROUP MEMBERS </h3>
+
+            <img src="images/select_all.png" alt="Select All" ng-click="checkAll()" style="box-shadow: none; border: none; cursor: pointer;" />
+            <img src="images/select_none.png" ng-click="uncheckAll()" alt="Select None" style="box-shadow: none;margin-left:30px; border: none; cursor: pointer;" />
+   <div class="select-box-contain">
+            <ul>
+                <li ng-repeat="item in userList track by item.id" style="height: 55px;">
+                    <input type="checkbox" name="users[]" ng-click="userclick(item.id)" ng-checked="allCheck">
+                    <img style="float: left; max-width:50px; max-height:50px;" alt="#" src="{{item.user_image}}" data-original-title="">
+                    <span>{{item.user_name}}</span>
+                </li>
+            </ul>
+  <div class="clear"></div>
+
+</div>
+                <div class="clear"></div>
+
+</div>
+
+
+            <div class="right-part">
+                <h1> Sport</h1>
+                <div class="sports-table">
+
+                    <div ng-repeat="n in sportsList">
+
+                        <h3> {{n.name}}</h3>
+                        
+                     
+                        <ul>
+                            <li ng-repeat="m in n.ch">
+                                <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="form.sports_id = m.id; selsp(); actClass = !actClass" ng-class="(actClass || form.sports_id == m.id) ? 'activeimg' : ''" ><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+                                <strong> {{m.name}}</strong>
+                            </li>
+                        </ul>
+                           
+                        <div class="clear"></div>
+  
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+            <button type="submit">Submit</button>
+
+        </form>
+
+
+</div>
+
+
+
+        <div class="footer-menu1">
+
+            <span>&copy;TORQK'D</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+        </div>
+
+
+
+    </div>
+</div>

@@ -82,10 +82,30 @@ torqdTest.config(['$routeProvider',
         templateUrl: 'partials/eventmap.html',
         controller: 'expCtrl'
       }).
-      when('/forum-listing', {
-        templateUrl: 'partials/forumlisting.html',
-        controller: 'forumCtrl'
-      }).
+        when('/forum-listing', {
+            templateUrl: 'partials/forumlisting.html',
+            controller: 'forumCtrl'
+        }).
+        when('/forum-listing1/:id', {
+            templateUrl: 'partials/forumlisting.html',
+            controller: 'forumCtrl'
+        }).
+        when('/forum-details/:id', {
+            templateUrl: 'partials/forumdetails.html',
+            controller: 'forumDetCtrl'
+        }).
+        when('/move-topic/:id', {
+            templateUrl: 'partials/move_topic.html',
+            controller: 'moveTopicCtrl'
+        }).
+        when('/new-topic/:id', {
+            templateUrl: 'partials/new_topic.html',
+            controller: 'newTopicCtrl'
+        }).
+        when('/topic-details/:id', {
+            templateUrl: 'partials/topic_det.html',
+            controller: 'topicDetCtrl'
+        }).
       when('/logout', {
 		templateUrl: 'partials/index.html',
         controller: 'logoutCtrl'
@@ -105,6 +125,18 @@ torqdTest.config(['$routeProvider',
         when('/edit-event/:id', {
             templateUrl: 'partials/event_add.html',
             controller: 'eventEditCtrl'
+        }).
+        when('/group-details/:id', {
+            templateUrl: 'partials/group_det.html',
+            controller: 'groupDetCtrl'
+        }).
+        when('/add-group', {
+            templateUrl: 'partials/add_group.html',
+            controller: 'groupAddCtrl'
+        }).
+        when('/edit-profile', {
+            templateUrl: 'partials/edit_profile.html',
+            controller: 'editProfileCtrl'
         }).
       otherwise({
         redirectTo: '/index'

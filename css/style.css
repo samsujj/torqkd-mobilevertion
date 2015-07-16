@@ -727,7 +727,7 @@ background-size:1600px;
 	margin:0px auto!important;
 	
 	padding:2px!important;
-	border: solid 2px #ebebeb;
+	border: solid 2px #dfe2e2;
 	display:block!important; overflow:hidden;
 }
 	    .activities_contain  .sports-table ul li a:hover, .sports-table ul li a.activeimg {
@@ -3153,6 +3153,24 @@ border: none!important;}
     width: 96% !important; margin-bottom:20px;
 }
 
+
+.createevent-body .left-part input[type="password"] {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 3px solid #97989a !important;
+    height: 45px !important;
+    padding: 4px !important;
+    width: 96% !important; margin-bottom:20px;
+}
+
+.createevent-body .left-part input[type="email"] {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 3px solid #97989a !important;
+    height: 45px !important;
+    padding: 4px !important;
+    width: 96% !important; margin-bottom:20px;
+}
+
+
 .createevent-body .left-part input[type="url"] {
     background: #fff none repeat scroll 0 0 !important;
     border: 3px solid #97989a !important;
@@ -3478,6 +3496,281 @@ border: none!important;}
 
 .imgLiquidFill img{ background:url(../images/logo.png) no-repeat center center; background-size:80%;}
 
+
+
+.top-part{ width:100%; margin-bottom:40px;}
+
+.top-part .top-partcon-left{ width:120px; float:left; margin-bottom:15px;}
+
+.top-part .top-partcon-left .profile-img img{border: 3px solid #f7931e;
+    min-height: 100px !important;
+    min-width: 100px !important;
+    position: relative;
+    z-index: 999; margin-bottom:10px;}
+	
+	
+	.top-part .top-partcon-right{ margin-left:10px; width:50%; float:left;  color: #4f4f51;
+    font-family: helvetica,arial;
+    font-size: 13px;  margin-bottom:15px;}
+	
+		.top-part .top-partcon-right h2{ margin:0 0 25px 0!important; padding:0!important; }
+	
+		.top-part .top-partcon-right h2 a{ color: #787777;
+    font-family: veneerregular;
+    font-size: 28px;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004); margin:0!important; padding:0!important; 
+}
+
+
+	.top-part .left1{ width:100px; float:left; font-size:11px; color:#333; font-family:Arial, Helvetica, sans-serif;
+}
+
+
+	.top-part .left1 a{color:#777; font-weight:700;}
+	
+	.top-part .right1 { color: #777;
+    font-size: 11px; width:150px; float:right; text-align:right; font-family:Arial, Helvetica, sans-serif; font-weight:700; padding-right:5px;}
+	
+	
+	.newlinkdiv {
+    background: url(../images/linkdiv2.png) no-repeat scroll 0 0;
+    cursor: pointer;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    height: 50px;
+    line-height: 60px;
+   margin: -1px 0 0 10px;
+    position: absolute;
+    text-align: center;
+    width: 105px;
+}
+	
+		.newlinkdiv a{ color:#333!important;  font-weight:normal; font-size: 11px;}
+	
+	
+	.createevent-body {
+    margin: 20px auto;
+    width: 90%;
+}
+.createevent-body .left-part {
+    float: none;
+    width: 100%;
+}
+.createevent-body .left-part h2 {
+    color: #f79213;
+    font-family: "veneerregular";
+    font-size: 36px;
+    font-weight: normal;
+    letter-spacing: 3px;
+    line-height: 36px;
+    margin: 0 !important;
+    padding: 0 0 20px !important;
+}
+.createevent-body .left-part .control-group {
+    float: left;
+    padding: 0 !important;
+    width: 93%;
+}
+.createevent-body .left-part .controls {
+    margin: 0;
+    padding: 0;
+}
+.createevent-body .left-part .input1 {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #97989a !important;
+    height: 33px !important;
+    padding: 4px !important;
+    width: 100% !important;
+}
+.createevent-body .left-part .input2 {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #97989a !important;
+    border-radius: 5px !important;
+    height: 70px !important;
+    width: 98.9% !important;
+}
+.createevent-body .left-part .input3 {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 1px solid #97989a !important;
+    border-radius: 0 !important;
+    height: 25px !important;
+    margin: 15px 0 0 !important;
+    padding: 2px 0;
+    width: 80% !important;
+}
+.createevent-body .left-part .text-part {
+    font-size: 13px;
+    font-style: italic;
+    padding: 10px 0;
+}
+.createevent-body .left-part h3 {
+    color: #f79213;
+    font-family: "veneerregular";
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    line-height: 22px;
+    margin: 0 !important;
+    padding: 20px 0 10px !important;
+}
+.createevent-body .left-part .form-part {
+    margin: 20px 0;
+    width: 100%;
+}
+.createevent-body .left-part .form-part span {
+    display: block;
+    float: left;
+    line-height: 35px;
+    padding-right: 10px;
+    text-align: right;
+    width: 24px;
+}
+.createevent-body .left-part .form-part .input-form {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #97989a !important;
+    float: left !important;
+    height: 40px !important;
+    padding: 4px !important;
+    width: 90% !important;
+}
+.createevent-body .left-part span .error {
+    color: #ff0000 !important;
+    display: inline !important;
+    line-height: 40px !important;
+}
+.createevent-body .event-btn {
+    background: rgba(0, 0, 0, 0) url("../images/submit_event.png") no-repeat scroll 0 0;
+    border: medium none;
+    cursor: pointer;
+    height: 45px;
+    margin: 20px 0;
+    width: 246px;
+}
+.createevent-body .backbtn {
+    color: #585b60;
+    font-family: "veneerregular";
+    font-size: 22px;
+    padding: 10px 0;
+}
+.createevent-body .backbtn:hover {
+    text-decoration: none;
+}
+.createevent-body .right-part {
+    float: none;
+    margin-top: 22px;
+    width: 100%;
+}
+.createevent-body .right-part h2 {
+    color: #f79213;
+    font-family: "veneerregular";
+    font-size: 36px;
+    font-weight: normal;
+    letter-spacing: 3px;
+    line-height: 22px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.createevent-body .right-part h1 {
+    color: #f79213;
+    font-family: "veneerregular";
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    line-height: 22px;
+    margin: 0 !important;
+    padding: 20px 0 0 !important;
+}
+.createevent-body .right-part ul {
+    margin-bottom: 20px;
+}
+.createevent-body .right-part h3 {
+    color: #4f4f51 !important;
+    padding-top: 20px !important;
+}
+.createevent-body .right-part h3:first-child {
+    padding-top: 0 !important;
+}
+
+.select-box-contain {
+    background: #f5f5f5 none repeat scroll 0 0;
+    margin: 20px 0 0;
+    padding: 20px 0 0;
+    width: 94%;
+}
+.select-box-contain li {
+    display: block;
+    float: left;
+    margin-left: 20px;
+    width: 90%;
+	font-family:Arial, Helvetica, sans-serif; font-size:12px;
+}
+.select-box-contain span {
+    display: block;
+    float: left;
+    padding: 0 0 0 10px;
+    width: 150px;
+}
+.select-box-contain input {
+    float: left;
+    width: 20px;
+}
+
+
+
+.createevent-body .left-part  .cropcontain{ width:auto; margin-bottom:25px; clear:both; overflow:hidden;}
+
+.createevent-body .left-part  .cropcontain .upload-btn1{ background: #242021 none repeat scroll 0 0 !important;
+    border: medium none !important;
+    color: #f7941e !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    height: 28px !important;
+    width: 28px !important; margin:2px 0;}
+	
+	.newaddimg {
+    border: 1px solid #979797;
+    max-height: 100%;
+    max-width: 300px;
+}
+
+
+.createevent-body .left-part .ng-scope{ background: #f7931e none repeat scroll 0 0;
+    border: 4px solid #fff;
+    box-shadow: none;
+    color: #414142;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: "veneerregular" !important;
+    font-size: 22px;
+    height: 40px;
+    margin: 10px 5px 0 0;
+    padding-top: 2px;
+    text-align: center;
+    width: 100px !important;}
+	
+	
+	.updatebtn{ background: #f8931f none repeat scroll 0 0;
+    border: 4px solid #fff;
+    border-radius: 0;
+    color: #434142;
+    cursor: pointer;
+   
+    font-family: "veneerregular";
+    font-size: 24px;
+    line-height: 24px;
+    margin: 10px 10px 20px 0;
+    outline: medium none !important;
+    padding: 10px 20px 5px 20px;
+    text-transform: uppercase; } 
+
+
+.backbtn{color: #585b60;
+    font-family: "veneerregular";
+    font-size: 22px;
+    padding: 10px 0; display:block; }
 /*===========================================================================================================================================================================================================*/		
 /*=================================================================================MEDIA CSS=================================================================================================================*/	
 /*===========================================================================================================================================================================================================*/	

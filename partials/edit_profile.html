@@ -1,0 +1,223 @@
+<style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+
+<div class="createevent-body">
+
+
+
+        <form angular-validator-submit="editProfile()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+<div class="left-part">
+            <h2>UPDATE YOUR PROFILE</h2>
+
+            <input type="hidden" ng-model = "form.id" value="0">
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>FIRST NAME</label>
+                    <input type="text" id="UserManager_lname" name="UserManager[fname]" placeholder="FIRST NAME"
+                           validate-on="blur"
+                           class = "form-control register_input"
+                           ng-model = "form.fname"
+                           required-message="'First Name cannot be blank.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>LAST NAME</label>
+                    <input type="text" id="UserManager_lname" name="UserManager[lname]" placeholder="LAST NAME"
+                           validate-on="blur"
+                           class = "form-control register_input"
+                           ng-model = "form.lname"
+                           required-message="'Last Name cannot be blank.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>EMAIL</label>
+                    <input type="email" id="UserManager_email" name="UserManager[email]" placeholder="YOUR EMAIL"
+                           validate-on="blur"
+                           class = "form-control register_input"
+                           ng-model = "form.email"
+                           required-message="'Email cannot be blank.'"
+                           invalid-message="'Enter valid email address.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>PASSWORD</label>
+                    <input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
+                           validate-on="dirty"
+                           class = "form-control register_input"
+                           ng-model = "form.password"
+                           validator = "passwordValidator(form.password) === true"
+                           invalid-message = "passwordValidator(form.password)"
+                           >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>CONFIRM PASSWORD</label>
+                    <input type="password" id="UserManager_password2" name="UserManager[password2]" placeholder="CONFIRM PASSWORD"
+                           validate-on="dirty"
+                           class = "form-control register_input"
+                           ng-model = "form.password2"
+                           validator = "form.password === form.password2 || form.password == ''"
+                           invalid-message = "'Passwords do not match!'"
+                            >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>LOCATION</label>
+                    <input type="text" id="UserManager_location" name="UserManager[location]" placeholder="LOCATION"
+                           class = "form-control register_input"
+                           ng-model = "form.location"
+                           >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>CITY</label>
+                    <input type="text" id="UserManager_city" name="UserManager[city]" placeholder="CITY"
+                           validate-on="blur"
+                           class = "form-control register_input"
+                           ng-model = "form.city"
+                           required-message="'City cannot be blank.'"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10" style="width:100%; padding:0;">
+                    <label>STATE</label>
+                    <select id="UserManager_state" name="UserManager[state]" class = "register_select form-control" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
+                        <option value="">SELECT YOUR STATE</option>
+                    </select>
+
+
+                </div>
+            </div>
+
+            <div class="cropcontain">
+                <div class="imglist">
+                    <img src="{{profileImg}}" class="newaddimg" />
+                </div>
+
+                <div>
+                    <input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <img src="images/help.png" alt="#" class="help-icon">
+                    <div class="clear"></div>
+                </div>
+
+                <div class="progress" ng-show="files[0].progress >= 0">
+                    <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
+                </div>
+
+                <input type="button" value="Crop" ng-if="profileImgName != 'default.jpg'">
+
+                <input type="button" value="Delete" ng-if="profileImgName != 'default.jpg'"  ng-click="profileImgDel(1)">
+
+
+            </div>
+
+              <div class="cropcontain">
+                <div class="imglist">
+                    <img src="{{coverImg}}" class="newaddimg" width="350" />
+                </div>
+
+                <div>
+                    <input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <img src="images/help.png" alt="#" class="help-icon">
+                    <div class="clear"></div>
+                </div>
+
+                <div class="progress" ng-show="files1[0].progress >= 0">
+                    <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
+                </div>
+
+                <input type="button" value="Crop" ng-if="coverImgName != 'default.jpg'">
+
+                <input type="button" value="Delete" ng-if="coverImgName != 'default.jpg'" ng-click="profileImgDel(2)">
+
+
+            </div>
+ </div>
+
+            <div class="right-part">
+                <h1>Select Sport</h1>
+                <div class="sports-table">
+
+                    <div ng-repeat="n in sportsList">
+
+                        <h3> {{n.name}}</h3>
+
+
+                        <ul>
+                            <li ng-repeat="m in n.ch">
+                                <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selsports(m.id);"  ng-class="{'activeimg':(userSports.indexOf(m.id) > -1)}"><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+                                <strong> {{m.name}}</strong>
+                            </li>
+                        </ul>
+
+                        <div class="clear"></div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+            <button  type="submit" class="updatebtn">UPDATE PROFILE</button>
+
+            <a href="#/profile/{{sessUser}}" class="backbtn">BACK</a>
+
+
+        </form>
+
+
+</div>
+
+
+
+        <div class="footer-menu1">
+
+            <span>&copy;TORQK'D</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+        </div>
+
+
+
+    </div>
+</div>

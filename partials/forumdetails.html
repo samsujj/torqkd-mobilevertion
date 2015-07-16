@@ -1,0 +1,115 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:25px 0!important; }
+
+    .confirmPopup .ngdialog-content{
+        position:relative;
+        margin:0 auto;
+        width:80%;
+        padding:3px 12px;
+        animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+    }
+
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+  
+  
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+  
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+<div class="forumpress-table">
+	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
+	
+	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
+	
+	<div class="rowone" ng-show="sessUser > 0">
+
+        <div class="left-img1">
+			<img style="width: 60px; height: 60px;" src="{{user_image}}"  alt="#"  width="100px"/>
+		</div>
+        <div class="clear"></div>
+    </div>
+	
+    
+    <h2>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+    </h2>
+
+
+    <a href="#/new-topic/{{headingArr[2].id}}">New Topic</a>
+
+
+    <div>
+		<div  class="top-row">
+			<div style="border:none; padding:0 2%; height:auto;" class="div1">{{forumDet.name}}</div>
+			
+			<div style="border:none;  padding:0 2% height:auto;;"  class="div2">REPLIES</div>
+			
+			<div style="border:none;  padding:0 2%; height:auto;"  class="div3">VIEWS</div>
+
+			<div style="border:none;  padding:0 2%; height:auto;"  class="div4">LATEST POST</div>
+
+			<div class="clear"></div>
+		</div>
+		
+		<div ng-repeat="item in forumDet.topicList" class="table-row2">
+		
+			<div class="div1">
+                <div class="teable-text">
+                    <span class="topicTitle"><a href="#/topic-details/{{item.id}}">{{item.title}}</a>&nbsp;&nbsp;</span>
+                    <small class="adminActions" ng-show="item.user_id == sessUser"><a href="#/move-topic/{{item.id}}">Move Topic</a> | <a href="javascript:void(0);" ng-click="delTopic(item.id,$index)">Delete Topic</a></small>
+                    <div class="topic-meta">posted by <strong> {{item.user_name}}</strong> on {{item.time}}</div></div>
+			</div>
+
+            <div class="div2">
+                <div class="teable-text"  style="display:block; line-height: 100px; "><span>{{item.reply}}</span></div>
+            </div>
+			
+			<div class="div3">
+                <div class="teable-text"  style="display:block; line-height: 100px; "> <span>{{item.no_of_view}}</span></div>
+			</div>
+			
+			<div style="border-right:none;"  class="div4">
+                <div class="teable-text">
+
+                    <a class="forumlink" style="font-size:14px;" href="#/topic-details/{{item.id}}">{{item.lpost_desc}}</a>
+                    <div class="forumdate"><strong>{{item.lpost_time}} -</strong> {{item.lpost_uname}}</div>
+
+
+
+                </div>
+			</div>
+			
+			<div class="clear"></div>
+
+		</div>	
+	</div>
+    
+    
+    </div>
+    
+
+</div>
+
+
+ <div class="clear"></div>
+
+<div class="footer-menu1">
+<span>&copy;TORQK'D</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+</div>
+
+</div>

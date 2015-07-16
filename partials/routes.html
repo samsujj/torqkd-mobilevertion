@@ -1,4 +1,8 @@
 <style>
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:25px 0!important; }
+
     .angular-google-map-container {
         width: 90%;
         height: 400px;
@@ -108,8 +112,11 @@
 
 
         <div style="display:block; margin-right: 11px; text-align: right;" class="sdiv">
+            <a href="javascript:void(0);" ng-click="fbShare(item.id)"><img src="images/newsicon1.png" width="25"  alt="#" /></a>
+            <a href="javascript:void(0);" ng-click="twShare(item.id)"><img src="images/newsicon2.png" width="25"  alt="#" /></a>
+            <a href="javascript:void(0);" ng-click="prShare(item.id)"><img src="images/newsicon3.png" width="25"  alt="#" /></a>
+
             <a ng-if="item.user_id==sessUser" href="javascript:void(0)" ng-click="delRoute(item.id,$index)" style="color: #616564; font-family: 'veneerregular'; font-size: 22px; padding:0px 0; text-decoration: none; ">&#10006;</a>
-            <input  type="button" value="Click Me" ng-click="dfgd(item.id)">
         </div>
 
         <div id="mapcon{{item.id}}" style="display: none;">

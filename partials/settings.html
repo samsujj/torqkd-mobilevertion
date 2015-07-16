@@ -1,0 +1,32 @@
+<form angular-validator-submit="groupSettings()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+    <input type="hidden" ng-model="form.id">
+    <label>
+        Group Name
+        <sup data-original-title="">*</sup>
+    </label>
+    <input type="text" id="group_name" name="group[name]"
+           validate-on="blur"
+           class = "form-control input1"
+           ng-model = "form.name"
+           required-message="'Name cannot be blank.'"
+           required>
+    <label>
+        Group Description
+        <sup data-original-title="">*</sup>
+    </label>
+    <textarea id="group_description" name="group[description]" class="form-control input2" validate-on="blur" ng-model="form.description" required-message="'Description cannot be blank.'"
+              required></textarea>
+
+    <label>Notify group members of changes via email</label>
+    <label>
+        <input type="radio" ng-model="form.notify" value="1">
+        Yes
+    </label>
+    <label>
+        <input type="radio" ng-model="form.notify" value="0">
+        No
+    </label>
+
+    <button  type="submit">Save Changes</button>
+
+</form>
