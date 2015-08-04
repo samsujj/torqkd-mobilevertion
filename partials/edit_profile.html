@@ -1,9 +1,175 @@
 <style>
-    .angular-google-map-container {
-        width: 100%;
-        height: 400px;
+    .example {
+        padding:2px 0;
+        display:block;
+        width:100%;
+        text-align:center;
+        position:relative;
+        overflow:hidden;
+        background-color:#fff;
+        background-image:-webkit-linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%), -webkit-linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%);
+        background-image:linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%);
+        background-size:16px 16px;
+        background-position:0 0, 8px 8px;
+        box-shadow:inset 0 0 6px rgba(0, 0, 0, .5)
+    }
+    .cmd {
+        text-align:center
+    }
+    .cmd li {
+        display:inline-block;
+        border-bottom:1px solid #eee;
+        margin:0 7px;
+        font-size:14px
+    }
+    .cmd li:hover {
+        border-bottom:none;
+        cursor:pointer;
+        color:#ccc
+    }
+    .cmd a {
+        color:#0b94c8
+    }
+    .pre {
+        display:block;
+        text-align:center;
+        padding:0px
+    }
+    .maskbg {
+        background:0 0;
+        box-shadow:none
+    }
+    .how {
+        display:block;
+        font-size:18px;
+        max-width:900px;
+        width:100%;
+        margin:150px auto;
+        color:#363636;
+        font-family:'PT Serif', serif
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family:'Cantora One', sans-serif;
+        font-weight:400
+    }
+    h4 {
+        font-size:30px;
+        padding-bottom:15px;
+        margin-bottom:20px;
+        border-bottom:1px solid #eee
+    }
+    h3 {
+        font-size:24px;
+        margin-bottom:10px;
+        padding-top:20px
+    }
+
+    .cropArea {
+        background: #E4E4E4;
+        overflow: hidden;
+        width:100%;
+        height:350px;
     }
 </style>
+<style type="text/css">
+    .clear {
+        clear:both;
+    }
+
+    ul#menu, ul#menu ul.sub-menu {
+        margin: 0;
+        padding: 0;
+    }
+    ul#menu li, ul#menu ul.sub-menu li {
+        display: inline-block;
+        float: none;
+        list-style-type: none;
+        margin: 0 auto;
+        padding: 5px;
+    }
+    ul#menu li a, ul#menu li ul.sub-menu li a {
+        color: #F7931D;
+        display: inline-block;
+        font-family: 'veneerregular';
+        font-size: 20px;
+        text-decoration: none;
+        width: 100%;
+    }
+    ul#menu li a:hover {
+        color: #5A5B5D;
+    }
+    ul#menu li {
+        position: relative;
+    }
+    ul#menu li ul.sub-menu {
+        background: url("<?php echo $themeUrl; ?>/images/orange1_1.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+        display: none;
+        left: -10px;
+        padding: 0;
+        position: absolute;
+        text-align: center;
+        top: 30px;
+        width: 100px;
+        z-index: 999999;
+    }
+    ul#menu li ul.sub-menu li {
+        display: block;
+        margin-left: 0;
+        padding: 0;
+        width: 100%;
+    }
+    ul#menu li ul.sub-menu a {
+        color: #FFFFFF !important;
+        display: inline-block;
+        float: none;
+        margin: 0 auto;
+        padding: 5px 0;
+        text-align: center;
+        width: 100%;
+    }
+    ul#menu li ul.sub-menu a:hover {
+        background: none repeat scroll 0 0 #F99331;
+    }
+    ul#menu li:hover ul.sub-menu {
+        display: block;
+    }
+    .experience-body {
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+        width: 100%;
+        background:#ebebeb;
+    }
+
+
+
+    .docs-buttons .btn-group { margin:0 auto;}
+
+    .icon-group  .btn{ background: #f7931e; border:solid 4px #fff; border-radius:0px!important;   color: #58595b; margin:0 4px; border-radius:5px; padding:10px 20px; width:70px;}
+    .icon-group .btn:hove{ margin:0 0!important;}
+
+
+    .big-btn{ width:155px; margin:0 auto; clear:both; overflow:hidden; margin-top:5px; }
+    .big-btn .btn-primary{ background: #f7931e;
+        color: #58595b;
+        display: block;
+
+        text-decoration: none;  font-family: "veneerregular"; border:solid 4px #fff; margin:10px auto!important; float:none; font-size:24px; width:150px; float:left!important; border-radius:0px!important; padding:14px 0 10px 0!important;}
+
+    .img-container{ border:solid 4px #f7931e; margin:25px auto!important; display:block; width:80%;}
+
+    .footer-menu1{ width:100%; padding-top:40px;}
+
+    @media screen and (max-width:400px) {
+        .mobile-top-con .logo { width:160px;}
+
+        .mobile-top-con .logo  img{ width:100%;}
+
+        .img-container{ border:solid 4px #f7931e; margin:25px auto!important; display:block; width:96%;}
+
+
+</style>
+
 
 
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
@@ -27,7 +193,7 @@
             <div class="form-group">
                 <div class="col-sm-10" style="width:100%; padding:0;">
                     <label>FIRST NAME</label>
-                    <input type="text" id="UserManager_lname" name="UserManager[fname]" placeholder="FIRST NAME"
+                    <input type="text" id="UserManager_fname" name="UserManager[fname]" placeholder="FIRST NAME"
                            validate-on="blur"
                            class = "form-control register_input"
                            ng-model = "form.fname"
@@ -126,7 +292,8 @@
                 </div>
 
                 <div>
-                    <input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <input type="button" ng-show="!isMobileApp" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp()">
                     <img src="images/help.png" alt="#" class="help-icon">
                     <div class="clear"></div>
                 </div>
@@ -135,9 +302,9 @@
                     <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
                 </div>
 
-                <input type="button" value="Crop" ng-if="profileImgName != 'default.jpg'">
+                <input class="imgBtnCls" type="button" value="Crop" ng-if="profileImgName != 'default.jpg'" ng-click="cropProfileImg()">
 
-                <input type="button" value="Delete" ng-if="profileImgName != 'default.jpg'"  ng-click="profileImgDel(1)">
+                <input class="imgBtnCls" type="button" value="Delete" ng-if="profileImgName != 'default.jpg'"  ng-click="profileImgDel(1)">
 
 
             </div>
@@ -148,7 +315,8 @@
                 </div>
 
                 <div>
-                    <input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <input ng-show="!isMobileApp" type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                    <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp1()">
                     <img src="images/help.png" alt="#" class="help-icon">
                     <div class="clear"></div>
                 </div>
@@ -157,9 +325,9 @@
                     <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
                 </div>
 
-                <input type="button" value="Crop" ng-if="coverImgName != 'default.jpg'">
+                <input class="imgBtnCls" type="button" value="Crop" ng-if="coverImgName != 'default.jpg'" ng-click="cropProfileBackImg()">
 
-                <input type="button" value="Delete" ng-if="coverImgName != 'default.jpg'" ng-click="profileImgDel(2)">
+                <input class="imgBtnCls" type="button" value="Delete" ng-if="coverImgName != 'default.jpg'" ng-click="profileImgDel(2)">
 
 
             </div>
@@ -176,7 +344,7 @@
 
                         <ul>
                             <li ng-repeat="m in n.ch">
-                                <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selsports(m.id);"  ng-class="{'activeimg':(userSports.indexOf(m.id) > -1)}"><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+                                <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selsports(m.id,this);"  ng-class="{'activeimg':(userSports.indexOf(m.id) > -1)}"><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
                                 <strong> {{m.name}}</strong>
                             </li>
                         </ul>
@@ -189,6 +357,9 @@
                 </div>
             </div>
 
+
+
+            
 
 
 

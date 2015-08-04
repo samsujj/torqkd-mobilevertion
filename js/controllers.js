@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-var homeControllers1 = angular.module('homeControllers', ['angularValidator','ngDialog','ngCookies','ngFileUpload','ngAnimate', 'ngTouch','uiGmapgoogle-maps','ngSanitize','com.2fdevs.videogular','youtube-embed','highcharts-ng','shoppinpal.mobile-menu','ui.bootstrap','colorpicker.module', 'wysiwyg.module']);
+var homeControllers1 = angular.module('homeControllers', ['angularValidator','ngDialog','ngCookies','ngFileUpload','ngAnimate', 'ngTouch','uiGmapgoogle-maps','ngSanitize','com.2fdevs.videogular','youtube-embed','highcharts-ng','shoppinpal.mobile-menu','ui.bootstrap','colorpicker.module', 'wysiwyg.module','angular-img-cropper']);
 //var homeControllers1 = angular.module('homeControllers', ['ngCookies']);
 
 homeControllers1.config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
@@ -49,7 +49,6 @@ homeControllers1.run(['$rootScope', '$window',
 
   }(document));
 }]);
-
 homeControllers1.directive('simpleSlider', ['SimpleSliderService', '$timeout', function (SimpleSliderService, $timeout) {
 
     'use strict';
@@ -102,15 +101,21 @@ homeControllers1.directive('simpleSlider', ['SimpleSliderService', '$timeout', f
       }
     };
   }]);
+
+
 homeControllers1.factory('SimpleSliderService', function () {
 
     'use strict';
 
     return typeof module != 'undefined' && module.exports ? // jshint ignore:line
-      module.exports :
-      context.SimpleSlider;
-  });
- 
+        module.exports :
+        context.SimpleSlider;
+});
+
+
+
+
+
 
 homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore,$cookies,loggedInStatus) {
 	
@@ -128,42 +133,50 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
            url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
        }) .success(function(data) {
 		   if(data > 0){
-			   $scope.sessUser = data;
-			   	$http({
-				   method  : 'POST',
-                    async:   false,
-				   url     : $scope.baseUrl+'/user/ajs/getFbmessage',
-				   data    : $.param({'userid':data}), 
-				   headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
-			   }) .success(function(data1) {
-				   if(data1.pagename == 'album'){
-						if(data1.type == 'facebook')
-							$rootScope.fbSmsg = 1;
-						if(data1.type == 'twitter')
-							$rootScope.twSmsg = 1;
-					    $location.path('/album/'+data);
-                   }else if(data1.pagename == 'experience'){
-                       if(data1.type == 'facebook')
-                           $rootScope.fbSmsg = 1;
-                       if(data1.type == 'twitter')
-                           $rootScope.twSmsg = 1;
-                       $location.path('/experience');
-                   }else if(data1.pagename == 'routes'){
-                       if(data1.type == 'facebook')
-                           $rootScope.fbSmsg = 1;
-                       if(data1.type == 'twitter')
-                           $rootScope.twSmsg = 1;
-                       $location.path('/routes/'+data);
-				   }else if(data1.pagename == 'profile'){
-						if(data1.type == 'facebook')
-							$rootScope.fbSmsg = 1;
-						if(data1.type == 'twitter')
-							$rootScope.twSmsg = 1;
-					   $location.path('/profile/'+data);
-				   }else{
-					   $location.path('/profile/'+data);
-				   }
-			   });
+
+               if(typeof($cookieStore.get('uploadGrImage')) != 'undefined'){
+                   $location.path('/add-group');
+               }else if(typeof($cookieStore.get('uploadEditPImage')) != 'undefined'){
+                   $location.path('/edit-profile');
+               }else{
+                   $scope.sessUser = data;
+                   $http({
+                       method  : 'POST',
+                       async:   false,
+                       url     : $scope.baseUrl+'/user/ajs/getFbmessage',
+                       data    : $.param({'userid':data}),
+                       headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                   }) .success(function(data1) {
+                       if(data1.pagename == 'album'){
+                           if(data1.type == 'facebook')
+                               $rootScope.fbSmsg = 1;
+                           if(data1.type == 'twitter')
+                               $rootScope.twSmsg = 1;
+                           $location.path('/album/'+data);
+                       }else if(data1.pagename == 'experience'){
+                           if(data1.type == 'facebook')
+                               $rootScope.fbSmsg = 1;
+                           if(data1.type == 'twitter')
+                               $rootScope.twSmsg = 1;
+                           $location.path('/experience');
+                       }else if(data1.pagename == 'routes'){
+                           if(data1.type == 'facebook')
+                               $rootScope.fbSmsg = 1;
+                           if(data1.type == 'twitter')
+                               $rootScope.twSmsg = 1;
+                           $location.path('/routes/'+data);
+                       }else if(data1.pagename == 'profile'){
+                           if(data1.type == 'facebook')
+                               $rootScope.fbSmsg = 1;
+                           if(data1.type == 'twitter')
+                               $rootScope.twSmsg = 1;
+                           $location.path('/profile/'+data);
+                       }else{
+                           $location.path('/profile/'+data);
+                       }
+                   });
+               }
+
 		   }else{
                if (typeof ($scope.email) != 'undefined' && typeof ($scope.password) != 'undefined') {
                    $http({
@@ -317,7 +330,7 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
 });
 
 homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,loggedInStatus,$cookieStore,$cookies) {
-	
+
 	$http({
 		method: 'POST',
 		async:   false,
@@ -332,10 +345,93 @@ homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, 
 	
 });
 
+homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies) {
+
+    $scope.msgFlag = false;
+
+    $scope.submitloginForm = function(){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/forgot_password',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            if(data == 1){
+                $location.path('/forgot-password-second-step');
+            }else{
+                $scope.msgFlag = true;
+            }
+        });
+
+    }
+
+});
+
+homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$cookieStore,$cookies) {
+
+    $scope.msgFlag = false;
+
+    $scope.submitloginForm = function(){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/forgot_password2',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            if(data > 0){
+                $location.path('/change-password');
+            }else{
+                $scope.msgFlag = true;
+            }
+        });
+
+    }
+
+});
+
+homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies) {
 
 
-homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cookieStore,$cookies) {
-	
+    $scope.passwordValidator = function(password) {
+
+        if (!password) {
+            return "Password can not be blank";
+        }
+        else if (password.length < 6) {
+            return "Password must be at least " + 6 + " characters long";
+        }
+        else if (!password.match(/[A-Z]/)) {
+            return "Password must have at least one capital letter";
+        }
+        else if (!password.match(/[0-9]/)) {
+            return "Password must have at least one number";
+        }
+
+        return true;
+    };
+
+    $scope.submitloginForm = function(){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/Change_password',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            $cookieStore.put('login_email',data.email);
+            $cookieStore.put('login_password',data.password);
+
+            $location.path('/login');
+        });
+
+    }
+
+});
+
+homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog) {
+
 	$scope.submitsignUpForm = function() {
 		$cookieStore.put('login_email',$scope.form.email);
 		$cookieStore.put('login_password',$scope.form.password);
@@ -349,10 +445,40 @@ homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cooki
        }) .success(function(data) {
                //alert(data);
 	   });
+
+
+
 	
 
 		$location.path('/activities');
 	};
+
+
+    $scope.showtermsploicy = function(id){
+
+        var header = '';
+        if(id=='policy')
+            header = 'Privacy Policy';
+        if(id=='terms')
+            header = 'Terms And Condition';
+
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/cms/admin/conditionmanager/bringcondition',
+            data    : $.param({'id':id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            ngDialog.open({
+                template: '<div><strong style="font-size: 16px; color:#C97413; font-weight: normal; text-align:center; display:block; font-weight:bold; text-transform:uppercase; font-size:22px;">'+header+'</strong></div>'+data,
+                plain:true,
+                showClose:true,
+                closeByDocument: false,
+                closeByEscape: false
+            });
+        });
+    }
 
 
 	$scope.myCustomValidator = function(text) {
@@ -578,10 +704,12 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
 
 });
 
-homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $compile, Upload) {
+homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $compile, Upload,$window) {
     $scope.usingFlash = FileAPI && FileAPI.upload != null;
 	$scope.profileImage = "";
 	$scope.profileBackImage = "";
+    $scope.profileImageName = "";
+    $scope.profileBackImageName = "";
 
     $scope.$watch('files', function (files) {
         $scope.formUpload = false;
@@ -594,6 +722,20 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
             }
         }
     });
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/getPImage',
+    }).success(function(data) {
+        $scope.profileImage = $scope.baseUrl+'/uploads/user_image/thumb/'+data.profileImgName;
+        $scope.profileImageName = data.profileImgName;
+        $scope.origprofileImageName = data.profileOrigImgName;
+        $scope.profileBackImage = $scope.baseUrl+'/uploads/user_image/background/thumb/'+data.backImg;
+        $scope.profileBackImageName = data.backImg;
+        $scope.origprofileBackImageName = data.OrigbackImgName;
+    });
+
 
     $scope.getReqParams = function () {
         return $scope.generateErrorOnServer ? '?errorCode=' + $scope.serverErrorCode +
@@ -631,6 +773,8 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
 		   }).success(function(data) {
 				$('.progress').addClass('ng-hide');
 				$scope.profileImage = $scope.baseUrl+'/uploads/user_image/thumb/'+response.data;
+                $scope.profileImageName = response.data;
+                $scope.origprofileImageName = response.data;
 		   });
             
         }, function (response) {
@@ -692,6 +836,8 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
 		   }).success(function(data) {
 				$('.progress').addClass('ng-hide');
 				$scope.profileBackImage = $scope.baseUrl+'/uploads/user_image/background/thumb/'+response.data;
+                $scope.profileBackImageName = response.data;
+                $scope.origprofileBackImageName = response.data;
 		   });
             
         }, function (response) {
@@ -708,6 +854,41 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
             // xhr.upload.addEventListener('abort', function(){console.log('abort complete')}, false);
         });
     }
+
+
+    $scope.profileImgDel = function(type){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/profileImgDel',
+            data    : $.param({'userid':$scope.sessUser,'type':type}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(result) {
+            if(type == 1){
+                $scope.profileImage = "";
+                $scope.profileImageName = "";
+                $scope.origprofileImageName = "";
+            }
+
+            if(type==2){
+                $scope.profileBackImage = "";
+                $scope.profileBackImageName = "";
+                $scope.origprofileBackImageName = "";
+            }
+        });
+    }
+
+
+    $scope.cropProfileImg = function(){
+        window.location.href = $scope.baseUrl+'/user/default/mobilecropsign/name/'+$scope.origprofileImageName;
+    }
+
+    $scope.cropProfileBackImg = function(){
+        window.location.href = $scope.baseUrl+'/user/default/mobilecropsign1/name/'+$scope.origprofileBackImageName;
+    }
+
+
+
 });
 
 homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$rootScope ) {
@@ -716,7 +897,8 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 	$scope.sessUser = 0;
 	$scope.isMobileApp = '';
 	$scope.curTime = new Date().getTime();
-	
+	$scope.isExp = 1;
+
 	$http({
         method  : 'POST',
         async:   false,
@@ -741,7 +923,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getCurLocation',
         }).success(function (result) {
-	
+
 			$scope.map = {
 			  dragZoom: {options: {}},
 			  control:{},
@@ -868,9 +1050,34 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
         }).success(function (result) {
 			$scope.groupList = result;
     });
-	
-	
-	$scope.highchartsNG = [];
+
+    $scope.sugGroup = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getSugGroups',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.groupList = result;
+        });
+    }
+
+    $scope.locGroup = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getLocGroups',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.groupList = result;
+        });
+    }
+
+
+
+    $scope.highchartsNG = [];
 	$scope.chartdata = [];
 	
 	
@@ -928,9 +1135,80 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 
 	
 	});
-	
-	
-	$scope.statusLike = function (item) {
+
+
+    $scope.photoDet = {
+        id : 0,
+        itemId : 0,
+        pstval : '',
+        imgSrc : '',
+        value : '',
+        is_status : '',
+        userId : 0,
+        userImage : $scope.baseUrl+"/uploads/user_image/thumb/default.jpg",
+        userName : '',
+        timeSpan : '',
+        msg : '',
+        commentNo : 0,
+        like_no : 0,
+        is_like:0,
+        c_user:0,
+        cUserImage : $scope.baseUrl+"/uploads/user_image/thumb/default.jpg",
+        commentList : [],
+        type: 'photo'
+    };
+
+
+    $scope.showPhoto = function(item){
+        $scope.photoDet = {
+            id : item.id,
+            itemId : item.id,
+            imgSrc : item.s_img,
+            s_img : item.s_img,
+            userImage : item.user_image,
+            user_id : item.user_id,
+            value : item.value,
+            type: 'image',
+            userName : item.user_name,
+            timeSpan : item.timespan,
+            msg : item.msg,
+            like_no : item.like_no,
+            is_like : item.is_like,
+            c_user:item.c_user,
+            cUserImage : item.c_user_image,
+            pstval : '',
+            commentList:item.comment
+        };
+        ngDialog.open({
+            template: 'photoComment',
+            scope: $scope
+        });
+    }
+
+    $scope.postComment1 = function(item){
+        if(item.pstval && typeof(item.pstval)!= 'undefined'){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/addcomment',
+                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                if(item.commentList.length){
+                    item.commentList.push(result);
+                }else{
+                    item.commentList = [result];
+                }
+                item.pstval = '';
+            });
+        }else{
+            alert('Please Enter Comment');
+        }
+    };
+
+
+
+    $scope.statusLike = function (item) {
 			if(item.is_like){
 				item.like_no = item.like_no-1;
 			}else{
@@ -1425,6 +1703,17 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.url;
+        if(tab.url == 'groups.tpl.html'){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/getGroups',
+                data    : $.param({'userid':0}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                $scope.groupList = result;
+            });
+        }
     }
     
     $scope.isActiveTab = function(tabUrl) {
@@ -1443,7 +1732,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 });
 
 
-homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope ) {
+homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route ) {
 	
 	$scope.isMobileApp = '';
 	$scope.curTime = new Date().getTime();
@@ -1455,6 +1744,8 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 	$scope.viewMoreEvent = 0;
 	$scope.offsetevent = 0;
 	$scope.status_id = 0;
+	$scope.isProfile = 1;
+	$scope.isLoad = 0;
 
 
 	if($routeParams.userid == 0){
@@ -1482,6 +1773,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
         async:   false,
            url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
        }) .success(function(data) {
+            $scope.isLoad = 1;
 		   if(data > 0){
 			   $scope.sessUser = data;
 
@@ -1620,6 +1912,17 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.url;
+       if(tab.url == 'groups.tpl.html'){
+           $http({
+               method: 'POST',
+               async:   false,
+               url: $scope.baseUrl+'/user/ajs/getGroups',
+               data    : $.param({'userid':$routeParams.userid}),
+               headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+           }).success(function (result) {
+               $scope.groupList = result;
+           });
+       }
     }
     
     $scope.isActiveTab = function(tabUrl) {
@@ -2145,9 +2448,33 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
 			$scope.groupList = result;
-    });
+        });
 
-	$scope.highchartsNG = [];
+    $scope.sugGroup = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getSugGroups',
+            data    : $.param({'userid':$routeParams.userid}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.groupList = result;
+        });
+    }
+
+    $scope.locGroup = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getLocGroups',
+            data    : $.param({'userid':$routeParams.userid}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.groupList = result;
+        });
+    }
+
+    $scope.highchartsNG = [];
 	$scope.chartdata = [];
 	
 	
@@ -2199,6 +2526,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 					activity_no : val.activity_no,
 					total_dis : val.total_dis,
 					total_time : val.total_time,
+                    statDet : val.statDet,
 				}
 				
 				$scope.highchartsNG.push(highchartsNG);
@@ -2207,6 +2535,23 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 
 	
 	});
+
+    $scope.statDet1 = [{'id':898},{'id':998}];
+
+    $scope.viewStatDet = function(index){
+        //$scope.statDet = obj;
+        $scope.statDet1 = $scope.chartdata[index].statDet;
+        ngDialog.open({
+            template: 'statdet12',
+            showClose:true,
+            closeByDocument: true,
+            closeByEscape: true,
+            scope:$scope
+        });
+    }
+
+
+
 	
 	$scope.leftVisible = false;
 	
@@ -2334,6 +2679,12 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 					
 					$scope.statusList.splice(0, 0, result);
 					$scope.offset = $scope.offset+1;
+
+
+
+
+                $route.reload();
+
 				});
 		}else{
 			alert("Please Enter Status");
@@ -2708,6 +3059,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 
 
     $scope.photoDet = {
+        id : 0,
         itemId : 0,
         pstval : '',
         imgSrc : '',
@@ -2719,8 +3071,9 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
         timeSpan : '',
         msg : '',
         commentNo : 0,
-        likeNo : 0,
-        likeStatus : 'Like',
+        like_no : 0,
+        is_like:0,
+        c_user:0,
         cUserImage : $scope.baseUrl+"/uploads/user_image/thumb/default.jpg",
         commentList : [],
         type: 'photo'
@@ -2729,6 +3082,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
 
     $scope.showPhoto = function(item){
          $scope.photoDet = {
+            id : item.id,
             itemId : item.id,
             imgSrc : item.s_img,
             s_img : item.s_img,
@@ -2739,8 +3093,9 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
             userName : item.user_name,
             timeSpan : item.timespan,
             msg : item.msg,
-            likeStatus : (item.is_like)?"Unlike":"Like",
-            likeNo : item.like_no,
+            like_no : item.like_no,
+            is_like : item.is_like,
+            c_user:item.c_user,
             cUserImage : item.c_user_image,
             pstval : '',
             commentList:item.comment
@@ -2771,6 +3126,9 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams, $http,$
             alert('Please Enter Comment');
         }
     };
+
+
+
 	
 	
 });
@@ -3087,7 +3445,8 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 		msg : '',
 		commentNo : 0,
 		likeNo : 0,
-		likeStatus : 'Like',
+		likeStatus : 0,
+        cUserId : 0,
 		cUserImage : $scope.baseUrl+"/uploads/user_image/thumb/default.jpg",
 		commentList : [],
 		type: 'photo'
@@ -3104,28 +3463,47 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 		msg : '',
 		commentNo : 0,
 		likeNo : 0,
-		likeStatus : 'Like',
+		likeStatus : 0,
 		cUserImage : $scope.baseUrl+"/uploads/user_image/thumb/default.jpg",
 		commentList : [],
 		value : '',
 		type : 'video',
 		videoType : ''
 	};
+
+    $scope.statusLike = function (item) {
+        if(item.likeStatus){
+            item.likeNo = item.likeNo-1;
+        }else{
+            item.likeNo = item.likeNo+1;
+        }
+        item.likeStatus = !item.likeStatus;
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/likestatus',
+            data    : $.param({'status_id':item.itemId,'user_id':item.cUserId}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+
+        });
+
+    };
 	
 	$scope.showPhoto = function(item){
-		$scope.photoDet.itemId = item.id;
-		$scope.photoDet.value = item.value;
-		$scope.photoDet.is_status = item.is_status;
-		$scope.photoDet.userId = item.user_id;
-		$scope.photoDet.userImage = item.user_image;
-		$scope.photoDet.userName = item.user_name;
-		$scope.photoDet.msg = item.msg;
-		$scope.photoDet.timeSpan = item.timeSpan;
-		$scope.photoDet.commentNo = item.commentNo;
-		$scope.photoDet.likeNo = item.likeNo;
-		$scope.photoDet.likeStatus = item.likeStatus;
-		$scope.photoDet.cUserImage = item.cUserImage;
-
+            $scope.photoDet.itemId = item.id;
+            $scope.photoDet.value = item.value;
+            $scope.photoDet.is_status = item.is_status;
+            $scope.photoDet.userId = item.user_id;
+            $scope.photoDet.userImage = item.user_image;
+            $scope.photoDet.userName = item.user_name;
+            $scope.photoDet.msg = item.msg;
+            $scope.photoDet.timeSpan = item.timeSpan;
+            $scope.photoDet.commentNo = item.commentNo;
+            $scope.photoDet.likeNo = item.likeNo;
+            $scope.photoDet.likeStatus = item.likeStatus;
+            $scope.photoDet.cUserImage = item.cUserImage;
+            $scope.photoDet.cUserId = item.cUserId;
 
         var dialog1 = ngDialog.open({
                     template: '<div style="text-align:center;"><img src="images/ajax-loader.gif"></div>',
@@ -4670,9 +5048,109 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
         });
     }
 
-    $scope.addTopicForm1 = function(item){
-        alert(item.id);
+    $scope.addTopicForm1 = function(index,item){
+        var replyval = $('#Reply_description'+index).val();
+        if(replyval != ''){
+            $http({
+                method  : 'POST',
+                async:   false,
+                url     : $scope.baseUrl+'/user/ajs/addnewTopic',
+                data    : $.param({'title':item.title,'description':replyval,'parentId':item.id,'forumId':item.forum_id}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }) .success(function(result) {
+                $('#Reply_description'+index).val('');
+
+                if($scope.topicDet.topic_reply.length > 0){
+                    item.topic_reply1.push(result);
+                }else{
+                    item.topic_reply1 = [result];
+                }
+            });
+        }
     }
+
+    $scope.delTopicReply = function(id,index,parent){
+        $scope.parentReply = parent;
+        $scope.confirmDialog = ngDialog.open({
+            template: '<div style="text-align:center;">Are you sure delete this topic?</div><div class="confirmBtn"><input type="button" value="OK" ng-click="delConfirm('+id+','+index+',1)" class="confbtn" /><input type="button" value="Cancel" ng-click="delCancel()" class="confbtn" /></div> ',
+            plain:true,
+            showClose:false,
+            closeByDocument: false,
+            closeByEscape: false,
+            className : 'confirmPopup',
+            scope:$scope
+        });
+    }
+
+    $scope.delTopicReply1 = function(id,index,parent){
+        $scope.parentReply = parent;
+        $scope.confirmDialog = ngDialog.open({
+            template: '<div style="text-align:center;">Are you sure delete this topic?</div><div class="confirmBtn"><input type="button" value="OK" ng-click="delConfirm('+id+','+index+',2)" class="confbtn" /><input type="button" value="Cancel" ng-click="delCancel()" class="confbtn" /></div> ',
+            plain:true,
+            showClose:false,
+            closeByDocument: false,
+            closeByEscape: false,
+            className : 'confirmPopup',
+            scope:$scope
+        });
+    }
+
+    $scope.delTopicReply2 = function(id,f_id){
+        $scope.confirmDialog = ngDialog.open({
+            template: '<div style="text-align:center;">Are you sure delete this topic?</div><div class="confirmBtn"><input type="button" value="OK" ng-click="delConfirm('+id+','+f_id+',3)" class="confbtn" /><input type="button" value="Cancel" ng-click="delCancel()" class="confbtn" /></div> ',
+            plain:true,
+            showClose:false,
+            closeByDocument: false,
+            closeByEscape: false,
+            className : 'confirmPopup',
+            scope:$scope
+        });
+    }
+
+    $scope.delConfirm = function(id,index,type){
+        $scope.confirmDialog.close();
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/delTopic',
+            data    : $.param({'id':id}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            if(type == 2)
+                $scope.parentReply.topic_reply1.splice(index,1);
+            if(type == 1)
+                $scope.topicDet.topic_reply.splice(index,1);
+            if(type == 3)
+                $location.path('/forum-details/'+index);
+        });
+    }
+
+    $scope.delCancel = function(){
+        $scope.confirmDialog.close();
+    }
+
+
+    $scope.likeTopic = function(item){
+        if($scope.sessUser >0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/topic_like',
+                data    : $.param({'id':item.id,'user_id':$scope.sessUser}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                if(result == 0){
+                    item.likeNo = item.likeNo-1;
+                    item.likeStatus = 0;
+                }else{
+                    item.likeNo = item.likeNo+1;
+                    item.likeStatus = 1;
+                }
+            });
+
+        }
+    }
+
 
 
 });
@@ -5111,13 +5589,15 @@ homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams
         };
 	});
 
-
-
 });
 
 homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload) {
     $scope.sessUser = 0;
     $scope.heading = "Create Event";
+
+    $scope.minDate = new Date();
+    $scope.minDate1 = new Date();
+
 
     $http({
         method  : 'POST',
@@ -5172,6 +5652,18 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
     };
 
     $scope.format = 'MM/dd/yyyy';
+
+    $scope.setDate1 = function(){
+        if(typeof($scope.form.to_date) != 'undefined'){
+            $scope.maxDate = new Date($scope.form.to_date);
+        }
+    }
+
+    $scope.setDate = function(){
+        if(typeof($scope.form.from_date) != 'undefined'){
+            $scope.minDate1 = new Date($scope.form.from_date);
+        }
+    }
 
     $scope.sportsList = [];
 
@@ -5902,10 +6394,14 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
 
 
 
-homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,Upload) {
+homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,Upload,$cookieStore) {
 
     $scope.sessUser = 0;
     $scope.allCheck = 0;
+    $scope.isMobileApp = 0;
+    $scope.groupImage = '';
+
+    $cookieStore.remove('uploadGrImage');
 
     $http({
         method  : 'POST',
@@ -5914,19 +6410,77 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
     }) .success(function(data) {
         if(data > 0){
             $scope.sessUser = data;
+
+            $http({
+                method  : 'POST',
+                async:   false,
+                url     : $scope.baseUrl+'/user/ajs/getGrTempImage',
+                data    : $.param({'user_id':data}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }) .success(function(result) {
+                if(result != ''){
+                    $scope.c_image = result;
+                    $scope.form.image = result;
+                    $scope.groupImage = $scope.baseUrl+'/uploads/group_image/thumb/'+result;
+                }
+            });
+
         }else{
             $location.path('/index');
         }
     });
 
-    $scope.groupImage = '';
+
+
+
+
+    $scope.c_sports_id = $cookieStore.get('sports_id');
+    $scope.c_image = $cookieStore.get('image');
+    $scope.c_type = $cookieStore.get('type');
+    $scope.c_name = $cookieStore.get('name');
+    $scope.c_description = $cookieStore.get('description');
+
+
+
+    if(typeof ($scope.c_sports_id) == 'undefined'){
+        $scope.c_sports_id = 0;
+    }
+
+    if(typeof ($scope.c_image) == 'undefined'){
+        $scope.c_image = '';
+    }
+
+    if(typeof ($scope.c_type) == 'undefined'){
+        $scope.c_type = 0;
+    }
+
+    if(typeof ($scope.c_name) == 'undefined'){
+        $scope.c_name = '';
+    }
+
+    if(typeof ($scope.c_description) == 'undefined'){
+        $scope.c_description = '';
+    }
 
     $scope.form = {
-        sports_id: 0,
-        image: '',
-        type: 1,
+        sports_id: $scope.c_sports_id,
+        image: $scope.c_image,
+        type: $scope.c_type,
+        name: $scope.c_name,
+        description: $scope.c_description,
         users:[]
     };
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/checkMobile',
+    }) .success(function(data) {
+        $scope.isMobileApp = data;
+    })
+
+
+
 
     $scope.sportsList = [];
 
@@ -6070,24 +6624,63 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
              data    : $.param($scope.form),  // pass in data as strings
              headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
              }) .success(function(data) {
-                $location.path('/profile/'+$scope.sessUser);
+                ngDialog.open({
+                    template: '<div style="text-align:center;">Group Added Successfully</div>',
+                    plain:true,
+                    showClose:true,
+                    closeByDocument: true,
+                    closeByEscape: true
+                });
+
+                $cookieStore.remove('sports_id');
+                $cookieStore.remove('image');
+                $cookieStore.remove('type');
+                $cookieStore.remove('name');
+                $cookieStore.remove('description');
+
+
+                $location.path('/group-details/'+data);
              });
         }
 
     }
 
+    $scope.andriodUp = function(){
+        $cookieStore.put('uploadGrImage',1);
+        window.location.href = 'http://torqkd.com/uploa-dgroup';
+    }
 
+
+    $scope.setCookie = function(){
+
+        $cookieStore.put('sports_id',$scope.form.sports_id);
+        $cookieStore.put('image',$scope.form.image);
+        $cookieStore.put('type',$scope.form.type);
+        $cookieStore.put('name',(typeof($scope.form.name) != 'undefined')?$scope.form.name : '');
+        $cookieStore.put('description',(typeof($scope.form.description) != 'undefined')?$scope.form.description : '');
+    }
 
 });
 
 
-homeControllers1.controller('editProfileCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,Upload) {
+homeControllers1.controller('editProfileCtrl', function($scope, $http, $routeParams, $rootScope,$cookieStore, ngDialog, $timeout,$location,Upload,$window) {
 
     $scope.sessUser = 0;
     $scope.userSports = [];
     $scope.profileImg = '';
     $scope.coverImg = '';
     $scope.profileImgName =  $scope.coverImgName = 'default.jpg';
+    $scope.isMobileApp = '';
+
+    $cookieStore.remove('uploadEditPImage');
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/checkMobile',
+    }) .success(function(data) {
+        $scope.isMobileApp = data;
+    })
 
     $http({
         method  : 'POST',
@@ -6096,6 +6689,8 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
     }) .success(function(data) {
         if(data > 0){
             $scope.sessUser = data;
+
+            var ctime = new Date().getTime();
 
             $http({
                 method  : 'POST',
@@ -6116,8 +6711,10 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
                 }
 
                 $scope.userSports = result.user_sports;
-                $scope.profileImg = result.profileImg;
-                $scope.coverImg = result.backImg;
+                $scope.origprofileImg = result.profileOrigImgName;
+                $scope.origcoverImg = result.OrigbackImgName;
+                $scope.profileImg = result.profileImg+'?version='+ctime;
+                $scope.coverImg = result.backImg+'?version='+ctime;
                 $scope.profileImgName = result.profileImgName;
                 $scope.coverImgName = result.backImgName;
 
@@ -6176,7 +6773,21 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
         return true;
     };
 
-    $scope.selsports = function(id){
+    $scope.selsports = function(id,obj){
+
+        var idx = $scope.userSports.indexOf(id);
+        if($scope.userSports.indexOf(id) < 0){
+            if($scope.userSports.length){
+                $scope.userSports.push(id);
+            }else{
+                $scope.userSports = [id];
+            }
+        }else{
+            $scope.userSports.splice(idx,1);
+        }
+
+        $(obj).blur();
+
         $http({
             method  : 'POST',
             async:   false,
@@ -6184,7 +6795,7 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
             data    : $.param({'userid':$scope.sessUser,'sportid':id}),  // pass in data as strings
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(result) {
-            var idx = $scope.userSports.indexOf(id);
+            /*var idx = $scope.userSports.indexOf(id);
 
             if(result ==1){
                 if($scope.userSports.length){
@@ -6194,7 +6805,7 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
                 }
             }else{
                 $scope.userSports.splice(idx,1);
-            }
+            }*/
         });
     }
 
@@ -6347,6 +6958,419 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
         file.upload.xhr(function (xhr) {
             // xhr.upload.addEventListener('abort', function(){console.log('abort complete')}, false);
         });
+    }
+
+/*
+    var picture = $('#thepicture');  // Must be already loaded or cached!
+    picture.guillotine({width: 142, height: 156});
+
+    $scope.rotate_left = function(){
+        picture.guillotine('rotateLeft');
+    }
+
+    $scope.zoom_out = function(){
+        picture.guillotine('zoomOut');
+    }
+
+    $scope.fit = function(){
+        picture.guillotine('fit');
+    }
+
+    $scope.zoom_in = function(){
+        picture.guillotine('zoomIn');
+    }
+
+    $scope.rotate_right = function(){
+        picture.guillotine('rotateRight');
+    }
+
+    $scope.save_crop = function(){
+        var data = picture.guillotine('getData');
+
+        data.fileName = '60.jpg';
+        data.filePath = '/uploads/user_image/';
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/cropImage',
+            data    : $.param(data),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function(res) {
+            alert(res);
+        });
+    }
+*/
+
+   /* $scope.myImage='';
+    $scope.myImageType='';
+    $scope.myCroppedImage='';
+    $scope.profileImgC='';
+    $scope.profileCroppedImage='';
+    $scope.myImage='';
+    $scope.myCroppedImage='';*/
+
+    $scope.cropper = {};
+    $scope.cropper.sourceImage = null;
+    $scope.cropper.sourcePImage = null;
+    $scope.cropper.sourceBImage = null;
+    $scope.cropper.croppedImage = null;
+    $scope.cropper.croppedPImage = null;
+    $scope.cropper.croppedBImage = null;
+    $scope.bounds = {};
+    $scope.bounds.left = 0;
+    $scope.bounds.right = 142;
+    $scope.bounds.top = 156;
+    $scope.bounds.bottom = 0;
+
+    $scope.canvasWidth = ((($window.innerWidth)*.9) *.9);
+    $scope.canvasheight = 200;
+
+
+
+    $scope.cropProfileImg = function(){
+        window.location.href = $scope.baseUrl+'/user/default/mobilecrop/name/'+$scope.origprofileImg;
+    }
+
+    $scope.cropProfileBackImg = function(){
+        window.location.href = $scope.baseUrl+'/user/default/mobilecrop1/name/'+$scope.origcoverImg;
+    }
+
+
+    $scope.andriodUp = function(){
+        $cookieStore.put('uploadEditPImage',1);
+        window.location.href = 'http://torqkd.com/editprofileupload';
+    }
+
+    $scope.andriodUp1 = function(){
+        $cookieStore.put('uploadEditPImage',1);
+        window.location.href = 'http://torqkd.com/editprofilebupload';
+    }
+
+
+
+
+});
+homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi) {
+    $scope.sessUser = 0;
+    $scope.sports_id = 0;
+    $scope.state1 = false;
+    $scope.state2 = false;
+    $scope.showFportion = true;
+    $scope.showLportion = false;
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
+    }) .success(function(data) {
+        if(data > 0){
+            $scope.sessUser = data;
+        }else{
+            $location.path('/index');
+        }
+    });
+
+    $scope.map = {
+        dragZoom: {options: {}},
+        control:{},
+        center: {
+            latitude: 22,
+            longitude: 88
+        },
+        pan: true,
+        zoom: 9,
+        refresh: false,
+        events: {},
+        bounds: {},
+    };
+
+    $http({
+        method: 'POST',
+        async:   false,
+        url: $scope.baseUrl+'/user/ajs/getsports2',
+    }).success(function (result) {
+        var scope = $scope;
+        angular.element( document.querySelector( '#sportsList' ) ).append(result);
+        var sp_list = document.getElementsByClassName("sp_li");
+        for (var i = 0; i < sp_list.length; i++) {
+            $(this).removeClass('sp_sel_li');
+            sp_list[i].addEventListener('click', function() {
+                scope.sports_id = $(this).attr('valId');
+                //scope.state1 = false;
+                //scope.state2 = true;
+                $(this).addClass('sp_sel_li');
+                angular.element( document.querySelector( '#sportsName' ) ).text($(this).text());
+                //angular.element( document.querySelector( '#sportsList' ) ).hide();
+                //angular.element( document.querySelector( '#loc_div' ) ).show();
+                $scope.sports_divClick();
+                $scope.loc_h_divClick();
+            });
+        }
+    });
+
+    $scope.sports_divClick = function(){
+        $scope.state1 = !$scope.state1;
+        if($scope.state1){
+            angular.element( document.querySelector( '#sportsList' ) ).show();
+        }else{
+            angular.element( document.querySelector( '#sportsList' ) ).hide();
+        }
+    }
+
+    $scope.loc_h_divClick = function(){
+        $scope.state2 = !$scope.state2;
+        if($scope.state2){
+            angular.element( document.querySelector( '#loc_div' ) ).show();
+        }else{
+            angular.element( document.querySelector( '#loc_div' ) ).hide();
+        }
+    }
+
+    $scope.begin = function(){
+        if($scope.sports_id == ''){
+            $scope.dialog1 = ngDialog.open({
+                template: '<div style="text-align:center;">Please Select Sports.</div>',
+                plain:true,
+                showClose:false,
+                closeByDocument: false,
+                closeByEscape: false
+            });
+
+            $timeout(function(){ $scope.dialog1.close();}, 2000);
+        }else if(typeof ($scope.route_name) == 'undefined' || $scope.route_name==''){
+            $scope.dialog2 = ngDialog.open({
+                template: '<div style="text-align:center;">Please Enter Location Name.</div>',
+                plain:true,
+                showClose:false,
+                closeByDocument: false,
+                closeByEscape: false
+            });
+
+            $timeout(function(){ $scope.dialog2.close();}, 2000);
+
+        }else{
+            $scope.showFportion = false;
+            $scope.showLportion = true;
+
+            $location.path('/add-route1/'+$scope.sports_id+'/'+encodeURI($scope.route_name));
+        }
+    }
+
+
+
+
+
+});
+homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi) {
+    $scope.sessUser = 0;
+    $scope.spId = $routeParams.spId;
+    $scope.locName = decodeURI($routeParams.locName);
+    $scope.st_lat = 0;
+    $scope.st_long = 0;
+    $scope.flag = 0;
+    $scope.location = [];
+    $scope.distance = 0.00;
+    $scope.avgPace = '00:00:00';
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
+    }) .success(function(data) {
+        if(data > 0){
+            $scope.sessUser = data;
+        }else{
+            $location.path('/index');
+        }
+    });
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/getCurLocation',
+    }) .success(function(data) {
+        $scope.st_lat = data.latitude;
+        $scope.st_long = data.longitude;
+
+        $scope.map = {
+            dragZoom: {options: {}},
+            control:{},
+            center: {
+                latitude: $scope.st_lat,
+                longitude: $scope.st_long
+            },
+            pan: true,
+            zoom: 9,
+            refresh: false,
+            events: {},
+            bounds: {},
+            markers:[],
+            lineStyle: {
+                color: '#F7931E',
+                weight: 3,
+                opacity:.8
+            }
+
+        };
+
+
+
+       $('#lat').val($scope.st_lat);
+       $('#long').val($scope.st_long);
+
+    });
+
+    $scope.startlocation = function(){
+        var curLat = $('#lat').val();
+        var curLong = $('#long').val();
+
+        $scope.map = {
+            dragZoom: {options: {}},
+            control:{},
+            center: {
+                latitude: $scope.st_lat,
+                longitude: $scope.st_long
+            },
+            pan: true,
+            zoom: 9,
+            refresh: false,
+            events: {},
+            bounds: {},
+            markers:[{'id':1,
+                'latitude':$scope.st_lat,
+                'longitude':$scope.st_long,
+                'icon':'images/map-icon.png'}],
+            lineStyle: {
+                color: '#F7931E',
+                weight: 3,
+                opacity:.8
+            }
+
+        };
+
+        $scope.location.push({'latitude':$scope.st_lat,'longitude':$scope.st_long});
+
+        $timeout(function(){ $scope.trackpath(); },5000);
+    }
+
+    $scope.trackpath = function(){
+        var locLength = $scope.location.length;
+
+        var lat = parseFloat($scope.location[locLength-1].latitude)+parseFloat(0.00005);
+        var long = parseFloat($scope.location[locLength-1].longitude)+parseFloat(0.0001);
+
+        var pos = new google.maps.LatLng($scope.location[locLength-1].latitude,$scope.location[locLength-1].longitude);
+        var Ppos = new google.maps.LatLng(lat,long);
+
+        var dis=google.maps.geometry.spherical.computeDistanceBetween (pos,Ppos);
+
+        if(dis > 0){
+
+            var diskm=(dis/1000);
+            var dismile=parseFloat(diskm*0.62137);
+
+            $scope.distance = parseFloat($scope.distance)+dismile;
+
+            var s = $('#sw_s').text();
+            var m = $('#sw_m').text();
+            var h = $('#sw_h').text();
+
+            var sec = 0;
+
+            sec += parseInt(s);
+            sec = parseInt(sec)+parseInt(m*60);
+            sec = parseInt(sec)+parseInt(h*60*60);
+
+            var avg_pace = sec/dis;
+            avg_pace = parseInt(avg_pace);
+            var avg_hour = avg_pace/3600;
+            avg_hour = parseInt(avg_hour);
+            avg_pace = avg_pace%3600;
+            avg_pace = parseInt(avg_pace);
+            var avg_min = avg_pace/60;
+            avg_min = parseInt(avg_min);
+            avg_pace = avg_pace%60;
+            var avg_sec = parseInt(avg_pace);
+
+            $scope.avgPace = avg_hour+':'+avg_min+':'+avg_sec;
+
+            $scope.location.push({'latitude':lat,'longitude':long});
+
+        }
+
+
+        $timeout(function(){ $scope.trackpath(); },5000);
+
+
+    }
+
+    $scope.addRoutes = function(){
+
+        var s = $('#sw_s').text();
+        var m = $('#sw_m').text();
+        var h = $('#sw_h').text();
+
+
+        $scope.st_point = '';
+        $scope.end_points = [];
+
+        angular.forEach($scope.location, function(val, key) {
+            if(key == 0){
+                $scope.st_point = new google.maps.LatLng(val.latitude,val.longitude);
+            }else{
+                $scope.end_points.push(new google.maps.LatLng(val.latitude,val.longitude));
+            }
+        });
+
+        $scope.form = {
+            sports_id: $scope.spId,
+            route_name: $scope.locName,
+            st_point: $scope.st_point,
+            end_point: $scope.end_points,
+            duration : h+':'+m+':'+s,
+        };
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/addRoutes',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            alert(data);
+        });
+
+
+    }
+
+
+    $scope.start = function(){
+        $scope.startlocation();
+        $('#sw_start').hide();
+        $('#sw_stop').show();
+        $('#sw_pause').show();
+
+        var offheight = (($('.mobile-top-con').height()+$('.header_msg').height()+$('#map-canvas').height()+$('.distance').height()+$('.bott-arrow').height())-$(window).height());
+
+        $('html, body').animate({ scrollTop: offheight+65 }, 2000);
+
+        $.APP.startTimer('sw');
+    }
+
+    $scope.stop = function(){
+        $('#sw_start').show();
+        $('#sw_stop').hide();
+        $('#sw_pause').hide();
+        $.APP.stopTimer();
+        //trackpath();
+    }
+
+    $scope.pause = function(){
+        $('#sw_start').show();
+        $('#sw_stop').show();
+        $('#sw_pause').hide();
+        $.APP.pauseTimer();
     }
 
 

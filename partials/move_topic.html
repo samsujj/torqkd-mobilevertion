@@ -38,14 +38,16 @@
 	
     
     <h2>
-        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> &raquo; </label></span>
     </h2>
 
-    <a href="#/new-topic/{{headingArr[2].id}}" ng-show="sessUser>0">New Topic</a>
+    <a href="#/new-topic/{{headingArr[2].id}}" ng-show="sessUser>0"  class="NewTopic-btn">New Topic</a>
+        <div class="clear"></div>
 
-
-    <p>Move "{{topicTitle}}" to new forum:</p>
-    <select ng-model = "forumList" ng-change="moveTopic()" ng-options="item.name for item in allForum  track by item.id">
+    <p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; margin-top:40px;">Move "{{topicTitle}}" to new forum:</p>
+    <select ng-model = "forumList" ng-change="moveTopic()" ng-options="item.name for item in allForum  track by item.id" style=" background-color: #ffffff;
+    border: 1px solid #cccccc;
+    width: 220px; height:30px; font-family:Arial, Helvetica, sans-serif;">
         <option value="">Select One</option>
     </select>
 

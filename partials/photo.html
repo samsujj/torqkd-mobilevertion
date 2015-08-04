@@ -38,7 +38,7 @@
 					<div style="font-size:13px; text-align:left; padding-top:8px;">{{photoDet.msg}}</div>
 					
 					<div class="cmnt_share">
-						<a href="javascript:void(0);">Comments [{{photoDet.commentList.length}}]</a> - <a href="javascript:void(0);">{{photoDet.likeStatus}} [{{photoDet.likeNo}}] </a>
+						<a href="javascript:void(0);">Comments [{{photoDet.commentList.length}}]</a> - <a href="javascript:void(0);"  ng-click="(photoDet.cUserId) ?  statusLike(photoDet) :'';">{{(photoDet.likeStatus)?'Unlike':'Like'}} [{{photoDet.likeNo}}] </a>
 						<b style="font-weight:bold;display:inline-block; " >&bull;</b>
 						<a href="javascript:void(0);" style="display: inline-block; position: relative;" ng-click="shareImageStaus(photoDet)">Share</a>
                            

@@ -26,7 +26,7 @@
   
   <highchart id="chart1" config="item"></highchart>
   
-  <div class="stat-table2" style="padding:10px 0; "><a href="#" class="stat-view-btn">View Details</a></div>
+  <div class="stat-table2" style="padding:10px 0; "><a href="javascript:void(0);" class="stat-view-btn" ng-click="viewStatDet(key)">View Details</a></div>
   </td>
   
   <tr>
@@ -38,6 +38,24 @@
 </table>
 
 <span class="empty" ng-hide="highchartsNG.length">No results found.</span>
+
+
+<script type="text/ng-template" id="statdet12">
+    <div class="ngdialog-message viewdetailpopup">
+
+        <div style="width: 100%; height:200px; overflow: auto;">
+            <div style="width: 100%;">
+                <span style="width: 24%; display:block; float: left; ">Sr. No.</span><span style="width: 25%; display:block; float: left; text-align: center;">Distance</span><span style="width: 25%; display:block; float: left; text-align: center;">Time</span><span style="width: 25%; display:block; float: left; text-align: center;">Date</span>
+            </div>
+            <div style="width: 100%;" ng-repeat="sitem in statDet1 track by sitem.id">
+                <span style="width: 24%; display:block; float: left; ">{{$index+1}}</span><span style="width: 25%; display:block; float: left; text-align: center;">{{sitem.distance}}</span><span style="width: 25%; display:block; float: left; text-align: center;">{{sitem.duration}}</span><span style="width: 25%; display:block; float: left; text-align: center;">{{sitem.date}}</span>
+            </div>
+        </div>
+
+
+    </div>
+</script>
+
 
 
 

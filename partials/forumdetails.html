@@ -24,8 +24,8 @@
 <div class="experience-wrapper">
 
 <div class="forumpress-table">
-	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
-	
+	<h2 style="font-size:30px;"><a href="javascript:void(0);" style="font-size:30px;">Discussion Forums</a></h2>
+	  <div class="clear"></div>
 	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
 	
 	<div class="rowone" ng-show="sessUser > 0">
@@ -38,12 +38,12 @@
 	
     
     <h2>
-        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+        <div style="display:block; margin-top:11px;"><span ng-repeat="h in headingArr" ><a href="{{h.link}}">{{h.value}}</a><label ng-show="!$last">&raquo;</label></span></div>
     </h2>
 
 
-    <a href="#/new-topic/{{headingArr[2].id}}">New Topic</a>
-
+    <a href="#/new-topic/{{headingArr[2].id}}" class="NewTopic-btn">New Topic</a>
+      <div class="clear"></div>
 
     <div>
 		<div  class="top-row">

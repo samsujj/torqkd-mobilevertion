@@ -1,0 +1,243 @@
+<style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 400px;
+        border: none;
+    }
+
+    /* fix for Twitter Bootstrap handling of responsive images */
+    .angular-google-map img {
+        max-width: none;
+    }
+
+    .angular-google-map {
+        top: 80px;
+
+    }
+
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 0!important; }
+
+
+
+    .sp_li{
+        cursor:pointer;
+    }
+
+    #map-canvas{ border: none; width: 100%;}
+    .bott-div{ width:100%;}
+    .bott-div .distance {
+        border-right: 2px solid #aeaeae;
+        float: left;
+        margin-top: 10px;
+        padding-right: 2%;
+        text-align: center;
+        width: 31%;
+    }
+    .bott-div .timer {
+        border-right: 2px solid #aeaeae;
+        float: left;
+        margin-top: 10px;
+        padding-right: 2%;
+        text-align: center;
+        width: 30%;
+    }
+    .bott-div .avg {
+        float: right;
+        margin-top: 10px;
+        text-align: center;
+        width: 33%;
+    }
+    .bott-div h1 {
+        color: #8d8d8d;
+        font-family: reservation;
+        font-size: 14px;
+        font-weight: normal;
+        height: auto;
+        margin: 0;
+        padding: 5px 0 10px;
+        text-transform: uppercase;
+    }
+    .bott-div h2 {
+        color: #8d8d8d;
+        font-family: reservation;
+        font-size: 11px;
+        font-weight: normal;
+        height: auto;
+        margin: 0;
+        padding: 10px 0 5px;
+        text-transform: uppercase;
+    }
+    .bott-div span {
+        color: #2c2926;
+        font-family: "veneerregular";
+        font-size: 28px;
+        padding-top: 5px;
+    }
+    .bott-arrow {
+        float: left;
+        margin: 0 0 10px;
+        padding-left: 0;
+        width: 150px;
+    }
+    .bott-arrow #sw_start {
+        background: rgba(0, 0, 0, 0) url("images/startb.png") no-repeat scroll 0 0 / 100% auto;
+        border: medium none;
+        box-shadow: none;
+        cursor: pointer;
+        font-size: 0;
+        height: 60px;
+        margin: 0 4px;
+        width: 60px;
+    }
+    .bott-arrow #sw_pause {
+        background: rgba(0, 0, 0, 0) url("images/Pauseb.png") no-repeat scroll 0 0 / 100% auto;
+        border: medium none;
+        box-shadow: none;
+        cursor: pointer;
+        font-size: 0;
+        height: 60px;
+        margin: 0 4px;
+        width: 60px;
+    }
+    .bott-arrow #sw_stop {
+        background: rgba(0, 0, 0, 0) url("images/stopb.png") no-repeat scroll 0 0 / 100% auto;
+        border: medium none;
+        box-shadow: none;
+        cursor: pointer;
+        font-size: 0;
+        height: 60px;
+        margin: 0 4px;
+        width: 60px;
+    }
+    .bott-arrow #sw_reset {
+        background: rgba(0, 0, 0, 0) url("images/resatb.png") no-repeat scroll 0 0 / 100% auto;
+        border: medium none;
+        box-shadow: none;
+        cursor: pointer;
+        font-size: 0;
+        height: 60px;
+        margin: 0 4px;
+        width: 60px;
+    }
+    .routebtn {
+        background: #f7931e none repeat scroll 0 0;
+        border: 3px solid #fff;
+        color: #404041;
+        display: block;
+        float: right;
+        font-family: veneerregular;
+        font-size: 24px;
+        height: 44px;
+        line-height: 42px;
+        margin: 10px 0 0;
+        padding: 0 20px;
+        width: 116px;
+    }
+
+</style>
+
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+
+
+
+        <div class="createevent-body">
+
+
+
+            <div class="header_msg"> GPS YOUR ROUTE </div>
+
+     
+                <div id="map-canvas">
+                    <ui-gmap-google-map id="map"
+                                        center="map.center"
+                                        pan="map.pan"
+                                        zoom="map.zoom"
+                                        draggable="true"
+                            >
+                        <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' >
+                        </ui-gmap-markers>
+                        <ui-gmap-polyline ng-if="location.length" path="location" center="{latitude: st_lat, longitude: st_long}" draggable="false" geodesic="true" stroke="{color: '#F7931E', weight: 3, opacity:.8}" fit="true"></ui-gmap-polyline>
+                    </ui-gmap-google-map>
+
+                </div>
+
+
+
+            <div class="bott-div">
+
+                <div class="distance">
+                    <h1>Distance:</h1>
+                    <span id="dis">{{distance.toFixed(3)}}</span>
+                    <h2>MILES</h2>
+
+                </div>
+                <div class="timer">
+                    <h1>Timer:</h1>
+                    <span id="sw_h">00</span>:
+                    <span id="sw_m">00</span>:
+                    <span id="sw_s">00</span>
+                    <h2>HH:MM:SS</h2>
+                </div>
+
+                <div class="avg">
+                    <h1>AVG PACE:</h1>
+                    <span id="sw_h12">{{avgPace}}</span>
+
+                    <h2>PER MILE</h2>
+                </div>
+
+            </div>
+
+            <input type="hidden" name="hour" id="hour" value="00">
+            <input type="hidden" name="min" id="min" value="00">
+            <input type="hidden" name="sec" id="sec" value="00">
+
+            <div style="clear:both;"></div>
+            <div style="width:277px; padding-left:2%; margin:15px auto;">
+                <div class="bott-arrow">
+                    <input type="button" value="Start" id="sw_start" ng-click="start()" />
+                    <input style="display:none;" type="button" value="Pause" id="sw_pause" ng-click="pause()" />
+                    <input style="display:none;" type="button" value="Stop"  id="sw_stop" ng-click="stop()" />
+                    <input style="display:none;" type="button" value="Reset" id="sw_reset" />
+                </div>
+
+                <input type="button" value="+ Route" ng-click="addRoutes()" class="routebtn">
+
+                <div style="clear:both;"></div>
+            </div>
+
+
+
+
+
+        </div>
+        <div class="clear"></div>
+
+        <div class="footer-menu1">
+
+            <span>&copy;TORQK'D</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">TERMS </a>
+</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);">PRIVACY</a>
+</span>
+        </div>
+
+
+    </div>
+
+</div>

@@ -43,7 +43,7 @@
 <img style="position:absolute; margin-top:-2px;" alt="" src="images/arrow.png" ng-if="item.type">
 
 <div class="blogimg">
-<img src="{{baseUrl}}/uploads/status_img/{{item.value}}" ng-if="item.type=='image'" style="cursor: pointer;" ng-click="showPhoto(item)" alt="">
+<img src="{{baseUrl}}/uploads/status_img/{{item.value}}?version={{item.time}}" ng-if="item.type=='image'" style="cursor: pointer;" ng-click="showPhoto(item)" alt="">
 
 <videogular ng-if="item.type=='mp4'" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+item.value), type: 'video/mp4'}]">
         <vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
@@ -159,7 +159,7 @@
                         <div style="font-size:13px; text-align:left; padding-top:8px;">{{photoDet.msg}}</div>
 
                         <div class="cmnt_share">
-                            <a href="javascript:void(0);">Comments [{{photoDet.commentList.length}}]</a> - <a href="javascript:void(0);">{{photoDet.likeStatus}} [{{photoDet.likeNo}}] </a>
+                            <a href="javascript:void(0);">Comments [{{photoDet.commentList.length}}]</a> - <a href="javascript:void(0);" ng-click="(photoDet.c_user) ?  statusLike(photoDet) :'';">{{(photoDet.is_like)?'Unlike':'Like'}} [{{photoDet.like_no}}] </a>
                             <b style="font-weight:bold;display:inline-block; " >&bull;</b>
                             <a href="javascript:void(0);" style="display: inline-block; position: relative;" ng-click="shareStaus(photoDet)">Share</a>
 

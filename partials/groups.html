@@ -1,3 +1,13 @@
+<div ng-if="isProfile" class="groupTab">
+    <input type="button" value="COMMUNITY GROUPS" ng-click="sugGroup()">
+    <input type="button" value="FRIENDS GROUPS" ng-click="locGroup()">
+</div>
+<div ng-if="isExp" class="groupTab">
+    <input type="button" value="SUGGESTED GROUPS" ng-click="sugGroup()">
+    <input type="button" value="LOCAL GROUPS" ng-click="locGroup()">
+</div>
+
+
 <div class="groups-body" ng-repeat="item in groupList track by item.id">
 	<div class="left-img" style="width:50px; float:left; margin-left: 11px;">
 		<img style="margin:-4px 0 0 0; max-width:50px;max-height:50px;" src="{{item.image}}">

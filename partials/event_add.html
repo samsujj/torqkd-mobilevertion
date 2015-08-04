@@ -3,6 +3,11 @@
         width: 100%;
         height: 400px;
     }
+
+    .btn-default{
+        padding: 0 !important;
+    }
+
 </style>
 
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
@@ -65,7 +70,7 @@
                                    class = "form-control input-form"
                                    ng-model = "form.from_date"
                                    datepicker-popup="{{format}}"
-                                   is-open="opened" ng-required="true" close-text="Close" show-weeks="false"
+                                   is-open="opened" ng-required="true" close-text="Close" show-weeks="false" min-date="minDate" max-date="maxDate" ng-blur="setDate()"
                                    ng-focus="open($event)"
                                    required-message="'Date cannot be blank.'"
                                    required>
@@ -80,7 +85,7 @@
                                    class = "form-control input-form"
                                    ng-model = "form.to_date"
                                    datepicker-popup="{{format}}"
-                                   is-open="opened1" ng-required="true" close-text="Close" show-weeks="false"
+                                   is-open="opened1" ng-required="true" close-text="Close" show-weeks="false" min-date="minDate1" ng-blur="setDate1()"
                                    ng-focus="open1($event)"
                                    required-message="'Date cannot be blank.'"
                                    required>

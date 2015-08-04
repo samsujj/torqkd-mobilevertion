@@ -3,7 +3,7 @@
         <ul>
             <li ng-repeat="tab in tabs" 
                 ng-class="{active:isActiveTab(tab.url)}" 
-                ng-click="onClickTab(tab)">{{tab.title}}</li>
+                ng-click="onClickTab(tab)"><span>{{tab.title}}</span></li>
         </ul>
         <div id="mainView">
             <div ng-include="currentTab"></div>

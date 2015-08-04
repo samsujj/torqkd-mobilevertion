@@ -2,7 +2,8 @@
 
 .ngdialog-content{ 
     border: 5px solid #f7941e !important;
-    border-radius: 0 !important; padding:25px 0!important; }
+    border-radius: 0 !important;
+    padding:25px 0!important; }
 
 
 #tabs{ margin-top:25px;}
@@ -149,7 +150,7 @@
     </div>
 
 	 <div class="clear"></div>
-	<div class="top-banner-contain" ng-show="sessUser!=currentUser">
+	<div class="top-banner-contain" ng-show="sessUser!=currentUser  && isLoad==1">
 		<div class="usercontain2">
 			<div class="user-contain2-img">
 				<img src="{{userdet.user_image}}"  alt="" />
@@ -173,7 +174,7 @@
 
 	
 	
-	<div  ng-show="sessUser!=currentUser" class="friends-div">
+	<div  ng-show="sessUser!=currentUser && isLoad==1" class="friends-div">
 		<h3 style="margin-right:0px;">Friends :</h3>
 			<div>{{frndno}}</div>
 			<div class="friendsimgmain">
@@ -195,7 +196,7 @@
 
 
 	
-	<div class="showalbumformobile" ng-show="sessUser!=currentUser">
+	<div class="showalbumformobile" ng-show="sessUser!=currentUser && isLoad==1">
 	
 			<div class="link6">
             

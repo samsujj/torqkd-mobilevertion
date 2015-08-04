@@ -24,7 +24,8 @@
 <div class="experience-wrapper">
 
 <div class="forumpress-table">
-	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
+	<h2 style="font-size:30px; padding-left:0px;"><a href="javascript:void(0);" style="font-size:30px;">Discussion Forums</a></h2>
+       <div class="clear"></div>
 	
 	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
 	
@@ -37,30 +38,35 @@
     </div>
 	
     
-    <h2>
-        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+    <h2 style="margin-bottom:20px; padding-left:0px;">
+        <span style="font-size:20px; letter-spacing:0px; padding:16px 0 0 0; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last">&raquo;</label></span>
     </h2>
+    
+    <div class="clear"></div>
 
     <div data-original-title="" class="top-heading"> <span data-original-title="" style="display:inline-block;">Topic: {{topicTitle}} </span></div>
 
 
-    <div style="background: #ECEFF5">
-        <div>
+    <div class="new-contain-row" style="background: #ECEFF5">
+        <div class="left-img-block">
             <img src="{{topicDet.user_image}}" width="50" alt="#" />
         </div>
-        <div>
-            <strong>{{topicDet.user_name}}</strong>
+        <div class="right-text-block" style="font-family:Arial, Helvetica, sans-serif; ">
+            <strong style="font-family:Arial, Helvetica, sans-serif; font-size:16px;">{{topicDet.user_name}}</strong>
             <div class="clear"></div>
-            <h5 style="font-size: 16px; color: #000; padding: 10px 0;">{{topicDet.title}}</h5>
-            <div ng-bind-html="topicDet.description"></div>
+            <h5 style="font-size: 16px; color: #000; padding: 10px 0; font-weight:bold;">{{topicDet.title}}</h5>
+            <div ng-bind-html="topicDet.description" style="font-weight:normal; font-size:16px; color:#111;"></div>
             <br/>
-            <span>{{topicDet.time}}</span>
-            <span><a href="javascript:void(0);">Like</a><span> (0)</span></span>
-            <span ng-show="sessUser>0">
-                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right; font-weight: bold;">DELETE&nbsp;POST</a>
-                <span style="float:right;">&nbsp;|&nbsp;</span>
-                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right; font-weight: bold;">EDIT&nbsp;POST</a>
+            <span style="font-size:16px;">{{topicDet.time}}</span>
+            <span style="font-size:16px;"><a href="javascript:void(0);" ng-click="likeTopic(topicDet)" style="color:#333;">{{(topicDet.likeStatus == 1)?'Unlike':'Like'}}</a><span> ({{topicDet.likeNo}})</span></span>
+            <span ng-show="sessUser>0" class="flink2">
+                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right; font-weight: bold; font-size:14px;"  ng-click="delTopicReply2(topicDet.id,topicDet.forum_id)" >DELETE&nbsp;POST</a>
+                <span style="float:right; font-size:13px;">&nbsp;|&nbsp;</span>
+                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right; font-weight: bold; font-size:14px;">EDIT&nbsp;POST</a>
             </span>
+            
+               <div class="clear"></div>
+
         </div>
 
         <div class="clear"></div>
@@ -69,39 +75,41 @@
 
 
 
-    <div ng-repeat="item in topicDet.topic_reply" style="background: #FFFFFF; margin: 5px 0;">
-        <div><img  alt="#" src="{{item.user_image}}" width="50" /></div>
-        <div>
-            <strong>{{item.user_name}}</strong>
+    <div ng-repeat="item in topicDet.topic_reply" class="new-contain-row">
+        <div class="left-img-block"><img  alt="#" src="{{item.user_image}}" width="50" /></div>
+        <div class="right-text-block" style=" font-size:16px; font-family:Arial, Helvetica, sans-serif; color:#333; line-height:18px;">
+            <strong style="font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;">{{item.user_name}}</strong>
             <div class="clear" style="margin-top: 8px;"></div>
             <div ng-bind-html="item.description"></div>
             <div class="clear" style="margin-top: 8px;"></div>
-            <span>{{item.time}}</span>
-            <span><a href="javascript:void(0);">Like</a><span>(0)</span></span>
-            <span ng-show="sessUser>0">
-                <a href="javascript:void(0);" style="color: #F7941E;display: inline-block; float: right;padding-right: 18px; font-weight: bold;  ">DELETE&nbsp;POST</a>
+            <span style="font-size:16px;">{{item.time}}</span>
+            <span style="font-size:16px; color:#000;"><a href="javascript:void(0);" ng-click="likeTopic(item)" style="color:#333;">{{(item.likeStatus == 1)?'Unlike':'Like'}}</a><span style="font-size:16px;"> ({{item.likeNo}})</span></span>
+            <span ng-show="sessUser>0" class="flink2" style="font-size:16px;">
+                <a href="javascript:void(0);" style="color: #F7941E;display: inline-block; float: right;padding-right: 18px; font-weight: bold; font-size:14px;" ng-click="delTopicReply(item.id,$index,item)">DELETE&nbsp;POST</a>
                 <span style="float:right;">&nbsp;|&nbsp;</span>
-                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right;   font-weight: bold; ">EDIT&nbsp;POST</a>
+                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right;   font-weight: bold; font-size:14px; ">EDIT&nbsp;POST</a>
                 <div class="clear"></div>
             </span>
             <div class="clear"></div>
         </div>
 
         <div class="clear"></div>
-        <div style="margin-left: 7%; width:90%; background: #ddd; border-bottom: #777 2px solid;">
-        <div ng-repeat="item1 in item.topic_reply1">
-            <div><img  alt="#" src="{{item1.user_image}}" width="50" /></div>
-            <div>
-                <strong>{{item1.user_name}}</strong>
+        <div class="containblock2">
+        <div ng-repeat="item1 in item.topic_reply1" style="margin-bottom:25px; font-size:16px; font-family:Arial, Helvetica, sans-serif; color:#333; line-height:18px;">
+            <div class="left-img-block"><img  alt="#" src="{{item1.user_image}}" width="50" /></div>
+            <div class="right-text-block">
+                <strong style="font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;">{{item1.user_name}}</strong>
                 <div class="clear" style="margin-top: 8px;"></div>
                 <div ng-bind-html="item1.description"></div>
                 <div class="clear" style="margin-top: 8px;"></div>
-                <span>{{item1.time}}</span>
-                <span><a href="javascript:void(0);">Like</a><span>(0)</span></span>
-            <span ng-show="sessUser>0">
-                <a href="javascript:void(0);" style="color: #F7941E;display: inline-block; float: right;padding-right: 18px; font-weight: bold;  ">DELETE&nbsp;POST</a>
+                <span style="font-size:16px; color:#a7a9aa;">{{item1.time}}</span>
+                <span><a href="javascript:void(0);" ng-click="likeTopic(item1)" style="font-size:16px; color:#333;">{{(item1.likeStatus == 1)?'Unlike':'Like'}}</a><span style="font-size:16px; color:#a7a9aa;">({{item1.likeNo}})</span></span>
+            <span ng-show="sessUser>0" class="flink2">
+                <a href="javascript:void(0);" style="color: #F7941E;display: inline-block; float: right;padding-right: 18px; font-weight: bold;  font-size:14px; " ng-click="delTopicReply1(item1.id,$index,item)">DELETE&nbsp;POST</a>
                 <span style="float:right;">&nbsp;|&nbsp;</span>
-                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right;   font-weight: bold; ">EDIT&nbsp;POST</a>
+                <a href="javascript:void(0);" style="color: #F7941E; display: inline-block; float: right;   font-weight: bold; font-size:14px; ">EDIT&nbsp;POST</a>
                 <div class="clear"></div>
             </span>
                 <div class="clear"></div>
@@ -111,38 +119,49 @@
         </div>
 
 
-        <form angular-validator-submit="addTopicForm1(item)" name="signUpForm" class="form-horizontal" novalidate angular-validator>
-            {{$index}}
-
+        <form angular-validator-submit="addTopicForm1($index,item)" name="signUpForm" class="form-horizontal" novalidate angular-validator>
             <div class="form-group">
                 <div class="col-sm-10" style="width:100%; padding:0;">
-                    <textarea id="Reply_description{{$index}}" name="Reply{{$index}}[description]" placeholder="Write reply here" class="form-control" validate-on="blur" ng-model="form1.description" required-message="'Reply cannot be blank.'" required></textarea>
+                    <textarea id="Reply_description{{$index}}" class="form-control" placeholder="Write reply here" style="	 background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #97989a ;
+    border-radius: 5px ;
+    font-family: Helvetica,Arial,sans-serif !;
+    font-size: 14px;
+    padding: 6px !;
+    width: 80% ; resize:none;"></textarea>
                 </div>
             </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn5">Submit</button>
         </form>
         </div>
 
 
         <div class="clear"></div>
     </div>
-
-    <input ng-show="sessUser > 0 && isReply==0" ng-click="isReply = !isReply" value="New Reply" type="button" style="width: 80px !important; text-align: center; padding: 6px 0 4px 0; margin-top: 8px;">
-
-    <form ng-show="isReply!=0" angular-validator-submit="addTopicForm()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+ <div  class="new-contain-row">
+    <input ng-show="sessUser > 0 && isReply==0" ng-click="isReply = !isReply" value="New Reply" type="button" class="btn5">
+   
+    <form ng-show="isReply!=0" angular-validator-submit="addTopicForm()" name="signUpForm" class="form-horizontal" novalidate angular-validator >
 
         <div class="form-group">
-            <div class="col-sm-10" style="width:100%; padding:0;">
-                <textarea id="Reply_description" name="Reply[description]" placeholder="Write reply here" class="form-control" validate-on="blur" ng-model="form.description" required-message="'Reply cannot be blank.'" required></textarea>
+            <div class="col-sm-10" >
+                <textarea  id="Reply_description" name="Reply[description]" placeholder="Write reply here" class="form-control" validate-on="blur" ng-model="form.description" required-message="'Reply cannot be blank.'" required style="	 background: #fff none repeat scroll 0 0;
+    border: 2px solid #97989a;
+    border-radius: 5px;
+    font-family: Helvetica,Arial,sans-seri;
+    font-size: 14px;
+    padding: 6px;
+    width: 95%; resize:none;"> </textarea>
             </div>
+            <div class="clear"></div>
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn5">Submit</button>
     </form>
 
-
-
+ <div class="clear"></div>
+</div>
 </div>
     
 

@@ -1,10 +1,26 @@
+<style type="text/css">
+
+.angular-google-map-container {
+    border: none!important; width:100%!important;
+}
+
+#map-canvas {
+
+ 
+    height:100%;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+</style>
+
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
   
   
-<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+<div id="sp-nav" ng-include="'partials/menu.html'" style="padding:0;"></div>
 
   
-<div id="sp-page" >
+<div id="sp-page" style="padding:0;" >
 
 <div class="albums-div" style="padding:0; width:100%;" ng-include="'partials/experience_5.html'"></div>
 

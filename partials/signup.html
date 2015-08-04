@@ -1,3 +1,17 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+    }
+
+</style>
+
 <div class="register-body">
   <div class="register_wrapper">
     <div class="logo" > <a href="#/index"> <img  src="images/logo.png" alt="#"/> </a> </div>
@@ -9,8 +23,7 @@
         <div class="form-group">
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
-				<input type="text" id="UserManager_lname" name="UserManager[fname]" placeholder="FIRST NAME"
-						validate-on="blur"
+				<input type="text" id="UserManager_fname" name="UserManager[fname]" placeholder="FIRST NAME"
                         class = "form-control register_input"
                         ng-model = "form.fname"
                         required-message="'First Name cannot be blank.'"
@@ -22,7 +35,6 @@
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
 				<input type="text" id="UserManager_lname" name="UserManager[lname]" placeholder="LAST NAME"
-						validate-on="blur"
                         class = "form-control register_input"
                         ng-model = "form.lname"
                         required-message="'Last Name cannot be blank.'"
@@ -34,7 +46,6 @@
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
 				<input type="email" id="UserManager_email" name="UserManager[email]" placeholder="YOUR EMAIL"
-						validate-on="blur"
                         class = "form-control register_input"
                         ng-model = "form.email"
                         required-message="'Email cannot be blank.'"
@@ -46,7 +57,6 @@
         <div class="form-group">
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<input type="email" name="UserManager[email2]" placeholder="CONFIRM YOUR EMAIL"
-						validate-on="dirty"
                         class = "form-control register_input"
                         ng-model = "form.email2"
 						validator = "form.email === form.email2"
@@ -59,7 +69,6 @@
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
 				<input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
-						validate-on="dirty"
                         class = "form-control register_input"
                         ng-model = "form.password"
                         required-message="'Password cannot be blank.'"
@@ -70,7 +79,6 @@
         <div class="form-group">
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<input type="password" id="UserManager_password2" name="UserManager[password2]" placeholder="CONFIRM PASSWORD"
-						validate-on="dirty"
                         class = "form-control register_input"
                         ng-model = "form.password2"
                         validator = "form.password === form.password2"
@@ -83,7 +91,6 @@
 			<div class="col-sm-10" style="width:100%; padding:0;">
 				<span style="float: right; display:block; width: 10px; color:#fb992c; margin-top:15px;">*</span>
 				<input type="text" id="UserManager_city" name="UserManager[city]" placeholder="CITY"
-						validate-on="blur"
                         class = "form-control register_input"
                         ng-model = "form.city"
                         required-message="'City cannot be blank.'"
@@ -106,9 +113,9 @@
          
          <p style="font-size: 11px;" >
 By proceeding to the next step, you agree to our
-<a style="color: #ff0000;" href="javascript:void(0)" > terms of service </a>
+<a style="color: #ff0000;" href="javascript:void(0)" ng-click="showtermsploicy('terms')" > terms of service </a>
 as well as our
-<a  style="color: #ff0000;" href="javascript:void(0)"> privacy </a>
+<a  style="color: #ff0000;" href="javascript:void(0)" ng-click="showtermsploicy('policy')"> privacy </a>
 .
 </p>
 

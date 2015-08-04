@@ -24,9 +24,9 @@
 <img ng-src="{{(profileImage != '')?profileImage:'images/default.jpg'}}" alt="#"  >
 
 </div>
-<div class="img-btn-div">
-<input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-<img src="images/help.png" alt="#" class="help-icon">
+<div class="img-btn-div" style="clear:both; overflow:hidden; position:inherit; bottom:0;">
+<input type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"> 
+<img src="images/help.png" alt="#" class="help-icon" style="margin-top:-3px;">
     <div class="clear"></div>   
 </div>
 
@@ -34,8 +34,12 @@
 	<div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
 </div>
 
-  </div>     
-       
+        <input class="imgBtnCls" style="margin-top: 30px;" type="button" value="Crop" ng-if="profileImageName != 'default.jpg'" ng-click="cropProfileImg()">
+
+        <input class="imgBtnCls" style="margin-top: 30px;" type="button" value="Delete" ng-if="profileImageName != 'default.jpg'"  ng-click="profileImgDel(1)">
+
+  </div>
+    <div class="clear"></div>
        
      <h4>Add Background Photo</h4>    
        
@@ -47,16 +51,20 @@
 
 </div>
 
-    <div class="img-btn-div">
-<input type="button" value="+" class="upload-btn2" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box"ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-<img src="images/help.png" alt="#" class="help-icon">
+  <div class="img-btn-div" style="clear:both; overflow:hidden; position:inherit; bottom:0;">
+<input type="button" value="+" class="upload-btn2" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box"ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"> 
+<img src="images/help.png" alt="#" class="help-icon" style="margin-top:-3px;">
     <div class="clear"></div>   
 </div> 
 
 <div class="progress" ng-show="files1[0].progress >= 0">
 	<div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
 </div>
-       
+
+           <input class="imgBtnCls" style="margin-top: 30px;" type="button" value="Crop" ng-if="profileBackImageName != 'default.jpg'" ng-click="cropProfileBackImg()">
+
+           <input class="imgBtnCls" style="margin-top: 30px;" type="button" value="Delete" ng-if="profileBackImageName != 'default.jpg'" ng-click="profileImgDel(2)">
+             <div class="clear"></div>
        </div>
        
      

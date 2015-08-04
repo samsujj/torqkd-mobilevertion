@@ -22,10 +22,22 @@ torqdTest.config(['$routeProvider',
         templateUrl: 'partials/login.html',
         controller: 'loginCtrl'
       }).
-      when('/signup', {
-        templateUrl: 'partials/signup.html',
-        controller: 'SignUpCtrl'
-      }).
+        when('/signup', {
+            templateUrl: 'partials/signup.html',
+            controller: 'SignUpCtrl'
+        }).
+        when('/forgot-password', {
+            templateUrl: 'partials/forgot_password.html',
+            controller: 'FPasswordCtrl'
+        }).
+        when('/forgot-password-second-step', {
+            templateUrl: 'partials/forgot_password2.html',
+            controller: 'FPassword2Ctrl'
+        }).
+        when('/change-password', {
+            templateUrl: 'partials/forgot_password3.html',
+            controller: 'CPasswordCtrl'
+        }).
       when('/activities', {
         templateUrl: 'partials/activities.html',
         controller: 'ActivityCtrl'
@@ -133,6 +145,14 @@ torqdTest.config(['$routeProvider',
         when('/add-group', {
             templateUrl: 'partials/add_group.html',
             controller: 'groupAddCtrl'
+        }).
+        when('/add-route', {
+            templateUrl: 'partials/add_route.html',
+            controller: 'routeAddCtrl'
+        }).
+        when('/add-route1/:spId/:locName', {
+            templateUrl: 'partials/add_route1.html',
+            controller: 'routeAdd1Ctrl'
         }).
         when('/edit-profile', {
             templateUrl: 'partials/edit_profile.html',

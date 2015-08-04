@@ -8,8 +8,8 @@
 <div class="experience-wrapper">
 
 <div class="forumpress-table">
-	<h2><a href="javascript:void(0);">Discussion Forums</a></h2>
-	
+	<h2 style="font-size:30px;"><a href="javascript:void(0);" style="font-size:30px;">Discussion Forums</a></h2>
+	<div class="clear"></div>
 	<div class="top-heading" style="margin-top: 15px;">{{user_name}}</div>
 	
 	<div class="rowone" ng-show="sessUser > 0">
@@ -20,11 +20,11 @@
         <div class="clear"></div>
     </div>
 	
-    
+       <div class="clear"></div>
     <h2>
-        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 12px; width: 60%" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last"> >> </label></span>
+        <span style="font-size:20px; letter-spacing:0px; padding:12px 0 0 0;" ng-repeat="h in headingArr"><a style="font-size: 30px;" href="{{h.link}}">{{h.value}}</a><label ng-show="!$last">&raquo;</label></span>
     </h2>
-
+       <div class="clear"></div>
 	<div ng-repeat="item in forumList">
 		<div  class="top-row">
 			<div style="border:none; padding:0 2%; height:auto;" class="div1"><a href="#/forum-listing1/{{item.id}}" style="color: #f7941e;">{{item.sport_name}}</a></div>
@@ -53,7 +53,7 @@
 			<div style="border-right:none;"  class="div4">
 				<div ng-show="!forum.lpost">No topics yet</div>
 				<div ng-show="forum.lpost">
-					<a style="font-size:14px;" href="#">{{forum.lpostArr.title}}</a>
+					<a style="font-size:14px;" href="#/forum-details/{{forum.id}}">{{forum.lpostArr.title}}</a>
 					<div>
 						<strong>{{forum.lpostArr.time}} - </strong> {{forum.lpostArr.user_name}}</div>
 				</div>
