@@ -1,26 +1,27 @@
-<!--<style>
-label.has-error{
-	color: #f8931f !important;
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    width: 100% !important;
-    display: inline-block;
-    margin: 0px auto !important;
-    padding: 0 !important;
-    text-align: left !important;
-    font-weight: normal !important;
-}
-.form-group{
-	margin:0 !important;
-	width:100% !important;
-}
-</style>-->
+<style>
+
+    .ngdialog-content{ background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
+
+</style>
+
 <div class="next-body">
   <div class="register_wrapper">
-    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
-    <div class="menupart"><img  alt="#" src="images/bgimage4.png" ></div>
+    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo_main.png" /> </a> </div>
+    <div class="menupart4"></div>
     <div class="activities_contain">
-      <h2><img  alt="#" src="images/invitefrds.jpg"></h2>
+      <h2><img  alt="#" src="images/invitefrds.jpg" id="nextH"></h2>
      
     <div class="inviteFriends"> 
 	<form angular-validator-submit="sendEmail()" name="sendEmailForm" class="form-horizontal" novalidate angular-validator>
@@ -44,11 +45,12 @@ label.has-error{
     <input class="see-btn2" type="submit" value="EMAIL" >
 	</form>
       
-    <h6>INVITE FRIENDS VIA YOUR ONLINE ADDRESS BOOK</h6>
+    <h6 id="inviteDiv">INVITE FRIENDS VIA YOUR ONLINE ADDRESS BOOK</h6>
       
     <select id="social_select" ng-model="social_select">
 		<option value="" data-original-title="">SELECT SERVICE</option>
 		<option value="fb" data-original-title="">FACEBOOK</option>
+        <option value="tw" data-original-title="">TWITTER</option>
 	</select>
 
 
@@ -68,5 +70,5 @@ label.has-error{
         
     </div>
   </div>
-  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+  <div class="footer-menu2"> <span>&copy;TORKQ</span> <span>|</span> <span> <a href="javascript:void(0);" ng-click="showtermsploicy('terms')" >TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a> </span> </div>
 </div>

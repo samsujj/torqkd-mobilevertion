@@ -9,11 +9,19 @@ audio, canvas, progress, video{ width:100%;}
 
 </style>
 <div ng-hide="{{maintv.type}}" class="videogular-container">
-	<videogular vg-auto-play="autoplay">
+<!--	<videogular vg-auto-play="autoplay">
         <vg-media vg-src="vidsources" vg-native-controls="true" vg-loop="true"></vg-media>
-        
     </videogular>
-	<h3>TORQK'D TV</h3>
+
+-->
+
+    <div class="video-contain2" data-original-title="" id="maintvDiv">
+        <div class="viewMore" style="width:100%; text-align:center; padding:5px 0;"><img src="images/loading_list.gif" width="118" height="9" /></div>
+    </div>
+
+
+
+	<h3><a href="#/video">TORKQ TV</a></h3>
 </div>
 <div ng-show="{{maintv.type}}">
 

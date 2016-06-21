@@ -1,110 +1,293 @@
 <div>
+
 	<div  ng-repeat="item in videoList track by item.id" style="position: relative; width: 240px; height:160px; float:left; margin:5px;">
+
 		<div liquid="liquidConfigurations[0]" class="imgLiquidFill imgLiquid" style="width: 230px; height:150px; border:6px #fff solid;">
+
 			<img ng-src="{{item.img_src}}"/>
+
 		</div>
-		<img src="images/youplay.png" alt="Play Video" style="width: 20%; left: 40%; position: absolute; top: 40%; cursor:pointer;" ng-click="showVideo(item)" />
+
+		<img src="images/youplay.png" alt="Play Video" style="width: 20%; left: 40%; position: absolute; top: 40%; cursor:pointer;" ng-click="showVideo(item,$index)" />
+
 	</div>
+
 </div>
+
 
 
 
 
 <script type="text/ng-template" id="videoComment">
-        <div class="ngdialog-message">
-		
+
+	<div class="popupbox2">
+
+		<a href="javascript:void(0)" class="cancelbtn1" ng-click="modalClose()"><img src="images/close.png"></a>
+
+
+
 <div class="photo-popup" style="mmargin: 0 auto; width:100%;text-align:center;overflow: inherit;height: auto; padding:0; ">
+
 	<div>
+
 		<div>
+
 			<div  class="embed-responsive embed-responsive-16by9 video-wrapper" ng-if="videoDet.videoType=='youtube'">
+
 				<youtube-video class="embed-responsive-item" video-id="videoDet.value"></youtube-video>
+
 			</div>
-			
-			<videogular ng-if="videoDet.videoType=='mp4'" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+videoDet.value), type: 'video/mp4'}]" >
+
+
+
+			<videogular ng-if="!isMobileApp && videoDet.videoType=='mp4' && videoDet.basepath==''" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+videoDet.value), type: 'video/mp4'}]" >
+
 				<vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
+
 			</videogular>
-			
-			
-		</div>
-	</div>
-	
-       <div class="poprt">
-            <div style="background-color:#D1D3D4;" class="comment-area">
-				<div class="comment_top">
-				
-					<div class="profile-img">
-						<img  src="{{videoDet.userImage}}" alt="" style=" max-width:50px; max-height:50px;" />
-					</div>
-					
-					<div class="profile-text">
-						<div class="name-text">{{videoDet.userName}}</div>
-						<div class="text-contain">{{videoDet.timeSpan}}</div>
-						<div class="clear"></div>
-					</div>
-					
-					<div class="clear"></div>
-					
-					<div style="font-size:13px; text-align:left; padding:8px;">{{videoDet.msg}}</div>
-					
-					<div class="cmnt_share">
-						<a href="javascript:void(0);">Comments [{{videoDet.commentList.length}}]</a> - <a href="javascript:void(0);">{{videoDet.likeStatus}} [{{videoDet.likeNo}}] </a>
-						<b style="font-weight:bold;display:inline-block; " >&bull;</b>
-						<a href="javascript:void(0);" style="display: inline-block; position: relative;" ng-click="shareVidStaus(videoDet)" >Share</a>
-                           
-                    </div>
-					
+
+
+
+			<videogular ng-if="!isMobileApp && videoDet.videoType=='mp4' && videoDet.basepath!=''" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/'+videoDet.value), type: 'video/mp4'}]" >
+
+				<vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
+
+			</videogular>
+
+
+
+			<div ng-if="isMobileApp && videoDet.videoType=='mp4' && videoDet.basepath==''">
+
+				<div style="position: relative;">
+
+					<img src="{{videoDet.imgSrc}}"  style="width:100%;"/>
+
+					<a href="http://torqkd.com?redirectvideoplay={{baseUrl}}/uploads/video/converted/{{videoDet.value}}"><img src="images/playVideo.png" style="position: absolute; width: 16%;  left:42%; top:40%;" /></a>
+
 				</div>
-            
-            
-            
-            
-       
-                 <div class="commen_body">
+
+			</div>
+
+
+
+			<div ng-if="isMobileApp && videoDet.videoType=='mp4' && videoDet.basepath!=''">
+
+				<div style="position: relative;">
+
+					<img src="{{videoDet.imgSrc}}"  style="width:100%;"/>
+
+					<a href="http://torqkd.com?redirectvideoplay={{baseUrl}}/uploads/video/{{videoDet.value}}"><img src="images/playVideo.png" style="position: absolute; width: 16%;  left:42%; top:40%;" /></a>
+
+				</div>
+
+			</div>
+
+
+
+
+
+		</div>
+
+	</div>
+
+	
+
+       <div class="poprt">
+
+            <div style="background-color:#D1D3D4;" class="comment-area">
+
+				<div class="comment_top">
+
 				
-					<div ng-repeat="com in videoDet.commentList track by com.id"  class="commend-box">
-					<div class="date-link">
-							<a href="javascript:void(0);">{{com.time}}</a>
-							<img class="closeCBtn" src="images/deletebutton1.png" class="closeBtn" ng-show="com.user_id==sessUser" ng-click="delComment($index,1)" />
-						</div>
-						
-						<div style="width:50px; float:left; height:auto;">
-							<img style=" margin-top:2px; max-width:35px; max-height:35px;" alt="" src="{{com.user_image}}" />
-						</div>
-						
-						<div class="combodyu">
-							<strong>
-								<a href="#/profile/{{com.user_id}}" data-original-title="">{{com.user_name}}</a>
-							</strong>
-							<br />{{com.body}}
-						</div>
-						
-						<div class="clear"></div>
-					</div>
-       
-                </div> 
-      
-                <div ng-show="sessUser" class="commendboxpro">
-					<div class="profile-img2">
-						<img style=" max-width:35px; max-height:35px;" alt="" src="{{videoDet.cUserImage}}">
+
+					<div class="profile-img">
+
+						<img  src="{{videoDet.userImage}}" alt="" style=" max-width:50px; max-height:50px;" />
+
 					</div>
 
-                   <div class="popup-text-box1">
-						<textarea placeholder="Write a comment..." ng-model="videoDet.pstval" ></textarea>
-                        <a href="javascript:void(0);" ng-click="postComment(videoDet)" class="mob-post2">POST</a>
+					
+
+					<div class="profile-text">
+
+						<div class="name-text">{{videoDet.userName}}</div>
+
+						<div class="text-contain">{{videoDet.timeSpan}}</div>
+
+						<div class="clear"></div>
+
+					</div>
+
+					
+
+					<div class="clear"></div>
+
+					
+
+					<div style="font-size:14px; text-align:left; padding:8px 5px; color:#333;">{{videoDet.msg}}</div>
+
+					
+
+					<div class="cmnt_share">
+
+						<a href="javascript:void(0);">Comment{{(videoDet.commentList.length >1)?'s':''}} [{{videoDet.commentList.length}}]</a> - <a href="javascript:void(0);" ng-click="(videoDet.cUserId) ?  statusLike(videoDet,'video') :'';">{{(videoDet.likeStatus)?'Unlike':'Like'}} [{{videoDet.likeNo}}] </a>
+
+						<b style="font-weight:bold;display:inline-block; " >&bull;</b>
+
+						<a href="javascript:void(0);" style="display: inline-block; position: relative;" ng-click="shareVidStaus(videoDet)" >Share</a>
+
+                           
+
                     </div>
+
+					
+
+				</div>
+
+            
+
+            
+
+            
+
+            
+
+       
+
+                 <div class="commen_body">
+
+				
+
+					<div ng-repeat="com in videoDet.commentList track by com.id"  class="commend-box">
+
+			
+
+						
+
+						<div style="width:50px; float:left; height:auto;">
+
+							<img style=" margin-top:2px; max-width:35px; max-height:35px;" alt="" src="{{com.user_image}}" />
+
+						</div>
+
+						
+
+						<div class="combodyu">
+						
+							<div class="date-link">
+
+							<a href="javascript:void(0);">{{com.time}}</a>
+
+							<img class="closeCBtn" src="images/deletebutton1.png" class="closeBtn" ng-show="com.user_id==sessUser" ng-click="delComment($index,1)" />
+
+						</div>
+						
+						
+						
+						 <div class="nprofilename">
+
+							<strong>
+
+								<a href="#/profile/{{com.user_id}}" data-original-title="">{{com.user_name}}</a>
+
+							</strong>
+
+							</div>
+						
+						
+							<div class="clear"></div>
+
+							<div ng-bind-html="com.body | newlines | emoticons:{'linkTarget':'_blank','newLine':true}" class="ng-emoticons"></div>
+
+
+
+						</div>
+
+						
+
+						<div class="clear"></div>
+
+					</div>
+
+       
+
+                </div> 
+
+      
+
+                <div ng-show="sessUser" class="commendboxpro">
+
+					<div class="profile-img2">
+
+						<img style=" max-width:35px; max-height:35px;" alt="" src="{{videoDet.cUserImage}}">
+
+					</div>
+
+
+
+                   <div class="popup-text-box1">
+
+						<!--<textarea placeholder="Write a comment..." ng-model="videoDet.pstval" ></textarea>-->
+
+					   <div style=" height: auto; position: relative;">
+
+						   <div id="pcommentdiv000" ng-keyup="setcommentval($event,videoDet)" style=" border:solid 2px #97989a; border-radius:5px; min-height: 38px; height: auto !important;padding: 6px; overflow: hidden;  float: left; text-align: left; " contentEditable="true"></div>
+
+						   <a href="javascript:void(0)" ng-click="showemojisdivsada()"> <img src="images/emo.png"  class="emocss"/></a>
+
+					   </div>
+
+					   <a href="javascript:void(0);" ng-click="postComment(videoDet)" class="mob-post2">POST</a>
+
+                    </div>
+
+
+
+					<div style="position: relative;">
+
+
+
+						<div ng-show="showemojisdiv" style=" bottom: 1px; position: absolute; right: 0; width: 90%; background-color: #FFFFFF; padding: 5px;border: 2px solid #97989a !important; border-radius: 5px !important; ">
+
+							<div class="emojisdiv" style="height: 200px;overflow: auto">
+
+								<a href="javascript:void(0)" ng-repeat="emoitem in emojisArr" ng-click="emoinsert(videoDet,emoitem)" class="emoticon emoticon-{{emoitem}}" title=":{{emoitem}}:"  ></a>
+
+							</div>
+
+						</div>
+
+					</div>
+
+
 
                     <div class="clear"></div>
 
+
+
                 </div>
+
  
+
         
+
        
+
        </div>
+
        
+
        </div>                             
+
    </div>
 
+
+
 </div>
+
 </script>
+
+
+
 
 

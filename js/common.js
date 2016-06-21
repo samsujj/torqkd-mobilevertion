@@ -14,8 +14,16 @@ function setValuelong(obj){
 
 function add_userdevice_with_session(deviceId){
     $.post('http://torqkd.com/user/ajs/add_userdevice_with_session',{deviceId:deviceId},function(res){
-       //alert(res);
+       //alert(deviceId);
     });
+}
+
+function loadImage(imgPath){
+     //alert( imgPath);
+       /* var imgpatharr = imgPath.split(",");
+        //alert(imgpatharr[1]);
+        $('#localtestimg').attr('src', '\ file://'+imgpatharr[1]+"\ ");*/
+       // $('#localtestimgstr').html(imgPath);
 }
 
 
@@ -231,3 +239,114 @@ $(document).ready(function() {
 
 });
 
+/*
+var items = $('#items');
+var index = 0;
+var timeout;
+
+
+(function($) {
+
+    /**
+     * Továbbítás a következő elemhez.
+     */
+   /* function autoForward() {
+
+        var children = $('#spItems').children();
+
+        var curIndex = $("#spItems li").index($("#spItems").find('li.cTop'));
+
+        index = curIndex === children.length - 3 ? 0 : curIndex + 1;
+
+        if ($('#spItems').length > 0) {
+            animate25(children.eq(index));
+        }else{
+            setTimeout(function(){
+                start123();
+            },2000);
+        }
+    }
+
+    /**
+     * Indítjuk a következő elemhez ugrást.
+     */
+   /* function startTimer() {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(autoForward, 5000);
+    }
+
+    /**
+     * Animáljuk a dobozt a megadott elemhez.
+     */
+   /* function animate25(item) {
+
+        if($('#spItems').length > 0){
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+
+                $('#spItems').find('li').removeClass('cTop');
+                item.addClass('cTop');
+
+                var firstContent = $('#spItems').find('li:first').html();
+
+
+                $('#spItems').stop(true).animate({
+                    top: -($('#spItems').find('li:first').position().top)
+                }, 'slow', startTimer);
+
+                $('#spItems').find('li:first').remove();
+                $('#spItems').append('<li class="ng-scope">' + firstContent + '</li>');
+
+    }else{
+            setTimeout(function(){
+                start123();
+            },2000);
+        }
+
+    }
+
+
+
+    start567();
+
+    function start567(){
+        alert($('#spItems').length);
+        if($('#spItems').length > 0){
+            var children = $('#spItems').children();
+
+            alert(5);
+
+            start123();
+        }else{
+            setTimeout(function(){
+                start567();
+            },2000);
+        }
+    }
+
+    function start123(){
+        var children = $('#spItems').children();
+
+        if(children.length == 0){
+
+            setTimeout(function(){
+                start123();
+            },2000);
+
+        }else{
+            if(children.length > 3){
+                startTimer();
+            }
+        }
+
+    }
+
+}(jQuery));
+*/
+function showandmsg(msg){
+    alert(msg);
+    Android.showToast(msg);
+ }

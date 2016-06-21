@@ -1,21 +1,29 @@
-    <div class="topcoat-list-container" ng-show="sessUser">
+    <div class="topcoat-list-container">
         <ul class="topcoat-list">
-            <li class="topcoat-list__item"><a href="#/profile/{{sessUser}}">Profile</a></li>
-            <li class="topcoat-list__item"><a href="#/friend-list/{{sessUser}}">Friends</a></li>
-            <li class="topcoat-list__item"><a href="#/connection/{{sessUser}}">Community</a></li>
-            <li class="topcoat-list__item"><a href="#/album/{{sessUser}}">Album</a></li>
-            <li class="topcoat-list__item"><a href="#/video">TORQK'D TV</a></li>
-            <li class="topcoat-list__item"><a href="#/routes/{{sessUser}}">View Routes</a></li>
-            <li class="topcoat-list__item"><a href="#/add-event">Add Events</a></li>
-            <li class="topcoat-list__item"><a href="#/add-group">Add Groups</a></li>
-            <li class="topcoat-list__item"><a href="#/add-route">Add Routes</a></li>
-            <li class="topcoat-list__item"><a href="#/forum-listing">Forum</a></li>
-            <li class="topcoat-list__item"><a href="#/comingsoon">Daily Poll</a></li>
-            <li class="topcoat-list__item"><a href="#/eventmap">Event Map</a></li>
-            <li class="topcoat-list__item"><a href="#/mysports">My Sports</a></li>
-            <li class="topcoat-list__item"><a href="#/edit-profile">Update Profile</a></li>
-            <li class="topcoat-list__item"><a href="#/experience">The Experience</a></li>
-            <li class="topcoat-list__item"><a href="#/logout">Logout</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/allnotification" ng-click="$spMenu.hide()">Notifications</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/profile/{{sessUser}}" ng-click="$spMenu.hide()">Profile</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/friend-list/{{sessUser}}" ng-click="$spMenu.hide()">Friends</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/connection/{{sessUser}}" ng-click="$spMenu.hide()">Community</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/album/{{sessUser}}" ng-click="$spMenu.hide()">Album</a></li>
+            <li ng-hide="sessUser" class="topcoat-list__item"><a href="#/photo" ng-click="$spMenu.hide()">Photo</a></li>
+            <li class="topcoat-list__item"><a href="#/video" ng-click="$spMenu.hide()">TORKQ TV</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/routes/{{sessUser}}" ng-click="$spMenu.hide()">View Routes</a></li>
+            <li ng-hide="sessUser" class="topcoat-list__item"><a href="#/routes" ng-click="$spMenu.hide()">View Routes</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-event" ng-click="$spMenu.hide()">Add Events</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-group" ng-click="$spMenu.hide()">Add Groups</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-route" ng-click="$spMenu.hide()">Add Routes</a></li>
+            <li class="topcoat-list__item"><a href="#/forum-listing" ng-click="$spMenu.hide()">Forum</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="javascript:void(0);" onClick="showdailypoll()" ng-click="$spMenu.hide()">Daily Poll</a></li>
+            <li class="topcoat-list__item"><a href="#/eventmap" ng-click="$spMenu.hide()">Event Map</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/mysports/{{sessUser}}" ng-click="$spMenu.hide()">My Sports</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/edit-profile" ng-click="$spMenu.hide()">Update Profile</a></li>
+            <li class="topcoat-list__item" style="position: relative; " ng-click="showsportsMenu = !showsportsMenu"><a href="javascript:void(0);">Sports</a>
+                <ul class="sub_menu"  ng-show="showsportsMenu">
+                    <li ng-repeat="n in sportsMenu"><a href="#/sport/{{n.id}}" ng-click="$spMenu.hide()">{{n.sport_name}}</a></li>
+                </ul>
+            </li>
+            <li class="topcoat-list__item"><a href="#/experience" ng-click="$spMenu.hide()">The Experience</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="#/logout" ng-click="$spMenu.hide()">Logout</a></li>
 
             
         </ul>

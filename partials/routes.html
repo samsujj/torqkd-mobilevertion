@@ -3,6 +3,16 @@
         border: 5px solid #f7941e !important;
         border-radius: 0 !important; padding:25px 0!important; }
 
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
     .angular-google-map-container {
         width: 90%;
         height: 400px;
@@ -59,16 +69,16 @@
  
 	<div style="width:100%;">
 		<h4 class="Routestext">Routes</h4>
-		<div class="mb-btn"><a href="#/add-route">+</a></div>
+		<div class="mb-btn" ng-show="sessUser > 0 && sessUser==currentUser"><a href="#/add-route">+</a></div>
         	<div class="clear"></div>
 	</div>
     
 	<div class="clear"></div>
 	<div style="width: 100%; ">
 		<div class="ptext">
-			<p style="color:#4f4f51;font-size: 13px;margin: 0px; line-height:22px;font-family: 'helvetica', 'arial';font-weight:normal;text-transform:none;letter-spacing:normal;">Below are listed the routes  recorded through either the online system or the Torqk'd mobile app. Click on the map for a larger view of the route recorded.</p>
+			<p style="color:#4f4f51;font-size: 13px;margin: 0px; line-height:22px;font-family: 'helvetica', 'arial';font-weight:normal;text-transform:none;letter-spacing:normal;">Below are listed the routes  recorded through either the online system or the Torkq mobile app. Click on the map for a larger view of the route recorded.</p>
 		</div>
-		<div class="albumPhotos">
+		<div class="albumPhotos" ng-show="currentUser">
 			<img  src="{{user_image}}" alt="">
 		</div>
 	</div>
@@ -147,8 +157,13 @@
 
 
     </div>
-    
-    </div>
+
+    <div class="empty" ng-show="routeListCount==0">No results found.</div>
+    <div ng-show="viewMore" class="viewMore"><a href="javascript:void(0);" ng-click="viewMoreRoues()">View More</a></div>
+    <div ng-show="viewMoreLoad" class="viewMore"><img src="images/loading_list.gif" /></div>
+
+
+</div>
 
 	</div>
 	</div>
@@ -158,6 +173,21 @@
 
     </div>
 
+
+
+
+    <div class="footer-menu1">
+
+        <span>&copy;TORKQ</span>
+        <span>|</span>
+<span>
+<a href="javascript:void(0);"  ng-click="showtermsploicy('terms')">TERMS </a>
+</span>
+        <span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+</span>
+    </div>
 
 </div>
 </div>

@@ -4,12 +4,38 @@
         border: 5px solid #f7941e !important;
         border-radius: 0 !important; padding:25px 0!important; }
 
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
     .confirmPopup .ngdialog-content{
         position:relative;
         margin:0 auto;
         width:80%;
         padding:3px 12px;
         animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+    }
+
+    .confirmPopup .ngdialog-close{
+        font-size: 40px;
+        position: absolute;
+        right: 5px;
+        top: -10px;
+    }
+    .confirmPopup .confirmBtn{
+        text-align: center;
+    }
+    .confirmPopup .poparebarea{
+        font-family: "veneerregular" !important;
+        font-size: 23px !important;
+        padding: 10px !important;
+        text-align: center;
     }
 
 </style>
@@ -42,7 +68,7 @@
     </h2>
 
 
-    <a href="#/new-topic/{{headingArr[2].id}}" class="NewTopic-btn">New Topic</a>
+    <a href="javascript:void(0)" ng-click="gotonewtopic(headingArr[2].id)" class="NewTopic-btn">New Topic</a>
       <div class="clear"></div>
 
     <div>
@@ -62,8 +88,8 @@
 		
 			<div class="div1">
                 <div class="teable-text">
-                    <span class="topicTitle"><a href="#/topic-details/{{item.id}}">{{item.title}}</a>&nbsp;&nbsp;</span>
-                    <small class="adminActions" ng-show="item.user_id == sessUser"><a href="#/move-topic/{{item.id}}">Move Topic</a> | <a href="javascript:void(0);" ng-click="delTopic(item.id,$index)">Delete Topic</a></small>
+                    <span class="topicTitle" style="padding-bottom: 8px;" ><a href="#/topic-details/{{item.id}}" style="font-size:14px!important; font-weight:700!important;">{{item.title}}</a>&nbsp;&nbsp;</span>
+                    <small class="adminActions" ng-show="item.user_id == sessUser" style="display:block; padding-bottom: 8px;"><a href="#/move-topic/{{item.id}}">Move Topic</a> | <a href="javascript:void(0);" ng-click="delTopic(item.id,$index)">Delete Topic</a></small>
                     <div class="topic-meta">posted by <strong> {{item.user_name}}</strong> on {{item.time}}</div></div>
 			</div>
 
@@ -79,7 +105,7 @@
                 <div class="teable-text">
 
                     <a class="forumlink" style="font-size:14px;" href="#/topic-details/{{item.id}}">{{item.lpost_desc}}</a>
-                    <div class="forumdate"><strong>{{item.lpost_time}} -</strong> {{item.lpost_uname}}</div>
+                    <div class="forumdate" style="padding-top: 8px;"><strong>{{item.lpost_time}} -</strong> {{item.lpost_uname}}</div>
 
 
 
@@ -101,14 +127,14 @@
  <div class="clear"></div>
 
 <div class="footer-menu1">
-<span>&copy;TORQK'D</span>
+<span>&copy;TORKQ</span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div>
 

@@ -5,6 +5,17 @@
     border-radius: 0 !important; padding:25px 0!important; }
 
 
+.ngdialog-content p{
+    font:13px/18px Arial,Helvetica,sans-serif;
+    margin:0 15px;
+}
+.ngdialog-content h2{
+    margin-left:15px;
+    margin-right:15px;
+}
+
+
+
 #tabs{ margin-top:25px;}
 .newPopup .ngdialog-content{
 	position:relative;
@@ -81,9 +92,10 @@
 
 
 
-    <div ng-show="sessUser" class="status-menu">
-        <div class="text-box">
-            <textarea ng-focus="isStatusInput=1" ng-model="statusText" placeholder="STATUS UPDATE" style="box-shadow:none;"></textarea>
+    <div ng-show="sessUser" class="status-menu" style="background-color: #FFFFFF;">
+        <div class="text-box" id="text-box">
+            <img id="loading_indicator" ng-show="getExactRunning ==1" src="images/ajax_loading.gif">
+            <textarea id="statusText" ng-keyup="resizeTextarea1($event); tetshigh($event)" ng-focus="isStatusInput=1;" ng-keypress="resizeTextarea1($event); chnagestatusval($event); tetshigh($event)" ng-blur="chnagestatusval($event)" ng-keydown="resizeTextarea1($event); tetshigh($event)" ng-model="statusText" placeholder="STATUS UPDATE" style="box-shadow:none; overflow: hidden;"></textarea>
         </div>
         <div class="menu1">
 
@@ -100,7 +112,8 @@
         </div>
         <div class="clear"></div>
     </div>
-    <div class="status-input" ng-show="sessUser">
+    <div id="extracted_url"></div>
+    <div class="status-input" id="statusinput" ng-show="sessUser">
         <div ng-show="isPhoto" style="padding-bottom:15px;">
             <input ng-show="!isMobileApp" type="button" class="browsebtn" value="Click To Browse" ngf-drop ngf-select ng-model="statusImage" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"><br>
             <div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progress + '%'"></div>
@@ -133,9 +146,11 @@
 
         <div ng-show="isStatusInput">
             <div>
-                <select ng-model="shareVal" >
+                <select id="share_with" ng-model="share_with">
                     <option value="1">Community</option>
                     <option value="2">Friends</option>
+                    <option value="3">Friends Of Friends</option>
+                    <option value="4">Private Me Only</option>
                 </select>
 
 
@@ -179,20 +194,20 @@
 						<h1>{{c.snippet.title}}</h1>
 						<a href="javascript:void(0)" ng-click="addYtVideo(c)" class="vidAddBtn">ADD</a>
 					</div>
-				<div>
+				</div>
 				</div>
 			</script>
 
 
  
-<span>&copy;TORQK'D</span>
+<span>&copy;TORKQ</span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div>
 </div>

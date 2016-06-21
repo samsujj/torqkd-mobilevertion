@@ -1,0 +1,59 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+    }
+
+</style>
+
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+
+        <div class="people-div2">
+
+        <h4 style="font-weight:normal;">Community:</h4>
+        <ul style="padding:10px 0 20px 0; margin:0; overflow:hidden; height:auto; border:none;">
+            <li class="u_list" ng-repeat="n in userList">
+                <ul>
+                    <li style="width:98px; float: left;  display:block;" class="mobpimg">
+                        <img src="{{n.user_image}}" style="max-height:100%; max-width:98%;"  alt="#" class="mobpimg" />
+                    </li>
+                    <li class="holist2">
+                        <h2><a href="#/profile/{{n.user_id}}">{{n.user_name}}</a></h2>
+                        <div class="clear"></div>
+                        <img  ng-repeat="m in n.sport" src="{{m.sp_image}}" width="25"  alt="#" />
+                        <div class="plno" ng-if="n.sport_no > 0">+{{n.sport_no}}</div>
+                        <div class="clear" ng-if="n.sport_no > 0"></div>
+                        <a href="#/profile/{{n.user_id}}" class="view-btn1" style="color:#f79213;"> View Profile</a>
+                        <div class="clear"></div>
+                    </li>
+                    <div class="clear"></div>
+                </ul>
+            </li>
+        </ul>
+        </div>
+<div class="footer-menu1">
+    <span>&copy;TORKQ</span>
+    <span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
+</span>
+    <span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+</span>
+</div>
+</div>
+</div>

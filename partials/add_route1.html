@@ -1,3 +1,4 @@
+
 <style>
     .angular-google-map-container {
         width: 100%;
@@ -22,13 +23,38 @@
         padding:25px 0!important; }
 
 
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
 
     .sp_li{
         cursor:pointer;
     }
 
-    #map-canvas{ border: none; width: 100%;}
-    .bott-div{ width:100%;}
+
+    #map-canvas {
+        height: 100%;
+        margin: 0px;
+        width:100%;
+        padding: 0px;
+
+        position: absolute;
+    }
+
+    #map-canvas  .gm-style-cc{
+        display: none;
+    }
+
+
+
+    .bott-div{ width:100%;
+        }
     .bott-div .distance {
         border-right: 2px solid #aeaeae;
         float: left;
@@ -138,6 +164,21 @@
         width: 116px;
     }
 
+
+    @media screen and (max-width:480px) {
+.createevent-body{ position: relative; }
+        
+        .header_msg{ position: fixed; left: 2%;
+            top: 0; z-index: 999999; width: 96%;}
+
+        .mapwrapper{ margin-top: 54px;}
+
+
+
+
+    }
+
+
 </style>
 
 
@@ -157,22 +198,10 @@
 
             <div class="header_msg"> GPS YOUR ROUTE </div>
 
-     
-                <div id="map-canvas">
-                    <ui-gmap-google-map id="map"
-                                        center="map.center"
-                                        pan="map.pan"
-                                        zoom="map.zoom"
-                                        draggable="true"
-                            >
-                        <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' >
-                        </ui-gmap-markers>
-                        <ui-gmap-polyline ng-if="location.length" path="location" center="{latitude: st_lat, longitude: st_long}" draggable="false" geodesic="true" stroke="{color: '#F7931E', weight: 3, opacity:.8}" fit="true"></ui-gmap-polyline>
-                    </ui-gmap-google-map>
+     <div style="width: 100%;  position: relative; height:300px;" class="mapwrapper">
+                <div id="map-canvas"></div>
 
-                </div>
-
-
+     </div>
 
             <div class="bott-div">
 
@@ -204,7 +233,7 @@
             <input type="hidden" name="sec" id="sec" value="00">
 
             <div style="clear:both;"></div>
-            <div style="width:277px; padding-left:2%; margin:15px auto;">
+            <div style="width:277px; padding-left:2%; margin:15px auto; ">
                 <div class="bott-arrow">
                     <input type="button" value="Start" id="sw_start" ng-click="start()" />
                     <input style="display:none;" type="button" value="Pause" id="sw_pause" ng-click="pause()" />
@@ -212,7 +241,22 @@
                     <input style="display:none;" type="button" value="Reset" id="sw_reset" />
                 </div>
 
+                <form id="addRouteMap" action="" method="post">
+
+                    <input type="hidden" name="sports_id" id="form_sports_id">
+                    <input type="hidden" name="route_name" id="form_route_name">
+                    <input type="hidden" name="duration" id="form_duration">
+                    <input type="hidden" name="st_lat" id="form_st_lat">
+                    <input type="hidden" name="st_long" id="form_st_long">
+                    <input type="hidden" name="st_point" id="form_st_point">
+                    <input type="hidden" name="distance" id="form_distance">
+                    <span id="end_p">
+                        <input type="hidden" name="end_point[]">
+                    </span>
+
                 <input type="button" value="+ Route" ng-click="addRoutes()" class="routebtn">
+
+                </form>
 
                 <div style="clear:both;"></div>
             </div>
@@ -226,14 +270,14 @@
 
         <div class="footer-menu1">
 
-            <span>&copy;TORQK'D</span>
+            <span>&copy;TORKQ</span>
             <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
             <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
         </div>
 

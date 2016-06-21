@@ -1,3 +1,19 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+    }
+
+
+
+</style>
+
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
   
   
@@ -40,7 +56,7 @@
 		
 			<div class="div1">
 				<div>
-					<strong><a href="#/forum-details/{{forum.id}}">{{forum.name}}</a></strong><br/>
+					<div style="padding-bottom: 8px; font-weight: bold;"><a href="#/forum-details/{{forum.id}}" style=" color:#000;">{{forum.name}}</a></div>
 					<div ng-bind-html="forum.description">
 					</div>
 				</div>
@@ -51,11 +67,11 @@
 			</div>
 			
 			<div style="border-right:none;"  class="div4">
-				<div ng-show="!forum.lpost">No topics yet</div>
+				<div ng-show="!forum.lpost" style="color: #f7941e  !important; font-size: 15px!important;">No topics yet</div>
 				<div ng-show="forum.lpost">
-					<a style="font-size:14px;" href="#/forum-details/{{forum.id}}">{{forum.lpostArr.title}}</a>
-					<div>
-						<strong>{{forum.lpostArr.time}} - </strong> {{forum.lpostArr.user_name}}</div>
+					<a style="font-size:15px;" href="#/forum-details/{{forum.id}}">{{forum.lpostArr.title}}</a>
+					<div style="color: #f7941e  !important; padding-top: 8px;">
+						<strong  style="color: #333 !important">{{forum.lpostArr.time}} - </strong> {{forum.lpostArr.user_name}}</div>
 				</div>
 			</div>
 			
@@ -74,14 +90,14 @@
  <div class="clear"></div>
 
 <div class="footer-menu1">
-<span>&copy;TORQK'D</span>
+<span>&copy;TORKQ</span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div>
 

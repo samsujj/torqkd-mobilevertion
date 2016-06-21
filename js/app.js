@@ -50,13 +50,17 @@ torqdTest.config(['$routeProvider',
         templateUrl: 'partials/next.html',
         controller: 'nextCtrl'
       }).
-      when('/addimg', {
-        templateUrl: 'partials/addimage.html',
-        controller: 'addimageCtrl'
-      }).
+        when('/addimg', {
+            templateUrl: 'partials/addimage.html',
+            controller: 'addimageCtrl'
+        }).
+        when('/test', {
+            templateUrl: 'partials/test.html',
+            controller: 'test'
+        }).
       when('/complete', {
         templateUrl: 'partials/completesignup.html',
-        controller: 'indexCtrl'
+        controller: 'completeCtrl'
       }).
       when('/experience', {
         templateUrl: 'partials/experience.html',
@@ -78,15 +82,23 @@ torqdTest.config(['$routeProvider',
         templateUrl: 'partials/album.html',
         controller: 'albumCtrl'
       }).
-      when('/routes/:userid', {
-        templateUrl: 'partials/routes.html',
-        controller: 'routesCtrl'
-      }).
-      when('/video', {
-        templateUrl: 'partials/torqkdTV.html',
-        controller: 'videoCtrl'
-      }).
-      when('/mysports', {
+        when('/routes', {
+            templateUrl: 'partials/routes.html',
+            controller: 'routesCtrl'
+        }).
+        when('/routes/:userid', {
+            templateUrl: 'partials/routes.html',
+            controller: 'routesCtrl'
+        }).
+        when('/photo', {
+            templateUrl: 'partials/photoAll.html',
+            controller: 'photoCtrl'
+        }).
+        when('/video', {
+            templateUrl: 'partials/torqkdTV.html',
+            controller: 'videoCtrl'
+        }).
+      when('/mysports/:userid', {
         templateUrl: 'partials/mysports.html',
         controller: 'sportCtrl'
       }).
@@ -157,6 +169,38 @@ torqdTest.config(['$routeProvider',
         when('/edit-profile', {
             templateUrl: 'partials/edit_profile.html',
             controller: 'editProfileCtrl'
+        }).
+        when('/sport/:id', {
+            templateUrl: 'partials/sport_det.html',
+            controller: 'sportDetCtrl'
+        }).
+        when('/sport-user/:id', {
+            templateUrl: 'partials/sport_user.html',
+            controller: 'sportUserCtrl'
+        }).
+        when('/post-details/:id/:type', {
+            templateUrl: 'partials/post_det.html',
+            controller: 'postDetCtrl'
+        }).
+        when('/post-details1/:id', {
+            templateUrl: 'partials/post_det.html',
+            controller: 'postDetCtrl1'
+        }).
+        when('/file-list', {
+            templateUrl: 'partials/filelist.html',
+            controller: 'fileListCtrl'
+        }).
+        when('/hastag/:hastag', {
+            templateUrl: 'partials/hastagres.html',
+            controller: 'hastagCtrl'
+        }).
+        when('/settings', {
+            templateUrl: 'partials/blocksettings.html',
+            controller: 'settingsCtrl'
+        }).
+        when('/allnotification', {
+            templateUrl: 'partials/allnotification.html',
+            controller: 'allnotificationCtrl'
         }).
       otherwise({
         redirectTo: '/index'

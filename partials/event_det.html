@@ -3,6 +3,19 @@
         width: 100%;
         height: 400px;
     }
+    .ngdialog-content{ background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important; padding-top: 25px!important;}
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
 </style>
 
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
@@ -14,7 +27,7 @@
 <div id="sp-page" >
     <div class="experience-wrapper">
         <div class="map_left-con">
-            <div class="header_msg">{{evetDet.name}}</div>
+            <div class="header_msg2">{{evetDet.name}}</div>
      
             <h2>{{evetDet.from_date1}}</h2>
 
@@ -81,9 +94,22 @@
                                    zoom="map.zoom"
                                    draggable="true"
                        >
-                   <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' >
+                   <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' events="map.markerEvents" >
 
                    </ui-gmap-markers>
+
+                   <ui-gmap-window
+                           idKey="map.openedCanadaWindows.id"
+                           coords ='map.openedCanadaWindows'
+                           show="map.openedCanadaWindows.doShow"
+                           closeclick="map.openedCanadaWindows.closeClick">
+                       <div>
+                           <h1 id="firstHeading" class="firstHeading">
+                               {{evetDet.name}}<br/>
+                               <span>{{evetDet.address}}, {{evetDet.city}}, {{evetDet.state}}</span></h1>
+                           <div id="eImage"></div>
+                       </div>
+                   </ui-gmap-window>
 
 
                </ui-gmap-google-map>
@@ -95,6 +121,22 @@
         <div style="clear:both;"></div>
         <br>
         <a href="javascript:history.go(-1)" style="color: #545455; font-family: veneerregular; font-size: 26px; padding:50px 0 0 0; overflow: hidden;">BACK</a>
+
+
+
+        <div class="footer-menu1">
+
+            <span>&copy;TORKQ</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);"  ng-click="showtermsploicy('terms')">TERMS </a>
+</span>
+            <span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+</span>
+        </div>
+
 
     </div>
 </div>

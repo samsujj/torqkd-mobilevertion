@@ -2740,6 +2740,7 @@ Nicholas McCready - https://twitter.com/nmccready
                   return;
                 }
                 pathPoints = _this.convertPathPoints(_this.scope.path);
+
                 if (_this.gObject != null) {
                   _this.clean();
                 }
@@ -2930,6 +2931,9 @@ Original idea from: http://stackoverflow.com/questions/22758950/google-map-drawi
         var move, poly;
         poly = new google.maps.Polyline({
           map: map,
+          strokeColor: '#F7931E',
+          strokeOpacity: 1.0,
+          strokeWeight: 4,
           clickable: false
         });
         move = google.maps.event.addListener(map, 'mousemove', function(e) {
@@ -3430,7 +3434,7 @@ Original idea from: http://stackoverflow.com/questions/22758950/google-map-drawi
   angular.module('uiGmapgoogle-maps.directives.api').factory('uiGmapPolylineChildModel', [
     'uiGmapBasePolyChildModel', 'uiGmapPolylineOptionsBuilder', function(BaseGen, Builder) {
       var PolylineChildModel, base, gFactory;
-      gFactory = function(opts) {
+      gFactory = function(opts,poly) {
         return new google.maps.Polyline(opts);
       };
       base = BaseGen(Builder, gFactory);

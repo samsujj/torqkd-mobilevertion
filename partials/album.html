@@ -4,6 +4,15 @@
     border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;
 }
 
+.ngdialog-content p{
+    font:13px/18px Arial,Helvetica,sans-serif;
+    margin:0 15px;
+}
+.ngdialog-content h2{
+    margin-left:15px;
+    margin-right:15px;
+}
+
 .confirmPopup .ngdialog-content{
 		position:relative;
 		margin:0 auto;
@@ -11,12 +20,35 @@
 		padding:3px 12px;
 		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
 	}
+
+.youtubePopup1{
+    top: 20px;
+    overflow: visible !important;
+}
 .youtubePopup .ngdialog-content{
     position:relative;
     margin:0 auto;
     width:80%;
     padding:3px 12px;
     animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+}
+.youtubePopup1 .ngdialog-content{
+    position:relative;
+    margin:0 auto;
+    width:80%;
+    padding:3px 12px;
+    animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+}
+.youtubeVideo1{
+    position:relative;
+}
+.youtubeVideo1 .ngdialog-close{
+    position: absolute;
+    top:-25px;
+    right: -10px;
+    font-weight: bold;
+    font-size: 30px;
+    height: 30px;
 }
 
 
@@ -31,8 +63,8 @@
 <div id="sp-page" >
 <div class="experience-wrapper" style="position:relative;">
 	<div class="Photosheading">Photos & Videos
-        <div class="Photoadd">
-        <a ng-show="isMobileApp && currentTab == 'photo.tpl.html'" href="{{baseUrl}}/user/profile/autoImgUp1/page/profile/type/photo/sess_id/{{sessUser}}" >+</a>
+        <div class="Photoadd" ng-show="sessUser > 0 && sessUser==currentUser">
+        <a  ng-show="isMobileApp && currentTab == 'photo.tpl.html'" href="javascript:void(0);" ng-click="andriodUp()" >+</a>
         <input ng-show="!isMobileApp && currentTab == 'photo.tpl.html'" type="button" class="browsebtn" value="+" ngf-drop ngf-select ng-model="image" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
         <a href="javascript:void(0);" ng-show="currentTab == 'video.tpl.html'" ng-click="videoUploadDivOpen()" >+</a>
     </div>
@@ -41,27 +73,36 @@
     <div class="progress" style="margin-bottom: 5px !important; margin-top: 5px !important;" ng-show="image[0].progress >= 0">	<div style="width:{{image[0].progress}}%; background:#F69830; font-size: 16px;padding-left:10px;" ng-bind="image[0].progress + '%'"></div></div>
 
 
-    <div class="status-input" ng-show="isStatusInput">
-        <textarea ng-model="statusText" placeholder="STATUS UPDATE" style="box-shadow:none;"></textarea>
+    <div class="status-input" ng-show="isStatusInput" style="overflow:hidden;" >
+        <textarea ng-model="statusText" placeholder="STATUS UPDATE" style="box-shadow:none; display:block; width:99%; margin-top:8px; font-size:18px; border:solid 1px #ccc; resize:none; padding:1%;" ></textarea>
         <div ng-if="photoval">
-            <img src="{{baseUrl}}/uploads/community_image/{{photoval}}" />
+            <img ng-if="photoval" src="{{baseUrl}}/uploads/community_image/{{photoval}}"  style="margin:5px 0;" />
+        </div>
+        <div ng-if="photoval1">
+            <img ng-if="photoval1" src="{{baseUrl}}/uploads/status_img/{{photoval1}}"  style="margin:5px 0;" />
         </div>
 
-        <div ng-if="videoval1">
+        <div ng-if="videoval1"  style="margin:5px 0;">
             <div style="margin-bottom:10px;" class="embed-responsive embed-responsive-16by9 video-wrapper">
                 <youtube-video class="embed-responsive-item" video-id="videoval1"></youtube-video>
             </div>
         </div>
 
-        <div ng-if="videoval2">
-            <videogular ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+videoval2), type: 'video/mp4'}]" >
+        <div ng-if="videoval2"  style="margin:5px 0;">
+            <img ng-if="videoval2 == 'images/fileloader.gif'" src="{{videoval2}}" />
+            <videogular ng-if="videoval2 != 'images/fileloader.gif'" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+videoval2), type: 'video/mp4'}]" >
                 <vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
             </videogular>
         </div>
 
         <div>
             <div>
-
+                <select id="share_with" ng-model="share_with">
+                    <option value="1">Community</option>
+                    <option value="2">Friends</option>
+                    <option value="3">Friends Of Friends</option>
+                    <option value="4">Private Me Only</option>
+                </select>
 
                 <input class="lrotbtn" type="button" ng-show="isRotateBtn" ng-click="imgRotate(1)" style="background: url({{baseUrl}}/torqkd_demo/images/rtal.png) no-repeat !important; height:32px; width:112px;">
                 <input class="rrotbtn" type="button" ng-show="isRotateBtn" ng-click="imgRotate(2)" style="background: url({{baseUrl}}/torqkd_demo/images/rtar.png) no-repeat !important; height:32px; width:112px;">
@@ -78,7 +119,7 @@
 
 
 
-    <div class="link-option"><a href="#/profile/{{sessUser}}"> Back to Profile</a></div>
+    <div class="link-option"><a href="#/profile/{{currentUser}}"> Back to Profile</a></div>
 	
 	<div class="albumPhotos">
 		<img  src="{{user_image}}">
@@ -100,14 +141,18 @@
         </div>
     </div>
 	</div>
-   
+
+
+    <script type="text/ng-template" id="loader">
+        <div style="text-align:center;"><img src="images/fileloader.gif" style="width: 100%;"></div>
+    </script>
 
     <script type="text/ng-template" id="photo.tpl.html">
-		<div id="viewOne" ng-include="'partials/photo.html'" class="tabphoto"></div>
-	</script>
-	
+        <div id="viewOne" ng-include="'partials/photo.html'" class="tabphoto"></div>
+    </script>
+
 	<script type="text/ng-template" id="video.tpl.html">
-		<div id="viewTwo" ng-include="'partials/video.html'" class="tabphoto"></div>
+        <div id="viewTwo" ng-include="'partials/video.html'" class="tabphoto"></div>
 	</script>
      <div class="clear"></div>
 
@@ -115,11 +160,11 @@
     <script type="text/ng-template" id="upVidDiv">
         <div class="ngdialog-message">
 		    <div class="Videopopup">
-            <input type="text" placeholder="Type to search / enter Youtube video url" id="youtubeTxt" class="searchbox" >
-            <input type="button" value="search" ng-click="youtubeSearch()" class="searchbtn"/><div  class="btnor">OR</div>
+            <input type="text" placeholder="Type to search YouTube" id="youtubeTxt" class="searchbox" >
+            <input type="button" value="search" ng-click="youtubeSearch()" class="searchbtn"/><div  class="searchbtn" style="cursor: auto;">OR</div>
             <input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="video123" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
 		
-            <a ng-show="isMobileApp" href="{{baseUrl}}/user/profile/autoImgUp1/page/profile/type/video/sess_id/{{sessUser}}" class="browsebtn">Click To Browse</a>
+            <a ng-show="isMobileApp" href="javascript:void(0);" ng-click="andriodUp()" class="browsebtn">Click To Browse</a>
             <div class="progress" ng-show="video123[0].progress >= 0">	<div style="width:{{video123[0].progress}}%; background:#F69830;" ng-bind="video123[0].progress + '%'"></div></div>
        
 	     </div>
@@ -129,10 +174,12 @@
     <script type="text/ng-template" id="youtubeVideo">
         <div class="ngdialog-message">
             <div class="youtubeVideo">
-                <div class="youtubeVideoBtn"><a href="javascript:void(0)" ng-hide="vidIndex==1" ng-click="vidIndex = vidIndex-1">Prev</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" ng-hide="vidIndex == vids.length" ng-click="vidIndex = vidIndex+1">Next</a></div>
+                <div class="youtubeVideoBtn"><a href="javascript:void(0)" ng-hide="vidIndex==1" ng-click="vidIndex = vidIndex-1" class="vidAddBtn" style="margin: 15px auto 0">Prev</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" ng-hide="vidIndex == vids.length" ng-click="vidIndex = vidIndex+1" class="vidAddBtn" style="margin-top: 0;">Next</a></div>
                 <div ng-repeat="c in vids" ng-show="$index == (vidIndex-1)">
                     <div style="margin-bottom:10px;" class="embed-responsive embed-responsive-16by9 video-wrapper" >
-                        <youtube-video class="embed-responsive-item" video-id="c.id.videoId"></youtube-video>
+                        <!--<youtube-video class="embed-responsive-item" video-id="c.id.videoId"></youtube-video>-->
+                        <img src="https://i.ytimg.com/vi/{{c.id.videoId}}/mqdefault.jpg" width="100%">
+                        <img src="images/youtube-playbtn.png" class="paly_video"  ng-click="playYvideo(c.id.videoId)" style="cursor:pointer;">
                     </div>
                     <h1>{{c.snippet.title}}</h1>
                     <a href="javascript:void(0)" ng-click="addYtVideo(c)" class="vidAddBtn">ADD</a>
@@ -148,14 +195,14 @@
  <div class="clear"></div>
 
 <div class="footer-menu1">
-<span>&copy;TORQK'D</span>
+<span>&copy;TORKQ</span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div>
 

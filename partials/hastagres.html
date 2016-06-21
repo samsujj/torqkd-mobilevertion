@@ -1,0 +1,150 @@
+<style>
+    .ngdialog-content{ background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+
+.ngdialog-content p{
+    font:13px/18px Arial,Helvetica,sans-serif;
+    margin:0 15px;
+}
+.ngdialog-content h2{
+    margin-left:15px;
+    margin-right:15px;
+}
+	.vidPopup .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 10px!important;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+		text-align:center;
+
+		font-family: veneerregular!important;
+		font-size:30px!important;
+		color:#000 ;
+		margin-top:25% !important;
+		line-height:33px!important;
+	}
+
+.vidPopup .ngdialog-content p{
+	font-family: veneerregular!important;
+	font-size:30px!important;
+	line-height:33px!important;
+	margin: 15px !important;
+}
+
+#tabs{ margin-top:25px;}
+.newPopup .ngdialog-content{
+	position:relative;
+	margin:0 auto;
+	width:291px;
+	height:129px;
+	padding:3px 12px;
+	animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	background: url({{baseUrl}}/torqkd_demo/images/hover_mobile.png) no-repeat;
+
+	}
+	.youtubePopup1{
+		top: 20px;
+		overflow: visible !important;
+	}
+	.youtubePopup .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 12px;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	}
+	.youtubePopup1 .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 12px;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	}
+	.youtubeVideo1{
+		position:relative;
+	}
+	.youtubeVideo1 .ngdialog-close{
+		position: absolute;
+		top:-25px;
+		right: -10px;
+		font-weight: bold;
+		font-size: 30px;
+		height: 30px;
+	}
+.confirmPopup .ngdialog-content{
+		position:relative;
+		margin:0 auto;
+		width:80%;
+		padding:3px 12px;
+		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+	}
+</style>
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
+
+
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+
+<div id="sp-page" >
+<div class="experience-wrapper">
+
+
+	<div class="movile-tab-body" ng-show="sessUser==currentUser">
+		<ul>
+			<li><a href="#/add-route">GPS</a></li>
+			<!--<li ng-show="isMobileApp"><a href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/photo/sess_id/{{sessUser}}">CAMERA</a></li>-->
+			<li ng-show="isMobileApp"><a href="http://torqkd.com/upload/">CAMERA</a></li>
+			<li ng-show="!isMobileApp"><input type="button" class="browsebtn" value="CAMERA" ngf-drop ngf-select ng-model="statusImage1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*,video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+			</li>
+
+		</ul>
+    </div>
+	<div class="clear"></div>
+
+
+<div id="tabs">
+	<div id="mainview">
+		<div ng-include="'partials/social.html'"></div>
+	</div>
+</div>
+
+
+
+
+ <div class="footer-menu1">
+
+
+
+			<script type="text/ng-template" id="youtubeVideo">
+				<div class="ngdialog-message">
+				<div class="youtubeVideo">
+					<div class="youtubeVideoBtn"><a href="javascript:void(0)" ng-hide="vidIndex==1" ng-click="vidIndex = vidIndex-1" class="vidAddBtn" style="margin: 15px auto 0">Prev</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" ng-hide="vidIndex == vids.length" ng-click="vidIndex = vidIndex+1" class="vidAddBtn"  style="margin-top:0">Next</a></div>
+					<div ng-repeat="c in vids" ng-show="$index == (vidIndex-1)">
+						<div style="margin-bottom:10px;" class="embed-responsive embed-responsive-16by9 video-wrapper" >
+							<!--<youtube-video class="embed-responsive-item" video-id="c.id.videoId"></youtube-video>-->
+							<img src="https://i.ytimg.com/vi/{{c.id.videoId}}/mqdefault.jpg" width="100%">
+							<img src="images/youtube-playbtn.png" class="paly_video"  ng-click="playYvideo(c.id.videoId)" style="cursor:pointer;">
+						</div>
+						<h1>{{c.snippet.title}}</h1>
+						<a href="javascript:void(0)" ng-click="addYtVideo(c)" class="vidAddBtn">ADD</a>
+					</div>
+				<div>
+				</div>
+			</script>
+
+
+
+<span>&copy;TORKQ</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);"  ng-click="showtermsploicy('terms')">TERMS </a>
+</span>
+<span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+</span>
+</div>
+</div>
+</div>

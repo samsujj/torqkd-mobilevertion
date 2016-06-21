@@ -1,0 +1,300 @@
+<style>
+    .ngdialog-content {
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+    .confirmPopup .ngdialog-content {
+        position:relative;
+        margin:0 auto;
+        width:80%;
+        padding:3px 12px;
+        animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+    }
+    .ngdialog-content p {
+        font:13px/18px Arial, Helvetica, sans-serif;
+    }
+    .youtubePopup .ngdialog-content {
+        position:relative;
+        margin:10px auto!important;
+        width:80%;
+        padding:3px 0!important;
+        animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
+        border: 2px solid #f6921c!important;
+        border-radius: 6px!important;
+    }
+    .youtubePopup .ngdialog-content h4{ border-bottom:solid 1px #eeeeee; padding:12px 0; font-family: "veneerregular" !important;}
+    .youtubePopup .ngdialog-content .youtubeVideo{
+        width:94%;
+        display:block;
+        margin:0 auto;
+        border: 5px solid #f6921c!important;
+        clear:both;
+        overflow-y: scroll;
+        height:505px;
+        padding:0 10px;
+        margin-bottom:20px;
+    }
+    .youtubePopup .ngdialog-content{
+        font-family: "veneerregular" !important;
+        font-size: 20px;
+        font-weight: normal;
+        text-align: center;
+        border-bottom:solid 1px #eeeeee;
+        margin:0;
+        padding:12px 0;
+    }
+    .youtubePopup .ngdialog-content .ng-scope{
+        background: #e2e2e2;
+        float: left;
+        height: 430px;
+        margin: 5px;
+        padding: 10px 1% 10px 1%;
+        width: 46%; margin:25px 1%;
+    }
+    .youtubePopup .ngdialog-content .ng-scope h1{
+        border-bottom: 1px dotted #000;
+        font-family: "veneerregular" !important;
+        font-size: 16px;
+        font-weight: normal;
+        height: 40px;
+        line-height: 20px;
+        margin: 0 0 0 0;
+        padding: 10px 0 0 0;
+    }
+    .youtubePopup .ngdialog-content .ng-scope  .vidAddBtn{
+        display: block;
+        float: none;
+        margin: 20px auto;
+        width: 72px; background-color: #f8931f;
+        color: #333;
+        border:solid 4px #fff;
+        font-family: "veneerregular" !important;
+        font-size: 22px;
+        font-weight: normal;
+        padding: 7px 0 4px 0;
+        margin-top:15px;
+    }
+    .youtubePopup .ngdialog-content .ng-scope .embed-responsive{
+        border:solid 4px #fff;
+    }
+    .videopopupclose{
+        position:absolute; right:20px; top:20px;
+    }
+    .cmsglist1{
+        width: 98%;
+        border-bottom: #c9c9c9 1px solid;
+        text-align: left;
+        cursor: pointer;
+        padding: 1%;
+    }
+    .replybtn{
+        background: #f7931e;
+        color: #333333!important;
+        display: block;
+        float: right;
+        font-family: "veneerregular" !important;
+        font-size: 21px !important;
+        margin-top: 8px;
+        margin-bottom:8px;
+        padding: 11px 5px 7px 5px;
+        text-align: center;
+        width: 100px;
+        border:solid 5px #fff!important;
+        box-shadow:0 0 1px #afb2b4!important;
+    }
+</style>
+
+<div class="experience-body" style="margin-top: 0px;">
+    <div class="experience-wrapper">
+        <!--Top Contain[start]-->
+        <div ng-include="'partials/header.html'"></div>
+        <!--Top Contain[end]-->
+        <div class="experience-leftcontain" style="margin-top: 22px;">
+            <div style="float: left; width: 30%;">
+                <ul  class="showmsgwrapper2">
+                    <li ng-repeat="item in CmessageList1" class="cmsglist1" ng-style="{ background: item.is_read == 0 ? '#d9d9d9' : '#ebebeb' }" ng-click="getUserMsgListfn1(item.user_id)">
+                        <div  class="msg_photo">
+                            <img src="{{item.user_image}}" width="50">
+                        </div>
+
+                     
+
+                            <div class="msg_text">
+
+                               
+
+                              <a class="msgclose"ooltip-placement="bottom" uib-tooltip="Mark As Read">x</a>
+                              
+                           
+                             
+                             <div  class="msg_text-wrapper" >
+                              <strong>{{item.user_name}}</strong>
+                             <b  class="ng-emoticons" ng-bind-html="item.message | newlines | emoticons:{'linkTarget':'_blank','newLine':true}">{{item.message}}</b>
+                            <label>{{item.time_str}}</label>
+                            </div>
+
+                            </div>
+ 
+
+                        <div style="clear: both;"></div>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div style="float: left; width: 65%; margin:0 5px 5px 20px; border: 6px solid #fff;">
+
+                <!--<h2 style="border: #F7931E 2px solid;" class="msgh2text">{{getUserMsgList[0].frnd_name}}</h2>-->
+                <div style=" font-family: 'veneerregular'; font-size: 20px; text-align: center; width: 100%; border-bottom:6px solid #fff;">
+                    <a style="background: #f7931e none repeat scroll 0 0; color: #58595b; display: block; padding: 10px 0 6px !important; text-decoration: none;">{{getUserMsgList[0].frnd_name}}</a>
+                </div>
+
+                <ul id="msglistArea" style="margin-bottom:0px; border-top: none; border-bottom:none; height: 500px; width:100%"  ng-scrollbar scroll="getUserMsgList">
+
+                    <li ng-repeat="(key, value) in getUserMsgList | groupBy: 'time_str' | toArray:true | orderBy:min">
+
+                        <div style="border-top: 1px solid #bdc1c9; color: #bdc1c9; font-size: 11px; margin: 17px 20px 2px; text-align: center; position: relative">
+
+                            <abbr style="background-color: #ebebeb; padding: 0 3px; position: absolute; top: -10px;">{{ value[0].time_str }}</abbr>
+
+                        </div>
+
+                        <ul>
+
+                            <li ng-repeat="item in value" style="margin: 5px 20px;  ">
+
+                                <div ng-show="item.user_id != value[$index - 1].user_id">
+
+                                    <img src="{{ item.user_image }}" width="30">
+
+                                    <a href="javascript:void(0)" style="font-weight: bold;">{{ item.user_name }}</a>
+
+                                    <span>{{ item.time_str1 }}</span>
+
+                                </div>
+
+                                <div style="padding: 5px 0 5px 40px; " class="ng-emoticons" ng-bind-html="item.message | newlines | emoticons:{'linkTarget':'_blank','newLine':true}"> </div>
+
+
+
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+                <div style=" height: 146px; padding: 10px; background:#ebebeb; border-top: #fff 6px solid; width:auto; ">
+
+                  <div style="position:relative; width:auto; height:110px;">
+                   <!-- <textarea style="height: 110px !important;  border:solid 2px #97989a!important; background:#fff!important; border-radius:5px!important; padding:5px 24px 1px 5px!important; " ng-model="reply"></textarea>-->
+
+                      <div id="replydiv441"  style="min-height: 110px !important; height: auto !important;  border:solid 2px #97989a!important; background:#fff!important; border-radius:5px!important; padding:5px 30px 1px 5px!important;" contentEditable="true"></div>
+                    
+                    <a href="javascript:void(0)" ng-click="cxvxzxczcvs441()"> <img src="images/emo.png"  style="position:absolute; right:8px; top:8px; width:20px"/></a>
+                      <div id="cxvxcvs441" style="display: none; bottom: 110px; position: absolute; right: 0; width: 400px; background-color: #FFFFFF; padding: 5px; border: 2px solid #97989a !important; border-radius: 5px !important;">
+                          <div class="chatemojisdiv">
+                              <a href="javascript:void(0)" ng-repeat="emoitem in chatemojisArr" ng-click="emoinsert441(emoitem);" class="emoticon emoticon-{{emoitem}}" title=":{{emoitem}}:" ></a>
+                          </div>
+                      </div>
+                    <div style="clear:both;"></div>
+                    </div>
+                    
+                    <div style="clear:both;"></div>
+
+                    <a class="replybtn" href="javascript:void(0)" style="font-size:20px; margin-top: 20px !important;" ng-click="addReply()">Reply</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="experience-rightcontain" style="margin-top:12px;">
+
+            <div class="link1" ng-if="sessUser"><a ui-sref="addroute">GPS YOUR ROUTE</a></div>
+
+            <div class="link2" ng-if="sessUser"><a ui-sref="routes({userId:sessUser})">VIEW ROUTES</a></div>
+
+            <div class="link2" ng-if="!sessUser"><a ui-sref="allroutes">VIEW ROUTES</a></div>
+
+
+
+            <div class="albums">
+
+                <a ui-sref="photo">
+
+                    <img src="images/checkered.png" lazy-img="images/hs1-0-02.jpg"  alt="" />
+
+                    <h2 style="padding-top:10px; padding-bottom:8px;">ALBUMS</h2>
+
+                </a>
+
+            </div>
+
+            <div ng-include="'partials/maintv.html'"></div>
+
+            <div class="link2" style="margin-bottom:0;"><a ui-sref="forumlist">FORUMS</a></div>
+
+
+
+            <div class="foroms-contain">
+
+                <div ng-repeat="item in forumList"> <strong><a style="padding-left: 0 !important;" href="javascript:void(0);">{{item.title}}</a></strong><br />
+
+                    <span style="padding-left: 30px !important;">{{item.time}} ({{item.reply_no}} Replies)</span><br>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="albums albums-btn">
+
+                <a  href="javascript:void(0);" onClick="showdailypoll()"> <img alt="" src="{{baseUrl}}/uploads/pollbanner/{{mainbanner}}">
+
+                    <h2 data-original-title="" style="padding-top:10px; padding-bottom:10px;">DAILY POLL</h2>
+
+                </a>
+
+            </div>
+
+
+
+            <div ng-include="'partials/chatList.html'"></div>
+
+
+
+
+
+
+
+        </div>
+
+        <!--right panel contain[end]-->
+
+        <div class="clear"></div>
+
+        
+
+        
+
+
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+

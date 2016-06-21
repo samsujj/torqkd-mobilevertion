@@ -1,9 +1,102 @@
-<div class="logo" > 
-<a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo.png"/> </a> 
-<a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo.png"/> </a> 
+<style>
+    .showmsgblog{
+        background: url("../images/msgarrow.png") no-repeat  164px top;
+        width:324px;
+        padding-top:8px;
+        position: absolute;
+        top: 42px;
+        z-index: 999;
+        left: -152px;
+    }
+    .showmsgblog .showmsgwrapper{
+        border:solid 5px #fff;
+        color:#000;
+        display:block;
+        width:100%;
+        padding:0;
+        background: #ebebeb!important;
+        box-shadow:0 0 5px #999898;
+    }
+    .showmsgblog .showmsgwrapper li{
+        display:block;
+        background: #ebebeb!important;
+    }
+    .showmsgblog .showmsgwrapper .msg_photo{
+        width:50px;
+        float:left;
+    }
+    .showmsgblog .showmsgwrapper .msg_text{
+        float: right;
+        position: relative;
+        width: 216px;
+        padding: 0 27px 0 0;
+        line-height: 15px;
+    }
+    .showmsgblog .showmsgwrapper .msgclose{
+        color: #333!important;
+        display: block!important;
+        line-height: 13px!important;
+        right: 2px!important;
+        text-align: center!important;
+        top: 2px!important;
+        width: 16px!important;
+        font-family: Arial, Helvetica, sans-serif!important;
+        position: absolute;
+        font-size: 14px!important;
+        height: 16px;
+    }
+</style>
+
+
+<div class="logo" >
+  <a href="#/index" ng-if="(sessUser==0)">
+    <img alt="#" src="images/logo_main.png"/>
+  </a>
+  <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" >
+    <img alt="#" src="images/logo_main.png"/>
+  </a>
 </div>
-  
-  
-  <div class="mobile-menu"><a href="javascript:void(0)" ng-click="$spMenu.toggle()"><img src="images/menu.png" alt="#"></a></div>
-  <div class="logout"><a href="#/edit-profile"><img alt="#" src="images/gear2.png" ></a></div>
-  <div class="clear"></div>
+
+<div class="mobile-menu">
+  <a href="javascript:void(0)" ng-click="$spMenu.toggle()">
+    <img src="images/menu.png" alt="#">
+  </a>
+</div>
+<!--
+<div class="logout" style="margin-right: 65px; width: 35px; position: relative;" ng-show="sessUser > 0">
+  <a href="javascript:void(0)" ng-click="opennotlistttt()" class="dropdown-toggle" data-toggle="dropdown">
+    <img ng-show="unReadNot > 0" alt="#" src="images/notification_active.png" >
+    <img ng-show="unReadNot == 0" alt="#" src="images/notification_inactive.png" >
+  </a>
+  <ul class="showmsgblog dropdown-menu" style="border: none; border-radius: 0; box-shadow: none; right: 0;left: auto;">
+    <span  class="showmsgwrapper">
+      <li>
+        <div ng-repeat="item in notificationList | limitTo:5" class="cmsglist" style="width:303px; padding:5px;" ng-style="{ background: item.is_read1 == 0 ? '#d9d9d9' : '#ebebeb' }">
+            <div class="msg_photo"  ng-click="openNotPost(item); markasreadnot(item);">
+                <img src="{{item.user_image}}" style="width: 50px !important;">
+            </div>
+            <div class="msg_text" style="cursor: pointer;" ng-click="openNotPost(item); markasreadnot(item);">
+                <div  class="msg_text-wrapper" style="width:160px; float:left;" >
+                    <div ng-bind-html="item.str | emoticons:{'linkTarget':'_blank','newLine':true}" class="notificationStr"></div>
+                    <label  >{{item.time_str1}}</label>
+                </div>
+                <div ng-show="item.file" style="width:50px; height:38px; background-color:#000; float:right;  background-position: center center; background-size: cover; background-image: url('{{item.file}}')"></div>
+            </div>
+
+            <div style="clear:both;"></div>
+        </div>
+      </li>
+        <li class="cmsglist" style="background-color: #f7931e!important; border:none; text-align:center; padding: 10px 0 8px 0; width:100%; border-top:solid 5px #fff!important;">
+            <a href="#/allnotification" style="color:#58595b; display:block; background:#f7931e!important; ">See All</a>
+        </li>
+    </span>
+  </ul>
+</div>
+-->
+<div ng-show="sessUser" class="logout">
+  <a href="#/edit-profile">
+    <img alt="#" src="images/gear2.png" >
+  </a>
+</div>
+
+<div class="clear"></div>

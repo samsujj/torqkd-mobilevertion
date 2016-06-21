@@ -1,13 +1,28 @@
 <style>
 
-.newPopup .ngdialog-content{
+    .ngdialog-content{ background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
+
+
+    .newPopup .ngdialog-content{
 	animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
 
-	position:relative;
-	margin:0 auto;
-	width:291px;
-	height:189px;
-		background: url({{baseUrl}}/torqkd_demo/images/hover_mobile.png) no-repeat;
+	position:relative !important;
+	margin:0 auto !important;
+	width:291px !important;
+	height:189px !important;
+        border: none !important;
+		background: url({{baseUrl}}/torqkd_demo/images/hover_mobile.png) no-repeat !important;
 
 }
 </style>
@@ -56,12 +71,42 @@
 		
 		<div class="bottom-img">
 			<div class="img-con">
-				<div ng-repeat="item in frnddet | filter:searchText">
-					<img ng-class="(item.status == 1 || item.frnd_type == 1 || item.frnd_type == 2)?'fr_request':''" src="{{item.user_image}}" ng-click="userDet(item,$index)" style="cursor:pointer;">
+				<div ng-repeat="item in frnddet | filter:searchText" ng-class="(item.status == 1 || item.frnd_type == 1 || item.frnd_type == 2)?'fr_request frlist-user':'frlist-user'" style="cursor: pointer;" ng-click="userDet(item,$index)">
+					<div  style=" overflow:hidden;" class="imgdiv">
+						<img  src="{{item.user_image}}">
+					</div>
+					<div class="friend_detail">
+						<a href="javascript:void(0);">
+							<span>{{ item.user_name | limitTo: 30 }}{{item.user_name.length > 30 ? '...' : ''}}</span><br />
+							{{ item.user_address | limitTo: 30 }}{{item.user_address.length > 30 ? '...' : ''}}
+						</a>
+					</div>
+
 				</div>
 			</div>
 			
 			<div class="clear"></div>
 		</div>
 	</div>
+
+
+
+    <div class="footer-menu1">
+
+
+
+
+
+        <span>&copy;TORKQ</span>
+        <span>|</span>
+<span>
+<a href="javascript:void(0);"  ng-click="showtermsploicy('terms')">TERMS </a>
+</span>
+        <span>|</span>
+<span>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+</span>
+    </div>
+
+
 </div>

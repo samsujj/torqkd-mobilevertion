@@ -1,49 +1,78 @@
 <style type="text/css">
-.ngdialog-content{ background-color: #f6f9fa !important;
-    border: 5px solid #f7941e !important;
-    border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+    .ngdialog-content{ background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important; padding:0!important; width:99%; margin:0 auto!important;}
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
 
 </style>
 
 <div class="experience-wrapper">
   <div class="logo" > 
-  <a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo.png"/> </a> 
-  <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo.png"/> </a> 
+  <a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo_main.png"/> </a>
+  <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo_main.png"/> </a>
 
 </div>
   
-  <div class="mobile-join-btn"  ng-if="(sessUser==0)"> <a href="#/signup">JOIN</a></div>
+  <div class="mobile-join-btn"  ng-if="(sessUser1==0)"> <a href="#/signup">JOIN</a></div>
   
-  <div class="spSlider" ng-include="'partials/experience_1.html'"></div>
- 
+  <div class="spSlider">
+      <simple-slider class="gallery1" transition-property="right"  start-value="100%" visible-value="0px" end-value="-100%">
 
-<div class="video-contain" ng-include="'partials/experience_2.html'""></div>
+          <div ng-repeat="item in slides track by item.id" style="width: 100%; height: 100%;">
+              <!--<img src="{{baseUrl}}/uploads/sports_image/additional/thumb/{{item.additional_image}}" alt="#" style="width:100%;" />-->
+              <div style="background: #dfe2e2 url('{{baseUrl}}/uploads/sports_image/additional/thumb/{{item.additional_image}}') no-repeat; background-size: 100%; width: 100%; height: 100%;">&nbsp;</div>
+              <div class="h2text">{{item.sport_name}}</div>
+			<span>
+				<div class="text-div">{{item.tag}}</div>
+				<div class="more"><a href="#/sport/{{item.id}}">MORE &raquo;</a> </div>
+				<div class="clear"></div>
+			</span>
+          </div>
 
 
-<div ng-include="'partials/social_tab.html'""></div>
-  
-  
-            
+      </simple-slider>
+  </div>
+
+
+<div class="video-contain expgallery">
+    <a  href="" ng-click="openDefault()"> <img alt="#" src="images/howitworks_3.jpg"> </a>
+</div>
+
+
+<div ng-include="'partials/social_tab.html'"></div>
+
+
+
   <div class="tab-bottom-con">
-  
-    <div class="link2" ><a href="javascript:void(0);">VIEW ROUTES</a></div> 
+
+    <div class="link2" ><a href="#/routes">VIEW ROUTES</a></div>
 
 
-<div class="albums-div" ng-include="'partials/experience_3.html'"></div>
+<div class="albums-div albums-div_background">
+    <a  href="javascript:void(0);" onClick="showdailypoll()"><img alt="" src="{{baseUrl}}/uploads/pollbanner/{{mainbanner}}" ><h2 data-original-title="">DAILY POLL</h2></a>
+</div>
 
 
-<div class="link1" ><a href="javascript:void(0);">FORUMS</a></div>
+<div class="link1" ><a href="#/forum-listing">FORUMS</a></div>
 
 
-<div class="albums-div">
-	<a  href="javascript:void(0);">
-		<img alt="" src="images/hs1-0-02.jpg">
+<div class="albums-div albums-div_background">
+	<a  href="#/photo">
+		<img alt="" src="images/hs1-0-02.jpg" class="expgallery">
 		<h2 data-original-title="">ALBUMS</h2>
 	</a>
 </div>
 
 
-<div class="albums-div" ng-include="'partials/experience_4.html'"></div>
+<div class="albums-div expgallery" ng-include="'partials/experience_4.html'"></div>
 
 
 
@@ -58,18 +87,18 @@
 
 
   </div>
-  
- 
-  
+
+
+
  <div class="footer-menu1">
-<span>&copy;TORQK'D</span>
+<span>&copy;TORKQ</span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">TERMS </a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
 </span>
 <span>|</span>
 <span>
-<a href="javascript:void(0);">PRIVACY</a>
+<a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div> 
 </div>

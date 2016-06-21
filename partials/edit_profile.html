@@ -1,4 +1,21 @@
 <style>
+    .ngdialog-content{
+        background-color: #f6f9fa !important;
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:0!important;
+        width:99%;
+        margin:0 auto!important;
+        padding-top: 25px !important;
+    }
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+        margin:0 15px;
+    }
+    .ngdialog-content h2{
+        margin-left:15px;
+        margin-right:15px;
+    }
     .example {
         padding:2px 0;
         display:block;
@@ -11,33 +28,33 @@
         background-image:linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%);
         background-size:16px 16px;
         background-position:0 0, 8px 8px;
-        box-shadow:inset 0 0 6px rgba(0, 0, 0, .5)
+        box-shadow:inset 0 0 6px rgba(0, 0, 0, .5);
     }
     .cmd {
-        text-align:center
+        text-align:center;
     }
     .cmd li {
         display:inline-block;
         border-bottom:1px solid #eee;
         margin:0 7px;
-        font-size:14px
+        font-size:14px;
     }
     .cmd li:hover {
         border-bottom:none;
         cursor:pointer;
-        color:#ccc
+        color:#ccc;
     }
     .cmd a {
-        color:#0b94c8
+        color:#0b94c8;
     }
     .pre {
         display:block;
         text-align:center;
-        padding:0px
+        padding:0px;
     }
     .maskbg {
         background:0 0;
-        box-shadow:none
+        box-shadow:none;
     }
     .how {
         display:block;
@@ -46,36 +63,32 @@
         width:100%;
         margin:150px auto;
         color:#363636;
-        font-family:'PT Serif', serif
+        font-family:'PT Serif', serif;
     }
     h1, h2, h3, h4, h5, h6 {
         font-family:'Cantora One', sans-serif;
-        font-weight:400
+        font-weight:400;
     }
     h4 {
         font-size:30px;
         padding-bottom:15px;
         margin-bottom:20px;
-        border-bottom:1px solid #eee
+        border-bottom:1px solid #eee;
     }
     h3 {
         font-size:24px;
         margin-bottom:10px;
-        padding-top:20px
+        padding-top:20px;
     }
-
     .cropArea {
         background: #E4E4E4;
         overflow: hidden;
         width:100%;
         height:350px;
     }
-</style>
-<style type="text/css">
     .clear {
         clear:both;
     }
-
     ul#menu, ul#menu ul.sub-menu {
         margin: 0;
         padding: 0;
@@ -140,255 +153,314 @@
         width: 100%;
         background:#ebebeb;
     }
-
-
-
-    .docs-buttons .btn-group { margin:0 auto;}
-
-    .icon-group  .btn{ background: #f7931e; border:solid 4px #fff; border-radius:0px!important;   color: #58595b; margin:0 4px; border-radius:5px; padding:10px 20px; width:70px;}
-    .icon-group .btn:hove{ margin:0 0!important;}
-
-
-    .big-btn{ width:155px; margin:0 auto; clear:both; overflow:hidden; margin-top:5px; }
-    .big-btn .btn-primary{ background: #f7931e;
+    .docs-buttons .btn-group {
+        margin:0 auto;
+    }
+    .icon-group  .btn{
+        background: #f7931e;
+        border:solid 4px #fff;
+        border-radius:0px!important;
+        color: #58595b;
+        margin:0 4px;
+        border-radius:5px;
+        padding:10px 20px;
+        width:70px;
+    }
+    .icon-group .btn:hover{
+        margin:0 0!important;
+    }
+    .big-btn{
+        width:155px;
+        margin:0 auto;
+        clear:both;
+        overflow:hidden;
+        margin-top:5px;
+    }
+    .big-btn .btn-primary{
+        background: #f7931e;
         color: #58595b;
         display: block;
-
-        text-decoration: none;  font-family: "veneerregular"; border:solid 4px #fff; margin:10px auto!important; float:none; font-size:24px; width:150px; float:left!important; border-radius:0px!important; padding:14px 0 10px 0!important;}
-
-    .img-container{ border:solid 4px #f7931e; margin:25px auto!important; display:block; width:80%;}
-
-    .footer-menu1{ width:100%; padding-top:40px;}
+        text-decoration: none;
+        font-family: "veneerregular";
+        border:solid 4px #fff;
+        margin:10px auto!important;
+        float:none;
+        font-size:24px;
+        width:150px;
+        float:left!important;
+        border-radius:0px!important;
+        padding:14px 0 10px 0!important;
+    }
+    .img-container{
+        border:solid 4px #f7931e;
+        margin:25px auto!important;
+        display:block;
+        width:80%;
+    }
+    .footer-menu1{
+        width:100%;
+        padding-top:40px;
+    }
 
     @media screen and (max-width:400px) {
         .mobile-top-con .logo { width:160px;}
-
         .mobile-top-con .logo  img{ width:100%;}
-
         .img-container{ border:solid 4px #f7931e; margin:25px auto!important; display:block; width:96%;}
-
-
+    }
+    .dropdown-menu_share li a{ border:none!important;}
+    .createevent-body .dropdown-menu{ padding:2px!important;}
 </style>
 
-
-
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
-
-
 <div id="sp-nav" ng-include="'partials/menu.html'"></div>
 
-<div id="sp-page" >
+<div id="sp-page">
     <div class="experience-wrapper">
-
-<div class="createevent-body">
-
-
-
-        <form angular-validator-submit="editProfile()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
-<div class="left-part">
-            <h2>UPDATE YOUR PROFILE</h2>
-
-            <input type="hidden" ng-model = "form.id" value="0">
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>FIRST NAME</label>
-                    <input type="text" id="UserManager_fname" name="UserManager[fname]" placeholder="FIRST NAME"
-                           validate-on="blur"
-                           class = "form-control register_input"
-                           ng-model = "form.fname"
-                           required-message="'First Name cannot be blank.'"
-                           required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>LAST NAME</label>
-                    <input type="text" id="UserManager_lname" name="UserManager[lname]" placeholder="LAST NAME"
-                           validate-on="blur"
-                           class = "form-control register_input"
-                           ng-model = "form.lname"
-                           required-message="'Last Name cannot be blank.'"
-                           required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>EMAIL</label>
-                    <input type="email" id="UserManager_email" name="UserManager[email]" placeholder="YOUR EMAIL"
-                           validate-on="blur"
-                           class = "form-control register_input"
-                           ng-model = "form.email"
-                           required-message="'Email cannot be blank.'"
-                           invalid-message="'Enter valid email address.'"
-                           required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>PASSWORD</label>
-                    <input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
-                           validate-on="dirty"
-                           class = "form-control register_input"
-                           ng-model = "form.password"
-                           validator = "passwordValidator(form.password) === true"
-                           invalid-message = "passwordValidator(form.password)"
-                           >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>CONFIRM PASSWORD</label>
-                    <input type="password" id="UserManager_password2" name="UserManager[password2]" placeholder="CONFIRM PASSWORD"
-                           validate-on="dirty"
-                           class = "form-control register_input"
-                           ng-model = "form.password2"
-                           validator = "form.password === form.password2 || form.password == ''"
-                           invalid-message = "'Passwords do not match!'"
-                            >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>LOCATION</label>
-                    <input type="text" id="UserManager_location" name="UserManager[location]" placeholder="LOCATION"
-                           class = "form-control register_input"
-                           ng-model = "form.location"
-                           >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>CITY</label>
-                    <input type="text" id="UserManager_city" name="UserManager[city]" placeholder="CITY"
-                           validate-on="blur"
-                           class = "form-control register_input"
-                           ng-model = "form.city"
-                           required-message="'City cannot be blank.'"
-                           required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10" style="width:100%; padding:0;">
-                    <label>STATE</label>
-                    <select id="UserManager_state" name="UserManager[state]" class = "register_select form-control" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
-                        <option value="">SELECT YOUR STATE</option>
-                    </select>
-
-
-                </div>
-            </div>
-
-            <div class="cropcontain">
-                <div class="imglist">
-                    <img src="{{profileImg}}" class="newaddimg" />
-                </div>
-
-                <div>
-                    <input type="button" ng-show="!isMobileApp" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-                    <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp()">
-                    <img src="images/help.png" alt="#" class="help-icon">
-                    <div class="clear"></div>
-                </div>
-
-                <div class="progress" ng-show="files[0].progress >= 0">
-                    <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
-                </div>
-
-                <input class="imgBtnCls" type="button" value="Crop" ng-if="profileImgName != 'default.jpg'" ng-click="cropProfileImg()">
-
-                <input class="imgBtnCls" type="button" value="Delete" ng-if="profileImgName != 'default.jpg'"  ng-click="profileImgDel(1)">
-
-
-            </div>
-
-              <div class="cropcontain">
-                <div class="imglist">
-                    <img src="{{coverImg}}" class="newaddimg" width="350" />
-                </div>
-
-                <div>
-                    <input ng-show="!isMobileApp" type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-                    <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp1()">
-                    <img src="images/help.png" alt="#" class="help-icon">
-                    <div class="clear"></div>
-                </div>
-
-                <div class="progress" ng-show="files1[0].progress >= 0">
-                    <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
-                </div>
-
-                <input class="imgBtnCls" type="button" value="Crop" ng-if="coverImgName != 'default.jpg'" ng-click="cropProfileBackImg()">
-
-                <input class="imgBtnCls" type="button" value="Delete" ng-if="coverImgName != 'default.jpg'" ng-click="profileImgDel(2)">
-
-
-            </div>
- </div>
-
-            <div class="right-part">
-                <h1>Select Sport</h1>
-                <div class="sports-table">
-
-                    <div ng-repeat="n in sportsList">
-
-                        <h3> {{n.name}}</h3>
-
-
-                        <ul>
-                            <li ng-repeat="m in n.ch">
-                                <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selsports(m.id,this);"  ng-class="{'activeimg':(userSports.indexOf(m.id) > -1)}"><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
-                                <strong> {{m.name}}</strong>
-                            </li>
-                        </ul>
-
-                        <div class="clear"></div>
-
+        <div class="createevent-body">
+            <form angular-validator-submit="editProfile()" name="signUpForm" class="form-horizontal" novalidate angular-validator>
+                <div class="left-part">
+                    <h2>UPDATE YOUR PROFILE</h2>
+                    <input type="hidden" ng-model = "form.id" value="0">
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>FIRST NAME</label>
+                            <input type="text" id="UserManager_fname" name="UserManager[fname]" placeholder="FIRST NAME"
+                                   validate-on="blur"
+                                   class = "form-control register_input"
+                                   ng-model = "form.fname"
+                                   required-message="'First Name cannot be blank.'"
+                                   required>
+                        </div>
                     </div>
 
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>LAST NAME</label>
+                            <input type="text" id="UserManager_lname" name="UserManager[lname]" placeholder="LAST NAME"
+                                   validate-on="blur"
+                                   class = "form-control register_input"
+                                   ng-model = "form.lname"
+                                   required-message="'Last Name cannot be blank.'"
+                                   required>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>EMAIL</label>
+                            <input type="email" id="UserManager_email" name="UserManager[email]" placeholder="YOUR EMAIL"
+                                   validate-on="blur"
+                                   class = "form-control register_input"
+                                   ng-model = "form.email"
+                                   required-message="'Email cannot be blank.'"
+                                   invalid-message="'Enter valid email address.'"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>PASSWORD</label>
+                            <input type="password" id="UserManager_password" name="UserManager[password]" placeholder="PASSWORD"
+                                   validate-on="dirty"
+                                   class = "form-control register_input"
+                                   ng-model = "form.password"
+                                   validator = "passwordValidator(form.password) === true"
+                                   invalid-message = "passwordValidator(form.password)"
+                                    >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>CONFIRM PASSWORD</label>
+                            <input type="password" id="UserManager_password2" name="UserManager[password2]" placeholder="CONFIRM PASSWORD"
+                                   validate-on="dirty"
+                                   class = "form-control register_input"
+                                   ng-model = "form.password2"
+                                   validator = "form.password === form.password2 || form.password == ''"
+                                   invalid-message = "'Passwords do not match!'"
+                                    >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>LOCATION</label>
+                            <input type="text" id="UserManager_location" name="UserManager[location]" placeholder="LOCATION"
+                                   class = "form-control register_input"
+                                   ng-model = "form.location"
+                                    >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>CITY</label>
+                            <input type="text" id="UserManager_city" name="UserManager[city]" placeholder="CITY"
+                                   validate-on="blur"
+                                   class = "form-control register_input"
+                                   ng-model = "form.city"
+                                   required-message="'City cannot be blank.'"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>COUNTRY</label>
+                            <select id="UserManager_country" name="UserManager[country]" class = "register_select form-control" validate-on="blur" ng-model = "form.country" required-message="'Country cannot be blank.'" ng-change="changeCountry(form.country)" required ng-options="item.name for item in countrylist  track by item.id">
+                                <option value="">SELECT YOUR COUNTRY</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10" style="width:100%; padding:0;">
+                            <label>STATE</label>
+                            <select id="UserManager_state" name="UserManager[state]" class = "register_select form-control" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
+                                <option value="">SELECT YOUR STATE</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="cropcontain" id="imgPor">
+                        <div class="imglist">
+                            <img src="{{profileImg}}" class="newaddimg" />
+                        </div>
+
+                        <div>
+                            <input type="button" ng-show="!isMobileApp" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                            <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp()">
+                            <img src="images/help.png" alt="#" class="help-icon">
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="progress" ng-show="files[0].progress >= 0">
+                            <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
+                        </div>
+
+                        <input class="imgBtnCls" type="button" value="Crop" ng-if="profileImgName != 'default.jpg'" ng-click="cropProfileImg()">
+                        <input class="imgBtnCls" type="button" value="Delete" ng-if="profileImgName != 'default.jpg'"  ng-click="profileImgDel(1)">
+                    </div>
+
+                    <div class="cropcontain">
+                        <div class="imglist">
+                            <img src="{{coverImg}}" class="newaddimg" width="350" />
+                        </div>
+
+                        <div>
+                            <input ng-show="!isMobileApp" type="button" value="+" class="upload-btn1" ngf-drop ngf-select ng-model="files1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+                            <input ng-show="isMobileApp" type="button" value="+" class="upload-btn1" ng-click="andriodUp1()">
+                            <img src="images/help.png" alt="#" class="help-icon">
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="progress" ng-show="files1[0].progress >= 0">
+                            <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
+                        </div>
+
+                        <input class="imgBtnCls" type="button" value="Crop" ng-if="coverImgName != 'default.jpg'" ng-click="cropProfileBackImg()">
+                        <input class="imgBtnCls" type="button" value="Delete" ng-if="coverImgName != 'default.jpg'" ng-click="profileImgDel(2)">
+                    </div>
                 </div>
-            </div>
 
+                <div class="editprofilemain">
+                    <div style="display: block;margin-top:15px; position: relative;">
+                        <span class="editsettingbtn" style="background: none; float: left; width:100%;  margin: 10px 0;">Privacy
+                        <!--<span ng-click="showprivacy = !showprivacy" class="editsettingbtn" style="background: none; float: left; width:100%; cursor: pointer; margin: 10px 0;">Privacy
+                            <!-- <ul style="display: block; background-color: #F4A546; top: 21px; position: absolute;" ng-show="showprivacy">
+                            <li style="width: 100px; margin: 0 auto; text-align: center;"><a href="javascript:void(0)" style="color: #f7931d; display: inline-block; font-family: 'veneerregular'; font-size: 20px; text-decoration: none; color: #fff !important; padding: 6px 0 !important; text-align: center;">Privacy</a></li>
+                            <li style="width: 100px; margin: 0 auto; text-align: center;"><a ui-sref="settings" style="color: #f7931d; display: inline-block; font-family: 'veneerregular'; font-size: 20px; text-decoration: none; color: #fff !important; padding: 6px 0 !important; text-align: center;">Blocking</a></li>
+                            </ul>-->
+                            <!--<ul class=" dropdown-menu dropdown-menu_share" style="display: block;  top: 40px; position: absolute; padding-bottom:5px;" ng-show="showprivacy">
+                                <li class="share4" style="border:none!important"><a href="javascript:void(0)" ng-click="showprivacypopup()"  style="font-size:10px!important; text-transform:uppercase; border:none!important; font-weight:normal!important;" ><span>Privacy</span></a></li>
+                                <li class="share6" style="border:none!important;"><a href="#/settings"  style="font-size:10px!important; text-transform:uppercase; border:none!important font-weight:normal!important;" ><span>Blocking</span></a></li>
+                            </ul>-->
 
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none; outline:none;">
+                                <span ng-show="privacy==1" style="font-size: 16px; letter-spacing: 0;"><img src="images/share1_icon_active.png" style="width:18px; margin-top:-2px;"><span style="margin-left: 3px;">Public</span></span>
+                                <span ng-show="privacy==2" style="font-size: 16px; letter-spacing: 0;"><img src="images/share2_icon_active.png" style="width:15px; margin-top:0px;"><span style="margin-left: 3px;">Friends</span></span>
+                                <span ng-show="privacy==3" style="font-size: 16px; letter-spacing: 0;"><img src="images/share3_icon_active.png" style="width:18px; margin-top:0px;"><span style="margin-left: 3px;">Friends Of Friends</span></span>
+                                <span ng-show="privacy==4" style="font-size: 16px; letter-spacing: 0;"><img src="images/share4_icon_active.png" style="width:12px; margin-top:0px;"><span style="margin-left: 3px;">Private Me Only</span></span>
+                                <span><img src="images/ad2new.png" style="padding-left:4px;"></span>
+                            </a>
+            <ul class="dropdown-menu dropdown-menu_share" style="top: 40px; left: 75px;">
+                <li class="share1"><a href="javascript:void(0)" style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(1)" ng-class="(item.share_with==1) ? 'active' : ''"><span>Public</span></a></li>
+                <li class="share2"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(2)" ng-class="(item.share_with==2) ? 'active' : ''"><span>Friends</span></a></li>
+                <li class="share3"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(3)" ng-class="(item.share_with==3) ? 'active' : ''"><span>Friends Of Friends</span></a></li>
+                <li class="share4"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(4)" ng-class="(item.share_with==4) ? 'active' : ''"><span>Private Me Only</span></a></li>
+            </ul>
 
-            
+                        </span>
 
+                        <span class="editsettingbtn" style="background: none; float: left; width:100%; margin: 10px 0; color: #f7931d;">Blocking
+                        <a href="#/settings"  style="font-size:16px!important; letter-spacing: 0; text-transform:uppercase;  border:none; font-weight:normal!important;" ><img src="images/gear.png"  style="margin-top:-6px;"/></a>
+                    </span>
 
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
 
-            <button  type="submit" class="updatebtn">UPDATE PROFILE</button>
+                <div class="right-part">
+                    <h1>Select Sport</h1>
+                    <div class="sports-table">
+                        <div ng-repeat="n in sportsList">
+                            <h3> {{n.name}}</h3>
+                            <ul>
+                                <li ng-repeat="m in n.ch">
+                                    <a href="javascript:void(0);" style="margin-bottom: 0px;" ng-click="selsports(m.id,this);"  ng-class="{'activeimg':(userSports.indexOf(m.id) > -1)}"><img  alt="#" src="{{baseUrl}}/uploads/sports_image/thumb/{{m.image}}" ></a>
+                                    <strong> {{m.name}}</strong>
+                                </li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
 
-            <a href="#/profile/{{sessUser}}" class="backbtn">BACK</a>
+                <button  type="submit" class="updatebtn">UPDATE PROFILE</button>
 
-
-        </form>
-
-
-</div>
-
-
-
-        <div class="footer-menu1">
-
-            <span>&copy;TORQK'D</span>
-            <span>|</span>
-<span>
-<a href="javascript:void(0);">TERMS </a>
-</span>
-            <span>|</span>
-<span>
-<a href="javascript:void(0);">PRIVACY</a>
-</span>
+                <a href="#/profile/{{sessUser}}" class="backbtn">BACK</a>
+            </form>
         </div>
 
-
-
+        <div class="footer-menu1">
+            <span>&copy;TORKQ</span>
+            <span>|</span>
+            <span>
+                <a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
+            </span>
+            <span>|</span>
+            <span>
+                <a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+            </span>
+        </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="privacymodal">
+    <div class="modal-header">
+        <a class="close" ng-click="modalClose()">&times;</a>
+        <h4>Privacy Settings</h4>
+    </div>
+
+    <div class="modal-body" style="text-align: center; min-height: 130px;">
+        <div style="text-align:center; display: inline; position: relative;">
+            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none; outline:none;">
+                <span ng-show="privacy==1"><img src="images/share1_icon_active.png" style="width:18px; margin-top:-2px;"><span>Public</span></span>
+                <span ng-show="privacy==2"><img src="images/share2_icon_active.png" style="width:15px; margin-top:0px;"><span>Friends</span></span>
+                <span ng-show="privacy==3"><img src="images/share3_icon_active.png" style="width:18px; margin-top:0px;"><span>Friends Of Friends</span></span>
+                <span ng-show="privacy==4"><img src="images/share4_icon_active.png" style="width:12px; margin-top:0px;"><span>Private Me Only</span></span>
+                <span><img src="images/ad2new.png" style="padding-left:4px;"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu_share">
+                <li class="share1"><a href="javascript:void(0)" style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(1)" ng-class="(item.share_with==1) ? 'active' : ''"><span>Public</span></a></li>
+                <li class="share2"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(2)" ng-class="(item.share_with==2) ? 'active' : ''"><span>Friends</span></a></li>
+                <li class="share3"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(3)" ng-class="(item.share_with==3) ? 'active' : ''"><span>Friends Of Friends</span></a></li>
+                <li class="share4"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeuserprivacy(4)" ng-class="(item.share_with==4) ? 'active' : ''"><span>Private Me Only</span></a></li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+
+

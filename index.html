@@ -3,9 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<base ng-init="baseUrl = 'http://192.168.0.131/torqkd'" />
+<base ng-init="baseUrl = 'http://torqkd.com'" />
 
 <script type="text/javascript">
+    var base_url = 'http://torqkd.com';
     FileAPI = {
       debug: true,
       forceLoad: true, html5: false, //to debug flash in HTML5 browsers
@@ -47,6 +48,7 @@
 
     <script src="js/angular.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.bootbox.min.js"></script>
   <script src="js/ui-bootstrap-0.13.0.min.js"></script>
   <script src="js/imgLiquid-min.js"></script>
   <script src="js/angular-mobile.js"></script>
@@ -71,10 +73,16 @@
   <script type="text/javascript" src="js/ng-mobile-menu.js"></script>
   <script src="js/html2canvas.js"></script>
     <script src="js/ng-img-crop.js"></script>
+    <script src="js/readmore.js"></script>
     <!--<script src="js/jquery.guillotine.min.js"></script>-->
+    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+
    <script src="js/app.js"></script>
    <script src="js/controllers.js"></script>
+    <script src="js/Chart.min.js"></script>
    <script src="js/common.js"></script>
+   <script src="js/poll.js"></script>
    <script src="js/angular-validator.js"></script>
    <script src="js/bootstrap-colorpicker-module.js"></script>
    <script src="js/angular-wysiwyg.js"></script>
@@ -87,8 +95,10 @@
  </head>
  <body>
  <div id="fb-root"></div>
- <input type="hidden" id="lat">
- <input type="hidden" id="long">
+
+
+ <input type="text" id="lat" style="display: none;">
+ <input type="text" id="long" style="display: none;">
 
 
  <div ng-view></div>
@@ -98,6 +108,25 @@
              <div class="video-container"><iframe src="https://www.youtube.com/embed/kkUZRGrF9Ig?rel=0&autoplay=0" frameborder="0" allowfullscreen></iframe></div>
          </div>
      </script>
+
+
+ <div class="modal fade " id="pollmodal" data-original-title="" style="display: none;" aria-hidden="true" >
+     <div class="popupbody2">
+        <a href="javascript:void(0);" data-dismiss="modal" aria-hidden="true" onclick="js:$('.modal-backdrop').remove();" class="closepopup"><img src="images/close.png"></a>
+
+     <div style="padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; " class="modal-body" data-original-title="">
+
+     </div>
+ </div>
+
+
+
+ </div>
+
+<div id="pollAll">
+
+</div>
+
 
  </body>
  </html>

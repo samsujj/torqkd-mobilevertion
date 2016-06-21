@@ -1,43 +1,190 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Torqkd</title>
-<link href="css/style.css" type="text/css" rel="stylesheet" media="all" />
-</head>
-<body>
-<div class="connect-body">
-  <div class="register_wrapper">
-    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
-    <div class="menupart"><img  alt="#" src="images/bgimage3.png" ></div>
-    <div class="activities_contain">
-      <h1><img  alt="#" src="images/ctop.jpg"></h1>
-      
-      <p style="font-size:12px;" data-original-title="">Click on the profile pictures to connect with other outdoor sports enthusiasts.</p>
-      
-     <div class="top-text"> <h4 style="color:#f8931f; margin: 10px 0; font-family: reservation; font-size: 13px; font-weight: normal; font-style: normal;">
-<span id="friend-count" style="color:##f8931f;">{{count}}</span>
-Friendship requested
-</h4>
-</div>
-        
-    <div class="connect-img">
-		<a href="javascript:void(0)" ng-click="selectUser(n.id); actClass = !actClass" ng-class="actClass ? 'active-pic' : ''" ng-repeat="n in userList" >
-			<img alt="#" src="{{baseUrl}}/uploads/user_image/thumb/{{n.image}}">
-		</a>
+<style>
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+    }
+</style>
 
-<div class="clear"></div>
-     
-     </div>   
-     <input  class="activities-submit" type="button" ng-click="next_c()" value="next step" >     
-        
-       <div class="skip connectskip">
-<a href="javascript:void(0);" data-original-title="">SKIP »</a>
-</div> 
+<div class="connect-body">
+
+    <div class="register_wrapper">
+
+        <div class="logo" >
+            <a href="#/index">
+                <img  alt="#" src="images/logo_main.png" />
+            </a>
+        </div>
+
+        <div class="menupart3"></div>
+
+        <div class="activities_contain">
+            <h1><img  alt="#" src="images/ctop.jpg" id="connectH"></h1>
+            <p style="font-size:12px;" data-original-title="">Click on the profile pictures to connect with other outdoor sports enthusiasts.</p>
+            <div class="top-text">
+                <h4 style="color:#f8931f; margin: 15px auto; font-family: reservation; font-size: 13px; font-weight: normal; font-style: normal; text-align: left;">
+                    <span id="friend-count" style="color:##f8931f;">{{count}}</span>
+                    Friendship requested
+                </h4>
+            </div>
+
+            <div class="connect-img">
+                <div ng-click="selectUser(n.id); actClass = !actClass" ng-class="actClass ? 'active-pic connect-user-list' : 'connect-user-list'" ng-repeat="n in userList | filter:search | limitTo: limit" >
+                    <div class="connect_imgdiv" >
+                        <a href="javascript:void(0)">
+                            <img alt="#" src="{{baseUrl}}/uploads/user_image/thumb/{{n.image}}">
+                        </a>
+                    </div>
+
+                    <div class="connect_textdiv">
+
+                        <a href="javascript:void(0)">
+
+                            <span>{{ n.user_name | limitTo: 30 }}{{n.user_name.length > 30 ? '...' : ''}}</span><br />
+
+                            {{ n.user_address_lim | limitTo: 28 }}
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="skip" style="letter-spacing: 1px;">
+                <a href="javascript:void(0)" style="color: #f8931f!important;" ng-show="((userList | filter:search).length) > limit" ng-click="loadmore()">Load More</a>
+            </div>
+
+            <input type="button" ng-click="showadvsearchfun()" value="Advanced Search" class="activities-submit">
+            <input  class="activities-submit" type="button" ng-click="next_c()" value="next step" >
+
+            <div class="search-new connectslide" ng-show="showadvsearch==1">
+
+                <div style="float: none; width:100%; margin-bottom:20px;">
+
+                    <!--<label style="display: block; padding-bottom:4px; width: 100%; float:none; font-weight:normal; color:#333;">Search By Name :</label> -->
+
+                    <input type="text" ng-model="search_user_name" ng-change="limit=20" placeholder="SEARCH BY NAME" style=" color: #717171 !important;  background: #fff!important; border: 2px solid #97989a  !important; border-radius: 4px !important; height: 42px !important; width: 100% !important; float:none; padding:0 0px; font-size:13px!important;">
+
+                    <div class="clear"></div>
+
+                </div>
+
+
+
+                <div style="float: none; width:100%; margin-bottom:20px;">
+
+                    <!--<label style="display: block; padding-bottom:4px; width: 100%; float:none; font-weight:normal; color:#333;"> Search By Country : </label>-->
+
+                    <select id="select-search-country"  ng-model="search_user_country" ng-change="limit=20;changeCountry(search_user_country)" style=" color: #717171 !important;  background: #fff!important; border: 2px solid #97989a  !important; border-radius: 4px !important; height: 42px !important; width: 100% !important; float:none; padding:0 0px; font-size:13px!important;">
+
+                        <option value="" >SEARCH BY COUNTRY</option>
+
+                        <option ng-repeat="item in countrylist  track by item.id" value="{{item.id}}" ng-selected="item.id == defCountry">{{item.name}}</option>
+
+                    </select>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div style="float: none; width:100%; margin-bottom:20px;">
+
+                    <!--  <label style="display: block; padding-bottom:4px; width: 100%; float:none; font-weight:normal; color:#333;"> Search By State : </label>-->
+
+                    <select id="select-search-state select-search"  ng-change="limit=20" ng-model="search_user_state"  style=" color: #717171 !important;  background: #fff!important; border: 2px solid #97989a  !important; border-radius: 4px !important; height: 42px !important; width: 100% !important; float:none; padding:0 0px; font-size:13px!important;">
+
+                        <option value="" selected="selected" >SEARCH BY STATE / PROVINCE</option>
+
+                        <option ng-repeat="item in statelist track by item.id" value="{{item.id}}" ng-selected="item.id == defState">{{item.name}}</option>
+
+                    </select>
+
+
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div style="float: none; width:auto; margin-bottom:5px; background: #fff; border: 2px solid #97989a; border-radius: 4px !important; color: #717171 !important; float: none; font-size: 13px !important; height: 42px !important; padding: 0 5px; cursor: pointer; line-height: 42px; " ng-click="showsportarea = 1">SELECT SPORTS</div>
+
+
+                <!--<div ng-show="showsportarea" style="text-transform: uppercase;">Hold down CRTL and click to multiple select sports.</div>-->
+
+                <div style="float: none; width:100%; margin-bottom:20px; margin-top: 5px;" ng-show="showsportarea">
+
+                    <!--  <label style="display: block; padding-bottom:4px; width: 100%; float:none; font-weight:normal; color:#333;">Search By Sport :</label>-->
+
+                    <!--<tags-input add-from-autocomplete-only="true" replace-spaces-with-dashes="false" placeholder="Search By Sports" ng-model="search_user_sports" on-tag-added="sp_tag_add()" on-tag-removed="sp_tag_add()">
+
+                    <auto-complete source="loadSports($query)" min-length="1"></auto-complete>
+
+                    </tags-input>-->
+
+                    <!--<select id="select-search"  ng-model="search_user_sports" multiple="multiple" style="  background: #fff!important; border: 2px solid #97989a  !important; border-radius: 4px !important;  height: 117px !important; width: 100% !important; float:none; padding:0 0px; font-size:14px!important;">
+
+                    <option value="" disabled="disabled" style="font-size:13px!important; color: #717171 !important; ">SELECT SPORT</option>
+
+                    </select>-->
+
+
+
+                    <div class="sports-table" style="background: #fff none repeat scroll 0 0; border: 2px solid #97989a; border-radius: 4px !important; padding: 10px;">
+                        <div ng-repeat="n in sportsList">
+                            <h3 style=" padding-bottom: 5px!important; color: #f8931f; "> {{n.name}}</h3>
+                            <div style=" padding-bottom: 20px;">
+                                <div ng-repeat="m in n.ch" style="float: left; width: 30%;">
+                                    <input type="checkbox" id="sportscheck{{m.id}}" class="sportscheck" name="sportscheck[]" ng-click="sp_tag_add(m.id)"><strong style="font-size: 13px!important;"> {{m.name}}</strong>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="clear"></div>
+
+                </div>
+
+
+
+                <div style="float: none; width:100%; margin-bottom:10px;">
+
+                    <input class="activities-submit" type="button" value="RESET" ng-click="resetsearch();showadvsearchfun()">
+
+                </div>
+
+
+
+                <div class="clear"></div>
+
+
+
+            </div>
+
+            <div class="skip connectskip">
+                <a href="javascript:void(0);" ng-click="skip()" >SKIP »</a>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+
+    <div class="footer-menu2">
+        <span>&copy;TORKQ</span>
+        <span>|</span>
+        <span>
+            <a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a>
+        </span>
+        <span>|</span>
+        <span>
+            <a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
+        </span>
+    </div>
 </div>
-</body>
-</html>

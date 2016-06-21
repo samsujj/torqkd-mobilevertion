@@ -1,12 +1,25 @@
+<style>
+
+    .ngdialog-content{
+        border: 5px solid #f7941e !important;
+        border-radius: 0 !important;
+        padding:25px 15px!important;
+    }
+
+    .ngdialog-content p{
+        font:13px/18px Arial,Helvetica,sans-serif;
+    }
+
+</style>
 <div class="activities-body">
   <div class="register_wrapper">
-    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo.png" /> </a> </div>
+    <div class="logo" > <a href="#/index"> <img  alt="#" src="images/logo_main.png" /> </a> </div>
 	
-    <div class="menupart"><img  alt="#" src="images/bgimage2.png" ></div>
+    <div class="menupart2"></div>
 	
-    <div class="activities_contain">
+    <div class="activities_contain" id="contain1">
 	
-      <h2><img  alt="#" src="images/selectsports.png"></h2>
+      <h2><img  alt="#" src="images/selectsports.png" id="selSportsH"></h2>
       
       <div class="sports-table">
 	  
@@ -31,5 +44,5 @@
         
     </div>
   </div>
-  <div class="footer-menu2"> <span>&copy;TORQK'D</span> <span>|</span> <span> <a href="javascript:void(0);">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);">PRIVACY</a> </span> </div>
+  <div class="footer-menu2"> <span>&copy;TORKQ</span> <span>|</span> <span> <a href="javascript:void(0);" ng-click="showtermsploicy('terms')">TERMS </a> </span> <span>|</span> <span> <a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a> </span> </div>
 </div>
