@@ -148,8 +148,16 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
     }*/
 
     //$scope.makeToast1('Loading....');
-	
-	$rootScope.fbSmsg = 0; 
+
+
+    $scope.sessUser = 0;
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
+
+    $rootScope.fbSmsg = 0;
 	$rootScope.twSmsg = 0;
 	$scope.sessUser = 0;
 
@@ -161,6 +169,8 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
            method  : 'POST',
         async:   false,
            url     : $scope.baseUrl+'/user/ajs/getCurrentUser21',
+        data    : $.param({'userid':$scope.sessUser}),
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
        }) .success(function(datares) {
             var data = datares.id;
             var accessToken = datares.accessToken;
@@ -236,11 +246,15 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
                        data    : $.param({'email':$scope.email,'password':$scope.password}),  // pass in data as strings
                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                    }) .success(function(data) {
-                       if(data > 0){
+                       console.log(data);
+                       if(typeof (data.id) != 'undefined'){
                            loggedInStatus.setStatus("true");
                            $cookieStore.put('login_email1',$scope.email);
                            $cookieStore.put('login_password1',$scope.password);
-                           $location.path('/profile/'+data);
+
+                           $cookieStore.put('rootuserdet',data);
+
+                           $location.path('/profile/'+data.id);
                        }else{
                            $location.path('/home');
                        }
@@ -401,24 +415,17 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
 
 });
 
-homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location) {
-
-
-    /*$scope.makeToast1 = function(msg){
-        Android.showToast(msg);
-    }*/
+homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
-	
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $location.path('/profile/'+data);
-		   }
-	   });
+
+    $scope.sessUserId = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUserId = $scope.userDet.id;
+        $location.path('/profile/'+$scope.userDet.id);
+    }
 	
 	$scope.openDefault = function () {
                 ngDialog.open({
@@ -457,23 +464,20 @@ homeControllers1.service('loggedInStatus', function () {  var loggedIn = "";
 	};
 });
 
-homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog) {
+homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog,$timeout) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 	
 	$scope.msgFlag = false;
 	$scope.loggedIn = loggedInStatus.getStatus();
+
+    $scope.sessUserId = 0;
 	
-	
-	$http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $location.path('/index');
-        }
-    });
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUserId = $scope.userDet.id;
+        $location.path('/profile/'+$scope.userDet.id);
+    }
 	
 		$scope.email = $cookieStore.get('login_email');
 		$scope.password = $cookieStore.get('login_password');
@@ -490,6 +494,14 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
         $cookieStore.put('login_password',$scope.password);
 
 
+        $timeout(function(){
+            $scope.chkLoginfunc();
+        },100);
+
+
+	}
+
+    $scope.chkLoginfunc = function(){
         $http({
             method  : 'POST',
             async:   false,
@@ -497,17 +509,20 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
             data    : $.param($scope.form),  // pass in data as strings
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(data) {
-            if(data > 0){
+            console.log(data);
+            if(typeof (data.id) != 'undefined'){
                 loggedInStatus.setStatus("true");
                 $cookieStore.put('login_email1',$scope.form.email);
                 $cookieStore.put('login_password1',$scope.form.password);
-                $location.path('/profile/'+data);
-             }
+
+                $cookieStore.put('rootuserdet',data);
+
+                $location.path('/profile/'+data.id);
+            }
+        }).error(function (result) {
+            $scope.chkLoginfunc();
         });
-
-
-
-	}
+    }
   
 	$scope.submitloginForm = function() {
 		if (typeof ($scope.form.remember) != 'undefined' && $scope.form.remember == true) {
@@ -524,15 +539,21 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
            data    : $.param($scope.form),  // pass in data as strings
            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
        }) .success(function(data) {
-               if(data > 0){
-				   loggedInStatus.setStatus("true");
-                   $cookieStore.put('login_email1',$scope.form.email);
-                   $cookieStore.put('login_password1',$scope.form.password);
-                   $location.path('/profile/'+data);
-			   }else{
+            console.log(data);
+            if(typeof (data.id) != 'undefined'){
+                loggedInStatus.setStatus("true");
+                $cookieStore.put('login_email1',$scope.form.email);
+                $cookieStore.put('login_password1',$scope.form.password);
+
+                $cookieStore.put('rootuserdet',data);
+
+                $location.path('/profile/'+data.id);
+            }else{
 				   $scope.msgFlag = true;
 			   }
-	   });
+        }).error(function (result) {
+            $scope.submitloginForm();
+        });
 	};
 
     $scope.showtermsploicy = function(id){
@@ -558,13 +579,15 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
                 closeByDocument: false,
                 closeByEscape: false
             });
+        }).error(function (result) {
+            $scope.showtermsploicy(id);
         });
     }
 
     $scope.sportsMenu = [];
 
     $http({
-        method: 'GET',
+        method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/GetParentSports',
     }).success(function (result) {
@@ -577,13 +600,20 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
 });
 
 homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,loggedInStatus,$cookieStore,$cookies) {
-
+    $scope.userId = 0;
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.userId = $scope.userDet.id;
+    }
 	$http({
 		method: 'POST',
 		async:   false,
 		url: $scope.baseUrl+'/user/ajs/logout',
+        data    : $.param({'cuser':$scope.userId}),  // pass in data as strings
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
 	}).success(function (result) {
 		loggedInStatus.setStatus("false");
+        $cookieStore.remove('rootuserdet');
         $cookieStore.remove('login_email1');
         $cookieStore.remove('login_password1');
 		$location.path('/index');
@@ -594,7 +624,7 @@ homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, 
 
 });
 
-homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog) {
+homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -609,10 +639,13 @@ homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$co
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(data) {
             if(data == 1){
+                $cookieStore.put('sess_f_email',$scope.form.email);
                 $location.path('/forgot-password-second-step');
             }else{
                 $scope.msgFlag = true;
             }
+        }).error(function (result) {
+            $scope.submitloginForm();
         });
 
     }
@@ -646,11 +679,15 @@ homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$co
 
 });
 
-homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog) {
+homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.msgFlag = false;
+
+    $scope.form = {
+        user_email : $cookieStore.get('sess_f_email')
+    }
 
     $scope.submitloginForm = function(){
         $http({
@@ -661,10 +698,13 @@ homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$c
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(data) {
             if(data > 0){
+                $cookieStore.put('sess_f_id',data);
                 $location.path('/change-password');
             }else{
                 $scope.msgFlag = true;
             }
+        }).error(function (result) {
+            $scope.submitloginForm();
         });
 
     }
@@ -698,9 +738,12 @@ homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$c
 
 });
 
-homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog) {
+homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
 
-
+    $scope.form = {
+        sess_f_id : $cookieStore.get('sess_f_id'),
+        sess_f_email : $cookieStore.get('sess_f_email')
+    }
     $scope.passwordValidator = function(password) {
 
         if (!password) {
@@ -731,6 +774,8 @@ homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$co
             $cookieStore.put('login_password',data.password);
 
             $location.path('/login');
+        }).error(function (result) {
+            $scope.submitloginForm();
         });
 
     }
@@ -1804,13 +1849,16 @@ homeControllers1.controller('completeCtrl', function($scope, $http, $timeout, $c
                 data    : $.param({'email':$scope.email,'password':$scope.password}),  // pass in data as strings
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
             }) .success(function(data) {
-                if(data > 0){
+                console.log(data);
+                if(typeof (data.id) != 'undefined'){
                     loggedInStatus.setStatus("true");
                     $cookieStore.put('login_email1',$scope.email);
                     $cookieStore.put('login_password1',$scope.password);
-                    //window.location.href=$scope.baseUrl+'/torqkd_demo/#/profile/'+data;
-                    $location.path('/profile/'+data);
-                }else{
+
+                    $cookieStore.put('rootuserdet',data);
+
+                    $location.path('/profile/'+data.id);
+                } else{
                     //window.location.href=$scope.baseUrl+'/torqkd_demo/#/home';
                     $location.path('/home');
                 }
@@ -1820,7 +1868,7 @@ homeControllers1.controller('completeCtrl', function($scope, $http, $timeout, $c
 });
 
 
-homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,$modal,  uiGmapGoogleMapApi,$timeout,$rootScope,$facebook ) {
+homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,$modal,  uiGmapGoogleMapApi,$timeout,$rootScope,$facebook,$cookieStore ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 	
@@ -1832,6 +1880,14 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
     $scope.viewMoreEvent = 0;
     $scope.offsetevent = 0;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+        $scope.sessUser1 = $scope.userDet.id;
+    }else{
+        $scope.sessUser1 = 0;
+
+    }
 
 
     /************************Notifications****************************/
@@ -2131,33 +2187,20 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
         url     : $scope.baseUrl+'/user/ajs/checkMobile',
     }) .success(function(data) {
 		$scope.isMobileApp = data;
-    })
+    });
+
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	
-	$http({
-           method  : 'POST',
-           async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
-			   $scope.sessUser1 = data;
-
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-
-		   }else{
-               $scope.sessUser1 = 0;
-           }
-
-
-	});
-
-
 	$http({
             method: 'GET',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getCurLocation',
+            data    : $.param({'sess_user':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
 
 			$scope.map = {
@@ -2283,7 +2326,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getStatus',
-			data    : $.param({'userid':0,'offset':0}),
+			data    : $.param({'userid':0,'sess_user':$scope.sessUser,'offset':0}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
             $scope.statusLoad = false;
@@ -2294,7 +2337,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getEvents',
-			data    : $.param({'userid':0,'offset':0}),
+			data    : $.param({'userid':0,'sess_user':$scope.sessUser,'offset':0}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
             $scope.eventList = result.event;
@@ -2345,7 +2388,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getEvents',
-            data    : $.param({'userid':0,'offset':$scope.offsetevent}),
+            data    : $.param({'userid':0,'sess_user':$scope.sessUser,'offset':$scope.offsetevent}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             $scope.viewMoreLoad = 0;
@@ -2487,7 +2530,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/addcomment',
-                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 item.commentList.push(result);
@@ -2563,7 +2606,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 					method: 'POST',
                     async:   false,
 					url: $scope.baseUrl+'/user/ajs/addcomment',
-					data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+					data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
 					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 				}).success(function (result) {
 					if(item.comment_no){
@@ -2648,6 +2691,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getFbAt',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 var sss = 'Say Something About This Post';
@@ -2769,6 +2813,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getTwOauth',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 if(result.oauth_token == '' || result.oauth_token_secret == ''){
@@ -3133,6 +3178,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
                                         method: 'POST',
                                         async:   false,
                                         url: $scope.baseUrl+'/user/ajs/getFbAt',
+                                        data    : $.param({'userid':$scope.sessUser}),
                                         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                                     }).success(function (result) {
                                         if(result == ''){
@@ -3497,7 +3543,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 });
 
 
-homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$facebook ) {
+homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$facebook,$cookieStore ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -3519,6 +3565,11 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
     $scope.share_with = 1;
 
     $scope.unReadNot = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet1 = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet1.id;
+    }
 
 
 	if($routeParams.userid == 0){
@@ -3916,7 +3967,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/alluserList55555',
-        //data    : $.param({sess_id: $scope.sessUser}),
+        data    : $.param({'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.taguserList = result;
@@ -3966,149 +4017,6 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         angular.element( document.querySelector( '#youtubeBody'+id ) ).html('<iframe width="100%" height="100%" src="https://www.youtube.com/embed/'+value+'?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
     }
 
-    /*$http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/profilecommon',
-        data    : $.param({'userid':$routeParams.userid,'offset':0}),
-        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-    }) .success(function(result) {
-        $scope.isLoad = 1;
-
-        if(result.sessUser > 0){
-            $scope.sessUser = result.sessUser;
-
-            $timeout(function(){
-                $scope.getNotListRec();
-            },3000);
-
-            $http({
-                method  : 'POST',
-                async:   false,
-                url     : $scope.baseUrl+'/user/ajs/getTempFile',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }) .success(function(result) {
-                if(typeof(result.id) != 'undefined'){
-
-                    if(result.type == 'image'){
-                        $scope.isPhoto = 0;
-                        $scope.photoval = result.value;
-                        $scope.statusType = 'image';
-                        $scope.statusValue = result.value;
-                        $scope.isStatusInput = 1;
-                        $scope.isRotateBtn = 1;
-                        $scope.status_id = result.id;
-                        $scope.tagpeople = [];
-                    }
-                    if(result.type == 'video'){
-                        $scope.videoval1 = '';
-                        $scope.photoval = '';
-                        $scope.localfilepath = result.localfilepath;
-                        $scope.videoTempval = result.tempImage;
-                        $scope.videoval2 = result.value;
-                        $scope.videoval3 = 1;
-                        $scope.isPhoto = 0;
-                        $scope.isVideo = 0;
-
-                        $scope.isPhoto = 0;
-                        $scope.statusType = 'video';
-                        $scope.statusValue = result.value;
-                        $scope.isStatusInput = 1;
-                        $scope.status_id = result.id;
-                        $scope.tagpeople = [];
-                    }
-
-                    //$location.hash('statusinput');
-                    var fgddf = $( '#statusinput' ).offset().top;
-                    fgddf = parseInt(fgddf)-parseInt(70);
-                    $('html, body').animate({ scrollTop: fgddf }, 2000);
-
-                }
-            });
-
-        }
-
-        $scope.isMobileApp = result.isMobileApp;
-        $scope.taguserList = result.taguserList;
-        $scope.statDet = result.statDet;
-        $scope.bannerslides1 = result.bannerslides2;
-        $scope.bannerslides2 = result.bannerslides3;
-
-        $scope.statusList = result.statusList.status;
-        if(result.statusList.totalCount > $scope.statusList.length){
-            $scope.viewMore = 1;
-            $scope.offset = 5;
-        }
-
-        $scope.eventList = result.eventList.event;
-        if(result.eventList.totalCount > $scope.eventList.length){
-            $scope.viewMoreEvent = 1;
-            $scope.offsetevent = 5;
-        }
-
-        $scope.groupList = result.groupList;
-
-        $scope.stats = result.stats;
-
-        angular.forEach($scope.stats, function(val, key) {
-            var highchartsNG = {
-                options: {
-                    chart: {
-                        type: 'line'
-                    }
-                },
-                series: [{
-                    data: val.data,
-                    name: '<div style="color:#555555;">Month</div>',
-                    color: '#F79213'
-                }],
-                title: {
-                    text: '<div style="color:#555555;">Last 6 Months</div>'
-                },
-                loading: false,
-
-                xAxis: {
-                    categories: val.mon
-                },
-
-                yAxis: {
-                    title: {
-                        text: '<div style="color:#555555;">Activity</div>',
-                    }
-                },
-
-                tooltip: {
-                    valueSuffix: ''
-                },
-            }
-
-            var chartdata = {
-                sports_id: val.sports_id,
-                sport_name: val.sport_name,
-                imag_name: val.imag_name,
-                activity_no: val.activity_no,
-                total_dis: val.total_dis,
-                total_time: val.total_time,
-                statDet: val.statDet,
-            }
-
-            $scope.highchartsNG.push(highchartsNG);
-            $scope.chartdata.push(chartdata);
-        });
-
-        $scope.frndno = result.frndno;
-        $scope.frnddet = result.frnddet;
-
-        $scope.userdet = result.userdet;
-
-        $scope.sportsMenu = result.sportsMenu;
-
-    });*/
-
-
-
-
 
     $http({
         method  : 'POST',
@@ -4118,104 +4026,58 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 		$scope.isMobileApp = data;
     })
 
+if($scope.sessUser > 0){
+    $timeout(function(){
+        $scope.getNotListRec();
+    },3000);
 
-
-	
-	$http({
-           method  : 'POST',
+    $http({
+        method  : 'POST',
         async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-            $scope.isLoad = 1;
-		   if(data > 0){
-			   $scope.sessUser = data;
+        url     : $scope.baseUrl+'/user/ajs/getTempFile',
+        data    : $.param({'userid':$scope.sessUser}),
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+    }) .success(function(result) {
+        if(typeof(result.id) != 'undefined'){
 
-               $timeout(function(){
-                   $scope.getNotListRec();
-               },3000)
+            if(result.type == 'image'){
+                $scope.isPhoto = 0;
+                $scope.photoval = result.value;
+                $scope.statusType = 'image';
+                $scope.statusValue = result.value;
+                $scope.isStatusInput = 1;
+                $scope.isRotateBtn = 1;
+                $scope.status_id = result.id;
+                $scope.tagpeople = [];
+            }
+            if(result.type == 'video'){
+                $scope.videoval1 = '';
+                $scope.photoval = '';
+                $scope.localfilepath = result.localfilepath;
+                $scope.videoTempval = result.tempImage;
+                $scope.videoval2 = result.value;
+                $scope.videoval3 = 1;
+                $scope.isPhoto = 0;
+                $scope.isVideo = 0;
 
-               /*$http({
-					method  : 'POST',
-                    async:   false,
-					url     : $scope.baseUrl+'/user/ajs/getTemp',
-					data    : $.param({'userid':$scope.sessUser}),
-					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
-				}) .success(function(data1) {
-					if(data1.type == 'image'){
-						$scope.isPhoto = 0;
-						$scope.photoval = data1.file;
-						$scope.statusType = 'image';
-						$scope.statusValue = data1.file;
-						$scope.isStatusInput = 1;
-						$scope.isRotateBtn = 1;
-					}
-					if(data1.type == 'video'){
-						$scope.videoval1 = '';
-						$scope.photoval = '';
-						$scope.videoval2 = data1.file;
-						$scope.isPhoto = 0;
-						$scope.isVideo = 0;
-						
-						$scope.isPhoto = 0;
-						$scope.statusType = 'video';
-						$scope.statusValue = data1.file;
-						$scope.isStatusInput = 1;
-					}
-					
-				});*/
+                $scope.isPhoto = 0;
+                $scope.statusType = 'video';
+                $scope.statusValue = result.value;
+                $scope.isStatusInput = 1;
+                $scope.status_id = result.id;
+                $scope.tagpeople = [];
+            }
 
+            //$location.hash('statusinput');
+            var fgddf = $( '#statusinput' ).offset().top;
+            fgddf = parseInt(fgddf)-parseInt(70);
+            $('html, body').animate({ scrollTop: fgddf }, 2000);
 
-               $http({
-                   method  : 'POST',
-                   async:   false,
-                   url     : $scope.baseUrl+'/user/ajs/getTempFile',
-                   data    : $.param({'userid':$scope.sessUser}),
-                   headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-               }) .success(function(result) {
-                   if(typeof(result.id) != 'undefined'){
+        }
+    });
+}
 
-                       if(result.type == 'image'){
-                           $scope.isPhoto = 0;
-                           $scope.photoval = result.value;
-                           $scope.statusType = 'image';
-                           $scope.statusValue = result.value;
-                           $scope.isStatusInput = 1;
-                           $scope.isRotateBtn = 1;
-                           $scope.status_id = result.id;
-                           $scope.tagpeople = [];
-                       }
-                       if(result.type == 'video'){
-                           $scope.videoval1 = '';
-                           $scope.photoval = '';
-                           $scope.localfilepath = result.localfilepath;
-                           $scope.videoTempval = result.tempImage;
-                           $scope.videoval2 = result.value;
-                           $scope.videoval3 = 1;
-                           $scope.isPhoto = 0;
-                           $scope.isVideo = 0;
-
-                           $scope.isPhoto = 0;
-                           $scope.statusType = 'video';
-                           $scope.statusValue = result.value;
-                           $scope.isStatusInput = 1;
-                           $scope.status_id = result.id;
-                           $scope.tagpeople = [];
-                       }
-
-                       //$location.hash('statusinput');
-                       var fgddf = $( '#statusinput' ).offset().top;
-                       fgddf = parseInt(fgddf)-parseInt(70);
-                       $('html, body').animate({ scrollTop: fgddf }, 2000);
-
-                   }
-               });
-
-		   }
-	   });
-
-
-
-    $scope.openBanner = function(url){
+	$scope.openBanner = function(url){
         if($scope.isMobileApp){
             window.location.href = url;
         }else{
@@ -4226,7 +4088,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 
 
 	$scope.statDet = [];
-	
+
 	$http({
             method: 'POST',
 			async:   false,
@@ -4238,7 +4100,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
     });
 
 	$scope.bannerslides1 = [];
-	
+
 	$http({
             method: 'POST',
 			async:   false,
@@ -4250,7 +4112,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
     });
 
 	$scope.bannerslides2 = [];
-	
+
 	$http({
             method: 'POST',
 			async:   false,
@@ -4271,7 +4133,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getStatus',
-        data    : $.param({'userid':$routeParams.userid,'offset':0}),
+        data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.statusLoad = false;
@@ -4307,7 +4169,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                method: 'POST',
                async:   false,
                url: $scope.baseUrl+'/user/ajs/getStatus',
-               data    : $.param({'userid':$routeParams.userid,'offset':0}),
+               data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
            }).success(function (result) {
                $scope.statusLoad = false;
@@ -4324,7 +4186,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                method: 'POST',
                async:   false,
                url: $scope.baseUrl+'/user/ajs/getEvents',
-               data    : $.param({'userid':$routeParams.userid,'offset':0}),
+               data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
            }).success(function (result) {
                $scope.eventList = result.event;
@@ -4340,7 +4202,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                method: 'POST',
                async:   false,
                url: $scope.baseUrl+'/user/ajs/getGroups',
-               data    : $.param({'userid':$routeParams.userid}),
+               data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
            }).success(function (result) {
                $scope.groupList = result;
@@ -4412,7 +4274,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 					method: 'POST',
                     async:   false,
 					url: $scope.baseUrl+'/user/ajs/addcomment',
-					data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+					data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
 					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 				}).success(function (result) {
 					if(item.comment_no){
@@ -4496,6 +4358,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getFbAt',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 var sss = 'Say Something About This Post';
@@ -4620,6 +4483,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getTwOauth',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 if(result.oauth_token == '' || result.oauth_token_secret == ''){
@@ -4982,6 +4846,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                                         method: 'POST',
                                         async:   false,
                                         url: $scope.baseUrl+'/user/ajs/getFbAt',
+                                        data    : $.param({'userid':$scope.sessUser}),
                                         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                                     }).success(function (result) {
                                         if(result == ''){
@@ -5275,7 +5140,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getSugGroups',
-            data    : $.param({'userid':$routeParams.userid}),
+            data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             $scope.groupList = result;
@@ -5287,7 +5152,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getLocGroups',
-            data    : $.param({'userid':$routeParams.userid}),
+            data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             $scope.groupList = result;
@@ -5301,7 +5166,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             method: 'POST',
 			async:   false,
             url: $scope.baseUrl+'/user/ajs/getUserStat',
-			data    : $.param({'userid':$routeParams.userid}),
+			data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
 			$scope.stats = result;
@@ -5496,7 +5361,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 					method: 'POST',
 					async:   false,
 					url: $scope.baseUrl+'/user/ajs/statusUpdate',
-					data    : $.param({'msg':$scope.statusText,'msg1':$scope.statusText1,'share_with':$('#share_with').val(),'group_id':$scope.group,'type':$scope.statusType,'value':$scope.statusValue,'is_status':1,'status_id':$scope.status_id,tagpeople:$scope.tagpeople}),
+					data    : $.param({'msg':$scope.statusText,'msg1':$scope.statusText1,'share_with':$('#share_with').val(),'group_id':$scope.group,'type':$scope.statusType,'value':$scope.statusValue,'is_status':1,'status_id':$scope.status_id,tagpeople:$scope.tagpeople,'sess_user':$scope.sessUser}),
 					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 				}).success(function (result) {
 					$scope.isStatusInput = 0;
@@ -5546,7 +5411,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                     method: 'POST',
                     async:   false,
                     url: $scope.baseUrl+'/user/ajs/getStatus',
-                    data    : $.param({'userid':$routeParams.userid,'offset':0}),
+                    data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                 }).success(function (result) {
                     $scope.statusLoad = false;
@@ -6087,7 +5952,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             method: 'POST',
 			async:   false,
             url: $scope.baseUrl+'/user/ajs/getStatus',
-			data    : $.param({'userid':$routeParams.userid,'offset':$scope.offset}),
+			data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':$scope.offset}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
 			$scope.viewMoreLoad = 0;
@@ -6106,7 +5971,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             method: 'POST',
 			async:   false,
             url: $scope.baseUrl+'/user/ajs/getEvents',
-			data    : $.param({'userid':$routeParams.userid,'offset':$scope.offsetevent}),
+			data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':$scope.offsetevent}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
 			$scope.viewMoreLoad = 0;
@@ -6196,7 +6061,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/addcomment',
-                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 item.commentList.push(result);
@@ -6259,7 +6124,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 
 });
 
-homeControllers1.controller('friendListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('friendListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -6268,6 +6133,10 @@ homeControllers1.controller('friendListCtrl', function($scope, $http, $routePara
 	$scope.sessUser = 0;
 	$scope.currentUser = $routeParams.userid;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet1 = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet1.id;
+    }
 
     /************************Notifications****************************/
 
@@ -6356,20 +6225,12 @@ homeControllers1.controller('friendListCtrl', function($scope, $http, $routePara
     if($routeParams.userid == 0){
 		$location.path('/login');
 	}
-	
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
 
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-		   }
-	   });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	   
 	   
 	$scope.user_image = $scope.baseUrl+"/uploads/user_image/thumb/default.jpg";
@@ -6485,7 +6346,7 @@ homeControllers1.controller('friendListCtrl', function($scope, $http, $routePara
 
 });
 
-homeControllers1.controller('connectionCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('connectionCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -6494,7 +6355,10 @@ homeControllers1.controller('connectionCtrl', function($scope, $http, $routePara
 	$scope.sessUser = 0;
 	$scope.currentUser = $routeParams.userid;
 
-
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet1 = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet1.id;
+    }
     /************************Notifications****************************/
 
 
@@ -6583,21 +6447,12 @@ homeControllers1.controller('connectionCtrl', function($scope, $http, $routePara
     if($routeParams.userid == 0){
 		$location.path('/login');
 	}
-	
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
 
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-		   }
-	   });
-	   
+    if($scope.sessUser  > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	   
 	$scope.user_image = $scope.baseUrl+"/uploads/user_image/thumb/default.jpg";
 	$scope.frnddet = [];
@@ -6748,7 +6603,10 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 
     $cookieStore.remove('uploadalbumFile');
 
-
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
     /************************Notifications****************************/
 
 
@@ -6880,70 +6738,62 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 		$scope.isMobileApp = data;
     })
 
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
 
-               $http({
-                   method  : 'POST',
-                   async:   false,
-                   url     : $scope.baseUrl+'/user/ajs/getTempFile',
-                   data    : $.param({'userid':$scope.sessUser}),
-                   headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-               }) .success(function(result) {
-                   if(typeof(result.id) != 'undefined'){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/getTempFile',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }) .success(function(result) {
+            if(typeof(result.id) != 'undefined'){
 
-                       if(result.type == 'image'){
-                           $scope.photoval1=result.value;
-                           $scope.statusValue = result.value;
-                           $scope.isStatusInput=1;
-                           $scope.isRotateBtn=1;
-                           $scope.type="image";
-                           $scope.status_id = result.id;
-                       }
+                if(result.type == 'image'){
+                    $scope.photoval1=result.value;
+                    $scope.statusValue = result.value;
+                    $scope.isStatusInput=1;
+                    $scope.isRotateBtn=1;
+                    $scope.type="image";
+                    $scope.status_id = result.id;
+                }
 
-                       if(result.type == 'video'){
+                if(result.type == 'video'){
 
-                           $scope.status_id = result.id;
+                    $scope.status_id = result.id;
 
-                           $http({
-                               method  : 'POST',
-                               async:   false,
-                               url     : $scope.baseUrl+'/user/ajs/updateTempFile',
-                               data    : $.param({'status_id':$scope.status_id}),
-                               headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-                           }) .success(function(result1) {
-                                $scope.currentTab = 'video.tpl.html';
+                    $http({
+                        method  : 'POST',
+                        async:   false,
+                        url     : $scope.baseUrl+'/user/ajs/updateTempFile',
+                        data    : $.param({'status_id':$scope.status_id}),
+                        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+                    }) .success(function(result1) {
+                        $scope.currentTab = 'video.tpl.html';
 
-                               $http({
-                                   method: 'POST',
-                                   async:   false,
-                                   url: $scope.baseUrl+'/user/ajs/getVideo',
-                                   data    : $.param({'userid':$routeParams.userid}),
-                                   headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-                               }).success(function (result) {
-                                   $scope.videoList = result;
-                               });
+                        $http({
+                            method: 'POST',
+                            async:   false,
+                            url: $scope.baseUrl+'/user/ajs/getVideo',
+                            data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
+                            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+                        }).success(function (result) {
+                            $scope.videoList = result;
+                        });
 
 
-                           });
+                    });
 
-                       }
-                   }
-               });
+                }
+            }
+        });
 
-           }
-	   });
-
+    }
 
     $scope.andriodUp = function(){
         $cookieStore.put('uploadalbumFile',1);
@@ -6989,7 +6839,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 		method: 'POST',
 		async:   false,
 		url: $scope.baseUrl+'/user/ajs/getImage',
-		data    : $.param({'userid':$routeParams.userid}),
+		data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
 		headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 	}).success(function (result) {
 		$scope.photoList = result;
@@ -6999,7 +6849,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 		method: 'POST',
 		async:   false,
 		url: $scope.baseUrl+'/user/ajs/getVideo',
-		data    : $.param({'userid':$routeParams.userid}),
+		data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
 		headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 	}).success(function (result) {
         $scope.videoList = result;
@@ -7197,7 +7047,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 					method: 'POST',
                     async:   false,
 					url: $scope.baseUrl+'/user/ajs/addcomment',
-					data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+					data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
 					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
 				}).success(function (result) {
 					if(item.type == 'photo'){
@@ -7293,6 +7143,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getFbAt',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 var sss = 'Say Something About This Post';
@@ -7397,6 +7248,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getTwOauth',
+                data    : $.param({'userid':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 if(result.oauth_token == '' || result.oauth_token_secret == ''){
@@ -8145,7 +7997,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/addAlbum',
-            data    : $.param({'type':$scope.type,'value':$scope.statusValue,'msg':$scope.statusText,'status_id':$scope.status_id,'share_with':$('#share_with').val()}),
+            data    : $.param({'type':$scope.type,'value':$scope.statusValue,'msg':$scope.statusText,'status_id':$scope.status_id,'share_with':$('#share_with').val(),'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (data) {
             if($scope.type == 'image'){
@@ -8153,7 +8005,7 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
                     method: 'POST',
                     async:   false,
                     url: $scope.baseUrl+'/user/ajs/getImage',
-                    data    : $.param({'userid':$routeParams.userid}),
+                    data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                 }).success(function (result) {
                     $scope.photoList = result;
@@ -8244,11 +8096,15 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 });
 
 
-homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$modal, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$modal, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -8364,19 +8220,11 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
     /*****************************************************/
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $scope.photoList = [];
 
@@ -8384,6 +8232,8 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getAllImage',
+        data    : $.param({'sess_user':$scope.sessUser}),
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.photoList = result;
     });
@@ -8499,7 +8349,7 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/addcomment',
-                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 if(item.type == 'photo'){
@@ -8565,6 +8415,7 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getFbAt',
+            data    : $.param({'userid':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             var sss = 'Say Something About This Post';
@@ -8671,6 +8522,7 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getTwOauth',
+            data    : $.param({'userid':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             if(result.oauth_token == '' || result.oauth_token_secret == ''){
@@ -8909,12 +8761,16 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
 
 });
 
-homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog,$modal, $timeout,$location) {
+homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog,$modal, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -9032,19 +8888,11 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $scope.videoList = [];
 
@@ -9052,7 +8900,7 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getAllVideo',
-        data    : $.param({'userid':$routeParams.userid}),
+        data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.videoList = result;
@@ -9221,7 +9069,7 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
                 $http({
                     method: 'POST',
                     url: $scope.baseUrl+'/user/ajs/addcomment',
-                    data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                    data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                 }).success(function (result) {
                     if($scope.videoDet.commentList.length){
@@ -9240,7 +9088,7 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
                     method: 'POST',
                     async:   false,
                     url: $scope.baseUrl+'/user/ajs/addvideocomment',
-                    data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval}),
+                    data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                 }).success(function (result) {
                     if($scope.videoDet.commentList.length){
@@ -9308,12 +9156,18 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
 
 });
 
-homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
     $scope.currentUser = $routeParams.userid;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
 
 
     /************************Notifications****************************/
@@ -9401,23 +9255,11 @@ homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $
 
 
 
-    $http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
-
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-
-			   if($scope.sessUser == 0){
-					//$location.path('/login');
-				}
-		   }
-	   });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	   
 	   
 	$scope.user_image = $scope.baseUrl+"/uploads/user_image/thumb/default.jpg";
@@ -9485,7 +9327,7 @@ homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $
 
 });
 
-homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9494,6 +9336,10 @@ homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $
     $scope.user_name = 'GUEST';
     $scope.spId = $routeParams.id;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -9590,30 +9436,23 @@ homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $
         $scope.spId = 0;
     }
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $http({
-                method: 'POST',
-                async:   false,
-                url: $scope.baseUrl+'/user/ajs/getUserDet',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }).success(function (result) {
-                $scope.user_image = result.userdet.user_image;
-                $scope.user_name = "Welcome "+result.userdet.user_name;
-            });
-        }
-    });
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getUserDet',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.user_image = result.userdet.user_image;
+            $scope.user_name = "Welcome "+result.userdet.user_name;
+        });
+    }
 
     $scope.forumList = [];
 
@@ -9673,7 +9512,7 @@ homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $
 });
 
 
-homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9681,6 +9520,11 @@ homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams
     $scope.user_image = '';
     $scope.user_name = 'GUEST';
     $scope.forumId = $routeParams.id;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     $scope.gotonewtopic = function(forumid){
@@ -9800,30 +9644,23 @@ homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams
         $scope.spId = 0;
     }
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $http({
-                method: 'POST',
-                async:   false,
-                url: $scope.baseUrl+'/user/ajs/getUserDet',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }).success(function (result) {
-                $scope.user_image = result.userdet.user_image;
-                $scope.user_name = "Welcome "+result.userdet.user_name;
-            });
-        }
-    });
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getUserDet',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.user_image = result.userdet.user_image;
+            $scope.user_name = "Welcome "+result.userdet.user_name;
+        });
+    }
 
     $scope.forumDet = [];
 
@@ -9908,7 +9745,7 @@ homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams
 
 });
 
-homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9919,6 +9756,10 @@ homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParam
     $scope.topicTitle = '';
     $scope.allForum = [];
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -10011,30 +9852,23 @@ homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParam
         link:'#/forum-listing'
     }];
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $http({
-                method: 'POST',
-                async:   false,
-                url: $scope.baseUrl+'/user/ajs/getUserDet',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }).success(function (result) {
-                $scope.user_image = result.userdet.user_image;
-                $scope.user_name = "Welcome "+result.userdet.user_name;
-            });
-        }
-    });
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getUserDet',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.user_image = result.userdet.user_image;
+            $scope.user_name = "Welcome "+result.userdet.user_name;
+        });
+    }
 
     $http({
         method  : 'POST',
@@ -10109,7 +9943,7 @@ homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParam
 });
 
 
-homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10118,6 +9952,10 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
     $scope.user_name = 'GUEST';
     $scope.forumId = $routeParams.id;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -10206,7 +10044,8 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
 
     $scope.form = {
         forumId : $routeParams.id,
-        parentId : 0
+        parentId : 0,
+        sess_user :$scope.sessUser
     }
 
     $scope.headingArr = [{
@@ -10215,32 +10054,25 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
         link:'#/forum-listing'
     }];
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $http({
-                method: 'POST',
-                async:   false,
-                url: $scope.baseUrl+'/user/ajs/getUserDet',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }).success(function (result) {
-                $scope.user_image = result.userdet.user_image;
-                $scope.user_name = "Welcome "+result.userdet.user_name;
-            });
-        }else{
-            $location.path('/index');
-        }
-    });
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getUserDet',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.user_image = result.userdet.user_image;
+            $scope.user_name = "Welcome "+result.userdet.user_name;
+        });
+    }else{
+        $location.path('/index');
+    }
 
     $scope.menu = [
         ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript'],
@@ -10257,6 +10089,7 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
     ];
 
     $scope.cssClasses = ['test1', 'test2'];
+
 
     $scope.addTopicForm = function(){
         $http({
@@ -10312,7 +10145,7 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
 });
 
 
-homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$sce) {
+homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$sce,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10323,6 +10156,11 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
     $scope.topicTitle = '';
     $scope.topicDet = [];
     $scope.isReply = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -10509,30 +10347,24 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
         link:'#/forum-listing'
     }];
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
 
-            $http({
-                method: 'POST',
-                async:   false,
-                url: $scope.baseUrl+'/user/ajs/getUserDet',
-                data    : $.param({'userid':$scope.sessUser}),
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }).success(function (result) {
-                $scope.user_image = result.userdet.user_image;
-                $scope.user_name = "Welcome "+result.userdet.user_name;
-            });
-        }
-    });
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getUserDet',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $scope.user_image = result.userdet.user_image;
+            $scope.user_name = "Welcome "+result.userdet.user_name;
+        });
+    }
 
     $http({
         method  : 'POST',
@@ -10559,7 +10391,7 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
         method  : 'POST',
         async:   false,
         url     : $scope.baseUrl+'/user/ajs/getTopicDetails',
-        data    : $.param({'id':$scope.topicId}),
+        data    : $.param({'id':$scope.topicId,'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }) .success(function(result) {
         $scope.topicDet = result;
@@ -10570,6 +10402,7 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
             parentId:result.id,
             forumId:result.forum_id,
             description:'',
+            sess_user :$scope.sessUser
         }
 
     });
@@ -10618,7 +10451,7 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
                 method  : 'POST',
                 async:   false,
                 url     : $scope.baseUrl+'/user/ajs/addnewTopic',
-                data    : $.param({'title':item.title,'description':replyval,'parentId':item.id,'forumId':item.forum_id}),  // pass in data as strings
+                data    : $.param({'title':item.title,'description':replyval,'parentId':item.id,'forumId':item.forum_id,'sess_user':$scope.sessUser}),  // pass in data as strings
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
             }) .success(function(result) {
                 $('#Reply_description'+index).val('');
@@ -10760,7 +10593,7 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
 
 
 
-homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10769,6 +10602,11 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
 	$scope.viewMore = 0;
 	$scope.viewMoreLoad = 0;
     $scope.offset = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -10876,20 +10714,12 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
 	if($routeParams.userid == 0){
 		$location.path('/login');
 	}
-	
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
 
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-		   }
-	   });
+    if($scope.sessUser  > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	   
 	   
 	$scope.user_image = $scope.baseUrl+"/uploads/user_image/thumb/default.jpg";
@@ -11028,6 +10858,7 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
                                         method: 'POST',
                                         async:   false,
                                         url: $scope.baseUrl+'/user/ajs/getFbAt',
+                                        data    : $.param({'userid':$scope.sessUser}),
                                         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                                     }).success(function (result) {
                                         if(result == ''){
@@ -11244,6 +11075,7 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getTwOauth',
+            data    : $.param({'userid':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             if(result.oauth_token == '' || result.oauth_token_secret == ''){
@@ -11354,13 +11186,18 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
 
 });
 
-homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$sce) {
+homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$sce,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
 	$scope.evetId = $routeParams.id;
 	$scope.evetDet = [];
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -11446,21 +11283,11 @@ homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams
 
     /************************Notifications****************************/
 
-
-
-    $http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
-
-               $timeout(function(){
-                   $scope.getNotListRec()
-               },500);
-		   }
-	});
+    if($scope.sessUser  > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 	
 	$http({
 		method: 'POST',
@@ -11547,7 +11374,7 @@ homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams
 
 });
 
-homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload) {
+homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -11556,6 +11383,10 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
 
     $scope.minDate = new Date();
     $scope.minDate1 = new Date();
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -11644,22 +11475,14 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-
-        }else{
-            $location.path('/index');
-        }
-    });
+    }else{
+        $location.path('/index');
+    }
 
 
     $scope.groupList = [];
@@ -11889,13 +11712,17 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
 });
 
 
-homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload) {
+homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
     $scope.eventId = $routeParams.id;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -11984,21 +11811,13 @@ homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParam
 
     $scope.heading = "Edit Event";
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }else{
-            $location.path('/index');
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }else{
+        $location.path('/index');
+    }
 
 
     $scope.groupList = [];
@@ -12081,7 +11900,8 @@ homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParam
                 state:{
                     id: $scope.stateid,
                     name: $scope.stateName
-                }
+                },
+                'sess_user':$scope.sessUser
             };
             if(data.image)
                 $scope.eventImage = $scope.baseUrl+'/uploads/event_image/thumb/'+data.image;
@@ -12291,7 +12111,7 @@ homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParam
 
 
 
-homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog,$modal, $timeout,$location,uiGmapGoogleMapApi,$route) {
+homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog,$modal, $timeout,$location,uiGmapGoogleMapApi,$route,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -12302,6 +12122,10 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
     $scope.isMember = 0;
     $scope.isAdmin = 0;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -12680,7 +12504,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/addcomment',
-                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 if(item.comment_no){
@@ -12733,7 +12557,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/statusUpdate',
-                data    : $.param({'msg':$scope.statusText,'msg1':$scope.statusText1,'share_with':$('#share_with').val(),'group_id':$scope.groupId,'type':$scope.statusType,'value':$scope.statusValue,'is_status':1,'status_id':$scope.status_id}),
+                data    : $.param({'msg':$scope.statusText,'msg1':$scope.statusText1,'share_with':$('#share_with').val(),'group_id':$scope.groupId,'type':$scope.statusType,'value':$scope.statusValue,'is_status':1,'status_id':$scope.status_id,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 $scope.isStatusInput = 0;
@@ -12783,7 +12607,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
                     method: 'POST',
                     async:   false,
                     url: $scope.baseUrl+'/user/ajs/getgroupStatus',
-                    data    : $.param({'groupId':$scope.groupId,'offset':0}),
+                    data    : $.param({'groupId':$scope.groupId,'sess_user':$scope.sessUser,'offset':0}),
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
                 }).success(function (result) {
                     $scope.statusLoad = false;
@@ -12808,19 +12632,11 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
     }
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
 
     $scope.bannerslides1 = [];
@@ -12884,7 +12700,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getGroupDet',
-        data    : $.param({'id':$routeParams.id}),
+        data    : $.param({'id':$routeParams.id,'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         if(typeof result.id == 'undefined'){
@@ -12917,7 +12733,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/joingroup',
-            data    : $.param({'groupid':id}),
+            data    : $.param({'groupid':id,'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             if(result == 1){
@@ -12931,7 +12747,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/leavegroup',
-            data    : $.param({'groupid':id}),
+            data    : $.param({'groupid':id,'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             if(result == 1){
@@ -12994,7 +12810,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getgroupStatus',
-        data    : $.param({'groupId':$scope.groupId,'offset':0}),
+        data    : $.param({'groupId':$scope.groupId,'sess_user':$scope.sessUser,'offset':0}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.statusLoad = false;
@@ -13009,7 +12825,7 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getgroupMember',
-        data    : $.param({'groupId':$scope.groupId,'offset':0}),
+        data    : $.param({'groupId':$scope.groupId,'offset':0,'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.groupMmber = result;
@@ -13229,6 +13045,10 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
     $scope.allCheck = 0;
     $scope.isMobileApp = 0;
     $scope.groupImage = '';
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -13318,36 +13138,29 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
 
     $cookieStore.remove('uploadGrImage');
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $http({
-                method  : 'POST',
-                async:   false,
-                url     : $scope.baseUrl+'/user/ajs/getGrTempImage',
-                data    : $.param({'user_id':data}),  // pass in data as strings
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-            }) .success(function(result) {
-                if(result != ''){
-                    $scope.c_image = result;
-                    $scope.form.image = result;
-                    $scope.groupImage = $scope.baseUrl+'/uploads/group_image/thumb/'+result;
-                }
-            });
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/getGrTempImage',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }) .success(function(result) {
+            if(result != ''){
+                $scope.c_image = result;
+                $scope.form.image = result;
+                $scope.groupImage = $scope.baseUrl+'/uploads/group_image/thumb/'+result;
+            }
+        });
 
-        }else{
-            $location.path('/index');
-        }
-    });
+    }else{
+        $location.path('/index');
+    }
 
 
 
@@ -13387,7 +13200,8 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
         type: $scope.c_type,
         name: $scope.c_name,
         description: $scope.c_description,
-        users:[]
+        users:[],
+        sess_user:$scope.sessUser
     };
 
     $http({
@@ -13421,6 +13235,8 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
         method: 'GET',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/alluserList',
+        data    : $.param({'sess_user':$scope.sessUser}),  // pass in data as strings
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.userList = result;
     });
@@ -13631,6 +13447,10 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
     $scope.profileImgName =  $scope.coverImgName = 'default.jpg';
     $scope.isMobileApp = '';
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -13739,69 +13559,62 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
         $scope.isMobileApp = data;
     })
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            var ctime = new Date().getTime();
+        var ctime = new Date().getTime();
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/getUserDetails',
+            data    : $.param({'userid':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(result) {
+
+            $scope.form = {
+                id:result.id,
+                fname:result.fname,
+                lname:result.lname,
+                email:result.email,
+                location:result.location,
+                city:result.city,
+                country:{id:result.country},
+                state:{id:result.state},
+            }
+
+            $scope.privacy = result.privacy;
+
+            $scope.userSports = result.user_sports;
+            $scope.origprofileImg = result.profileOrigImgName;
+            $scope.origcoverImg = result.OrigbackImgName;
+            $scope.profileImg = result.profileImg+'?version='+ctime;
+            $scope.coverImg = result.backImg+'?version='+ctime;
+            $scope.profileImgName = result.profileImgName;
+            $scope.coverImgName = result.backImgName;
+
 
             $http({
-                method  : 'POST',
+                method: 'POST',
                 async:   false,
-                url     : $scope.baseUrl+'/user/ajs/getUserDetails',
-                data    : $.param({'userid':data}),  // pass in data as strings
+                url: $scope.baseUrl+'/user/ajs1/getStateList',
+                data    : $.param({'id':result.country}),  // pass in data as strings
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-            }) .success(function(result) {
-
-                $scope.form = {
-                    id:result.id,
-                    fname:result.fname,
-                    lname:result.lname,
-                    email:result.email,
-                    location:result.location,
-                    city:result.city,
-                    country:{id:result.country},
-                    state:{id:result.state},
-                }
-
-                $scope.privacy = result.privacy;
-
-                $scope.userSports = result.user_sports;
-                $scope.origprofileImg = result.profileOrigImgName;
-                $scope.origcoverImg = result.OrigbackImgName;
-                $scope.profileImg = result.profileImg+'?version='+ctime;
-                $scope.coverImg = result.backImg+'?version='+ctime;
-                $scope.profileImgName = result.profileImgName;
-                $scope.coverImgName = result.backImgName;
-
-
-                $http({
-                    method: 'POST',
-                    async:   false,
-                    url: $scope.baseUrl+'/user/ajs1/getStateList',
-                    data    : $.param({'id':result.country}),  // pass in data as strings
-                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                }).success(function (result5) {
-                    $scope.statelist = result5;
-                });
-
-
+            }).success(function (result5) {
+                $scope.statelist = result5;
             });
 
 
+        });
 
-        }else{
-            $location.path('/index');
-        }
-    });
+
+
+    }else{
+        $location.path('/index');
+    }
 
     $scope.countrylist = [];
     $scope.statelist = [];
@@ -14017,7 +13830,7 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
-            fields: {username: $scope.username},
+            fields: {'user_id':$scope.sessUser},
             file: file,
             fileFormDataName: 'Filedata'
         });
@@ -14218,7 +14031,7 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
 
 
 });
-homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi) {
+homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -14228,6 +14041,11 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
     $scope.state2 = false;
     $scope.showFportion = true;
     $scope.showLportion = false;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -14315,22 +14133,14 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-
-        }else{
-            $location.path('/index');
-        }
-    });
+    }else{
+        $location.path('/index');
+    }
 
     $scope.map = {
         dragZoom: {options: {}},
@@ -14366,7 +14176,7 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
                     method  : 'POST',
                     async:   false,
                     url     : $scope.baseUrl+'/user/ajs/chkuserSports',
-                    data    : $.param({'spval':sel_spval}),  // pass in data as strings
+                    data    : $.param({'spval':sel_spval,'sess_user':$scope.sessUser}),  // pass in data as strings
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }) .success(function(data) {
 
@@ -14382,7 +14192,7 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
                         $scope.loc_h_divClick();
                     }else{
                         var dial12 = ngDialog.open({
-                         template: '<div><a href="'+$scope.baseUrl+'/torqkd_demo/#/edit-profile">Add sport to your profile</a>',
+                         template: '<div><a href="'+$scope.subUrl+'/#/edit-profile">Add sport to your profile</a>',
                          plain:true,
                          showClose:false,
                          closeByDocument: false,
@@ -14490,7 +14300,7 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
 
 
 });
-homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi) {
+homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -14506,6 +14316,11 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
     $scope.st_point = '';
     $scope.end_points = [];
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -14622,22 +14437,14 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-
-        }else{
-            $location.path('/index');
-        }
-    });
+    }else{
+        $location.path('/index');
+    }
 
     $scope.st_lat = $('#lat').val();
     $scope.st_long = $('#long').val();
@@ -14849,6 +14656,7 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
         var h = $('#sw_h').text();
 
 
+        $('#form_sess_user').val($scope.sessUser);
         $('#form_sports_id').val($scope.spId);
         $('#form_route_name').val($scope.locName);
         $('#form_duration').val(h+':'+m+':'+s);
@@ -14943,7 +14751,7 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
 });
 
-homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
@@ -14954,6 +14762,10 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
     $scope.communityUsers = [];
     $scope.sportDet = [];
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet1 = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet1.id;
+    }
 
     /************************Notifications****************************/
 
@@ -15040,19 +14852,11 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $scope.content = '';
 
@@ -15112,6 +14916,8 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
         method: 'GET',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getCurLocation',
+        data    : $.param({'sess_user':$scope.sessUser}),
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
 
         $scope.map = {
@@ -15213,7 +15019,7 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
         method: 'POST',
         async:   false,
         url: $scope.baseUrl+'/user/ajs/getSpStatus',
-        data    : $.param({sp_id:$scope.spId,'userid':$scope.sessUser,'offset':0}),
+        data    : $.param({sp_id:$scope.spId,'sess_user':$scope.sessUser,'offset':0}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
         $scope.statusLoad = false;
@@ -15231,7 +15037,7 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
             method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getSpStatus',
-            data    : $.param({sp_id:$scope.spId,'userid':$scope.sessUser,'offset':$scope.offset}),
+            data    : $.param({sp_id:$scope.spId,'sess_user':$scope.sessUser,'offset':$scope.offset}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             $scope.viewMoreLoad = 0;
@@ -15348,7 +15154,7 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
                 method: 'POST',
                 async:   false,
                 url: $scope.baseUrl+'/user/ajs/getSpStatus',
-                data    : $.param({sp_id:$scope.spId,'userid':$scope.sessUser,'offset':0}),
+                data    : $.param({sp_id:$scope.spId,'sess_user':$scope.sessUser,'offset':0}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 $scope.statusLoad = false;
@@ -15508,13 +15314,17 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
 
 });
 
-homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
     $scope.spId = $routeParams.id;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -15601,19 +15411,11 @@ homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParam
 
 
 
-    $http({
-        method: 'POST',
-        async: false,
-        url: $scope.baseUrl + '/user/ajs/getCurrentUser',
-    }).success(function (data) {
-        if (data > 0) {
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if ($scope.sessUser > 0) {
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $scope.userList = [];
 
@@ -15669,7 +15471,7 @@ homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParam
 
 });
 
-homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route ) {
+homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -15677,6 +15479,10 @@ homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$
     $scope.postId = $routeParams.id;
     $scope.postType = $routeParams.type;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -15760,19 +15566,11 @@ homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $http({
         method  : 'POST',
@@ -15872,7 +15670,7 @@ homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$
                 method: 'POST',
                 async:   false,
                 url: url,
-                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 item.commentList.push(result);
@@ -15935,12 +15733,18 @@ homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$
 
 });
 
-homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route ) {
+homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
     $scope.postId = $routeParams.id;
+
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     /************************Notifications****************************/
@@ -16025,25 +15829,17 @@ homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,
 
 
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $http({
         method  : 'POST',
         async:   false,
         url     : $scope.baseUrl+'/user/ajs/getPostDet1',
-        data    : $.param({'id':$scope.postId}),  // pass in data as strings
+        data    : $.param({'id':$scope.postId,'sess_user':$scope.sessUser}),  // pass in data as strings
         headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
     }) .success(function(result) {
         if(typeof (result.id) != 'undefined'){
@@ -16137,7 +15933,7 @@ homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,
                 method: 'POST',
                 async:   false,
                 url: url,
-                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 item.commentList.push(result);
@@ -16200,42 +15996,31 @@ homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,
 
 });
 
-homeControllers1.controller('fileListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
+homeControllers1.controller('fileListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
     $scope.sessUser = 0;
 
-
-
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-        }
-    });
-});
-
-homeControllers1.controller('comingsoon', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location) {
-
-	$scope.sessUser = 0;
-	
-	$http({
-           method  : 'POST',
-        async:   false,
-           url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-       }) .success(function(data) {
-		   if(data > 0){
-			   $scope.sessUser = data;
-		   }
-	   });
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
 
 });
 
+homeControllers1.controller('comingsoon', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
 
-homeControllers1.controller('test', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$modal) {
+    $scope.sessUser = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
+});
+
+
+homeControllers1.controller('test', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$modal,$cookieStore) {
 
     var modalInstance;
 
@@ -16301,12 +16086,16 @@ homeControllers1.controller('test', function($scope, $http, $routeParams, $rootS
 
 });
 
-homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route ) {
+homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
     $scope.sessUser = 0;
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -16396,19 +16185,11 @@ homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$i
     $scope.hastag = $routeParams.hastag;
     $scope.trustAsHtml = $sce.trustAsHtml;
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-        }
-    });
+    if($scope.sessUser > 0){
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+    }
 
     $http({
         method: 'POST',
@@ -16505,7 +16286,7 @@ homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$i
                 method: 'POST',
                 async:   false,
                 url: url,
-                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval}),
+                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
                 item.commentList.push(result);
@@ -16576,6 +16357,10 @@ homeControllers1.controller('settingsCtrl', function($scope, $http, $routeParams
     $scope.sessUser = 0;
     $scope.isMobileApp = '';
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
     /************************Notifications****************************/
 
@@ -16673,33 +16458,27 @@ homeControllers1.controller('settingsCtrl', function($scope, $http, $routeParams
         $scope.isMobileApp = data;
     })
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
-
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
-
-            $http({
-                method  : 'POST',
-                async:   false,
-                url     : $scope.baseUrl+'/user/ajs/getBlockpeople',
-                data    : $.param({cuser:$scope.sessUser}),  // pass in data as strings
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-            }) .success(function(result) {
-                $scope.blockList = result;
-            });
+    if($scope.sessUser > 0){
 
 
-        }else{
-            $location.path('/index');
-        }
-    });
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/getBlockpeople',
+            data    : $.param({cuser:$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(result) {
+            $scope.blockList = result;
+        });
+
+
+    }else{
+        $location.path('/index');
+    }
 
 
 
@@ -16829,6 +16608,10 @@ homeControllers1.controller('allnotificationCtrl', function($scope, $http, $rout
     $scope.searchkey = '';
     $scope.userList = [];
 
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
 
 
     $http({
@@ -16839,23 +16622,16 @@ homeControllers1.controller('allnotificationCtrl', function($scope, $http, $rout
         $scope.isMobileApp = data;
     })
 
-    $http({
-        method  : 'POST',
-        async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getCurrentUser',
-    }) .success(function(data) {
-        if(data > 0){
-            $scope.sessUser = data;
+    if($scope.sessUser > 0){
 
-            $timeout(function(){
-                $scope.getNotListRec()
-            },500);
+        $timeout(function(){
+            $scope.getNotListRec()
+        },500);
 
 
-        }else{
-            $location.path('/index');
-        }
-    });
+    }else{
+        $location.path('/index');
+    }
 
 
     $scope.openNotPost = function(item){
