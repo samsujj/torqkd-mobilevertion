@@ -164,7 +164,7 @@
                     <img src="images/share4_icon_active.png" uib-tooltip="Private Me Only" tooltip-placement="bottom" tooltip-trigger="click" style="width:12px; margin-top:0px;" ng-show="item.share_with==4">
                 </a>
             </span>
-            {{item.like_no}} LIKE - {{item.comment.length}} <a href="javascript:void(0);">Comment{{(item.comment.length >1)?'s':''}}
+            {{item.like_no}} LIKE - {{item.comment.length}} <a href="javascript:void(0);" ng-click="showDetails = !showDetails">Comment{{(item.comment.length >1)?'s':''}}
         </a>
         </div>
         <div class="clear"></div>
@@ -279,7 +279,7 @@
                                     <div id="pcommentdiv000" ng-keyup="setcommentval($event,photoDet)" style=" border:solid 2px #97989a; border-radius:5px; min-height: 38px; height: auto !important;padding: 6px; overflow: hidden; float: left; text-align: left; " contentEditable="true"></div>
                                     <a href="javascript:void(0)" ng-click="showemojisdivsada()"> <img src="images/emo.png" class="emocss"  /></a>
                                 </div>
-                                <a href="javascript:void(0);" ng-click="postComment(photoDet)" class="mob-post2">POST</a>
+                                <a href="javascript:void(0);" ng-click="postComment1(photoDet)" class="mob-post2">POST</a>
                             </div>
                             <div style="position: relative;">
                                 <div ng-show="showemojisdiv" style=" bottom: 1px; position: absolute; right: 0; width:90%; background-color: #FFFFFF; padding: 5px;border: 2px solid #97989a !important; border-radius: 5px !important; ">

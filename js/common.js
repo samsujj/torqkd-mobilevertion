@@ -10,10 +10,20 @@ function setValuelong(obj){
 
 }
 
+function tracklocation(position) {
+    var pos = new google.maps.LatLng(position.coords.latitude,
+        position.coords.longitude);
+    $('#lat').val(position.coords.latitude);
+    $('#long').val(position.coords.longitude);
+}
+
 
 
 function add_userdevice_with_session(deviceId){
-    $.post('http://torqkd.com/user/ajs/add_userdevice_with_session',{deviceId:deviceId},function(res){
+    $('#device_id').val(deviceId);
+    $('#device_value').text('dfsdfs dsfs');
+    //alert($('#c_current_user').val());
+    $.post('http://torqkd.com/user/ajs/add_userdevice_with_session',{deviceId:deviceId,userid:$('#c_current_user').val()},function(res){
        //alert(deviceId);
     });
 }

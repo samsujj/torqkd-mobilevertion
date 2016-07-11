@@ -90,7 +90,6 @@
 <div id="sp-page" >
 <div class="experience-wrapper">
 
-
 	<div class="movile-tab-body" ng-show="sessUser==currentUser">
 		<ul>
 			<li><a href="#/add-route">GPS</a></li>
@@ -166,8 +165,11 @@
 		</div>
 		
         <div ng-show="isVideo">
-			<input type="text" placeholder="Type to search YouTube" ng-model="youtubeTxt" class="searchbox" ><br>
-			<input type="button" value="search" ng-click="youtubeSearch()" class="searchbtn"/><div  class="btnor">OR</div>
+			<form ng-submit="youtubeSearch()" name="signUpForm" id="signUpForm" class="form-horizontal">
+				<input type="text" placeholder="Type to search YouTube" ng-model="youtubeTxt" class="searchbox" ><br>
+				<input type="submit" value="search" class="searchbtn"/>
+			</form>
+			<div  class="btnor">OR</div>
 			<input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="statusVideo" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
 			<div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progress + '%'"></div>
 			</div>

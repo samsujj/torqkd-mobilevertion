@@ -14,12 +14,18 @@
 
 </style>
 
-<div class="experience-wrapper">
-  <div class="logo" > 
-  <a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo_main.png"/> </a>
-  <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo_main.png"/> </a>
+<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
 
-</div>
+<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+
+<div id="sp-page" >
+    <div class="experience-wrapper">
+ <!-- <div class="logo" >
+      <a href="#/index" ng-if="(sessUser==0)"> <img alt="#" src="images/logo_main.png"/> </a>
+      <a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" > <img alt="#" src="images/logo_main.png"/> </a>
+  </div>
+-->
+
   
   <div class="mobile-join-btn"  ng-if="(sessUser1==0)"> <a href="#/signup">JOIN</a></div>
   
@@ -101,4 +107,5 @@
 <a href="javascript:void(0);" ng-click="showtermsploicy('policy')">PRIVACY</a>
 </span>
 </div> 
+</div>
 </div>

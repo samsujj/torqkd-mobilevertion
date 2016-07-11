@@ -17,7 +17,7 @@ homeControllers1.config(['$facebookProvider', function($facebookProvider) {
     $facebookProvider.setAppId('434078603403320').setPermissions(['public_profile','user_friends','email','manage_pages','publish_pages','publish_actions','publish_stream']);
 }]);
 
-homeControllers1.run(['$window', function( $window) {
+homeControllers1.run(['$rootScope', '$cookieStore','$q','$http','$window','$timeout', function( $rootScope, $cookieStore,$q,$http,$window,$timeout) {
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
@@ -25,6 +25,35 @@ homeControllers1.run(['$window', function( $window) {
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+    $rootScope.$on('$locationChangeStart', function () {
+
+    });
+    $rootScope.$on('$locationChangeSuccess',function(){
+
+        if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+            $rootScope.dfgdf = $cookieStore.get('rootuserdet');
+            angular.element( document.querySelector( '#c_current_user' ) ).val($rootScope.dfgdf.id);
+
+            $http({
+                method: 'POST',
+                async:   false,
+                url: 'http://torqkd.com/user/ajs/useractive',
+                data    : $.param({'userid':$rootScope.dfgdf.id}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+            });
+
+
+        }else{
+            angular.element( document.querySelector( '#c_current_user' ) ).val(0);
+            if(typeof ($cookieStore.get('newUserId')) != 'undefined'){
+                angular.element( document.querySelector( '#c_current_user' ) ).val($cookieStore.get('newUserId'));
+            }else{
+                angular.element( document.querySelector( '#c_current_user' ) ).val(0);
+            }
+        }
+    });
 
 
 }]);
@@ -159,7 +188,6 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
 
     $rootScope.fbSmsg = 0;
 	$rootScope.twSmsg = 0;
-	$scope.sessUser = 0;
 
     $scope.email = $cookieStore.get('login_email1');
     $scope.password = $cookieStore.get('login_password1');
@@ -447,6 +475,8 @@ homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDia
 	$scope.next_com = function() {
 		$location.path('/login');
 	};
+
+
 
 
 
@@ -1331,8 +1361,8 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
             $('html, body').animate({scrollTop:$('#nextH').position().top}, 'slow');
         },2000);
 
-    }else{
-        $location.path('/login');
+    //}else{
+      //  $location.path('/login');
     }
 
 
@@ -1383,9 +1413,9 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
     }
 	
 	$scope.form = {
-			mailBody: "Be sure to check out torqkd.com. Torqk'd brings the consciousness of outdoor sports to a new, progressive social media realm. Torqk'd is a collective of runners, jumpers, climbers, riders, hikers, surfers and all who dare to smack the terrain from land, sky, powder and H2O. Now go get it!! Time to connect, track and explore. I use Torqk'd to connect, track and explore my favorite sports."
+			mailBody: "Be sure to check out torkq.com. Torkq brings the consciousness of outdoor sports to a new, progressive social media realm. Torkq is a collective of runners, jumpers, climbers, riders, hikers, surfers and all who dare to smack the terrain from land, sky, powder and H2O. Now go get it!! Time to connect, track and explore. I use Torkq to connect, track and explore my favorite sports."
 	};
-	
+
 	$scope.sendEmail = function() {
 		var dialog1 = ngDialog.open({
                     template: '<div style="text-align:center;">Sending <img src="images/ajax_loading.gif"></div>',
@@ -2196,7 +2226,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
     }
 	
 	$http({
-            method: 'GET',
+            method: 'POST',
             async:   false,
             url: $scope.baseUrl+'/user/ajs/getCurLocation',
             data    : $.param({'sess_user':$scope.sessUser}),
@@ -3547,6 +3577,8 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
+
+
     $scope.isMobileApp = '';
 	$scope.curTime = new Date().getTime();
 	$scope.sessUser = 0;
@@ -4268,43 +4300,7 @@ if($scope.sessUser > 0){
     };
 
 
-    $scope.postComment = function(item){
-			if(item.pstval && item.pstval != '<br>' && typeof(item.pstval)!= 'undefined'){
-				$http({
-					method: 'POST',
-                    async:   false,
-					url: $scope.baseUrl+'/user/ajs/addcomment',
-					data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
-					headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
-				}).success(function (result) {
-					if(item.comment_no){
-						item.comment.push(result);
-					}else{
-						item.comment = [result];
-					}
-					item.comment_no = item.comment_no +1;
-					item.pstval = '';
 
-                    $('#commentdiv000'+item.id).html('');
-                    $('#emojisdiv'+item.id).hide();
-
-				});
-			}else{
-
-                $scope.Commentmsg = ngDialog.open({
-                    template: '<div style="text-align: center;margin: 0 auto;display: block;font-family: arial, helvetica, sans-serif;font-weight: normal;font-size: 18px; padding: 15px 0;">Please Enter Comment.</div>',
-                    plain:true,
-                    showClose:false,
-                    closeByDocument: true,
-                    closeByEscape: true
-                });
-
-                $timeout(function(){
-                    $scope.Commentmsg.close();
-                },3000);
-			}
-		};
-		
 		
 		
 		$scope.shareStaus = function(item){
@@ -5665,7 +5661,7 @@ if($scope.sessUser > 0){
 	$scope.vidIndex = 1;
 	
 	$scope.youtubeSearch = function(){
-		if($scope.vi == ''){
+		if($scope.youtubeTxt == ''){
 
             $scope.Commentmsg = ngDialog.open({
                 template: '<div style="text-align: center;margin: 0 auto;display: block;font-family: arial, helvetica, sans-serif;font-weight: normal;font-size: 18px; padding: 15px 0;">Please enter search key.</div>',
@@ -6053,7 +6049,47 @@ if($scope.sessUser > 0){
 
     $scope.modalClose = function(){
         modalInstance.dismiss('cancel');
+
     }
+
+
+    $scope.postComment = function(item){
+        if(item.pstval && item.pstval != '<br>' && typeof(item.pstval)!= 'undefined'){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/addcomment',
+                data    : $.param({'status_id':item.id,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                if(item.comment_no){
+                    item.comment.push(result);
+                }else{
+                    item.comment = [result];
+                }
+                item.comment_no = item.comment_no +1;
+                item.pstval = '';
+
+                $('#commentdiv000'+item.id).html('');
+                $('#emojisdiv'+item.id).hide();
+
+            });
+        }else{
+
+            $scope.Commentmsg = ngDialog.open({
+                template: '<div style="text-align: center;margin: 0 auto;display: block;font-family: arial, helvetica, sans-serif;font-weight: normal;font-size: 18px; padding: 15px 0;">Please Enter Comment.</div>',
+                plain:true,
+                showClose:false,
+                closeByDocument: true,
+                closeByEscape: true
+            });
+
+            $timeout(function(){
+                $scope.Commentmsg.close();
+            },3000);
+        }
+    };
+
 
     $scope.postComment1 = function(item){
         if(item.pstval && typeof(item.pstval)!= 'undefined'){
@@ -6064,8 +6100,17 @@ if($scope.sessUser > 0){
                 data    : $.param({'status_id':item.itemId,'cmnt_body':item.pstval,'sess_user':$scope.sessUser}),
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
             }).success(function (result) {
-                item.commentList.push(result);
-                item.pstval = '';
+                console.log($scope.photoDet);
+                $scope.photoDet.commentList.push(result);
+                $scope.photoDet.pstval = '';
+
+                $scope.showemojisdiv = false;
+
+                console.log($scope.photoDet);
+                $scope.$apply();
+
+
+                $('#pcommentdiv000').html('');
             });
         }else{
 
@@ -10405,7 +10450,73 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
             sess_user :$scope.sessUser
         }
 
+        $timeout(function(){
+            $scope.gettoipcreplyrec();
+        },500);
+
     });
+
+    $scope.offset = 0;
+    $scope.gettoipcreplyrec = function(){
+        $scope.loadingtreply = true;
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/gettoipcreply',
+            data    : $.param({'id':$scope.topicId,'sess_user':$scope.sessUser,offset:$scope.offset}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }) .success(function(result1) {
+            $scope.offset = $scope.offset+3;
+
+            if($scope.topicDet.topic_reply.length)
+                $scope.topicDet.topic_reply=$scope.topicDet.topic_reply.concat(result1);
+            else
+                $scope.topicDet.topic_reply = result1;
+
+
+
+            if($scope.topicDet.topic_reply_count > $scope.topicDet.topic_reply.length){
+                $timeout(function(){
+                    $scope.gettoipcreplyrec();
+                },5000);
+            }else{
+                $scope.loadingtreply = false;
+
+                angular.forEach($scope.topicDet.topic_reply,function(value){
+                    $scope.gettoipcreply1(value);
+                })
+
+            }
+        }).error(function (result) {
+
+            $timeout(function () {
+                $scope.gettoipcreplyrec();
+            }, 3000);
+
+        });
+    }
+
+    $scope.gettoipcreply1 = function(result){
+        $scope.loadingtreply = true;
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/gettoipcreply1',
+            data    : $.param({'id':result.id,'sess_user':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }) .success(function(result2) {
+            $scope.loadingtreply = false;
+            result.topic_reply1 = result2;
+
+        }).error(function (result2) {
+
+            $timeout(function () {
+                $scope.gettoipcreply1(result);
+            }, 5000);
+
+        });
+    }
+
 
 
     $scope.addTopicForm = function(){
@@ -14494,6 +14605,26 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
 
     $scope.startlocation = function(){
+
+        if( navigator.geolocation ) {
+
+
+
+
+            var optn = {
+                enableHighAccuracy: true,
+                timeout: 2000,
+                maximumAge: 2000
+            };
+
+            var watchID = navigator.geolocation.watchPosition(tracklocation, fail, optn);
+
+
+
+
+
+
+        }
 
         var locLength = $scope.location.length;
 
