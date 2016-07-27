@@ -336,7 +336,7 @@
                         </div>
 
                         <div class="progress" ng-show="files[0].progress >= 0">
-                            <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progress + '%'"></div>
+                            <div style="width:{{files[0].progress}}%; background:#F69830;" ng-bind="files[0].progresstext"></div> 
                         </div>
 
                         <input class="imgBtnCls" type="button" value="Crop" ng-if="profileImgName != 'default.jpg'" ng-click="cropProfileImg()">
@@ -356,7 +356,7 @@
                         </div>
 
                         <div class="progress" ng-show="files1[0].progress >= 0">
-                            <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progress + '%'"></div>
+                            <div style="width:{{files1[0].progress}}%; background:#F69830;" ng-bind="files1[0].progresstext"></div>
                         </div>
 
                         <input class="imgBtnCls" type="button" value="Crop" ng-if="coverImgName != 'default.jpg'" ng-click="cropProfileBackImg()">

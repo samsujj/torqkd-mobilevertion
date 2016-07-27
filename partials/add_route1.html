@@ -110,44 +110,44 @@
         width: 150px;
     }
     .bott-arrow #sw_start {
-        background: rgba(0, 0, 0, 0) url("images/startb.png") no-repeat scroll 0 0 / 100% auto;
+        background: rgba(0, 0, 0, 0) url("images/startb.png") no-repeat;
         border: medium none;
         box-shadow: none;
         cursor: pointer;
         font-size: 0;
-        height: 60px;
+        height: 60px!important;
         margin: 0 4px;
-        width: 60px;
+        width: 60px!important; background-size:60px!important;
     }
     .bott-arrow #sw_pause {
-        background: rgba(0, 0, 0, 0) url("images/Pauseb.png") no-repeat scroll 0 0 / 100% auto;
+        background: rgba(0, 0, 0, 0) url("images/Pauseb.png") no-repeat ;
         border: medium none;
         box-shadow: none;
         cursor: pointer;
         font-size: 0;
-        height: 60px;
+        height: 60px!important;
         margin: 0 4px;
-        width: 60px;
+        width: 60px!important; background-size:60px!important;
     }
     .bott-arrow #sw_stop {
-        background: rgba(0, 0, 0, 0) url("images/stopb.png") no-repeat scroll 0 0 / 100% auto;
+        background: rgba(0, 0, 0, 0) url("images/stopb.png") no-repeat;
         border: medium none;
         box-shadow: none;
         cursor: pointer;
         font-size: 0;
-        height: 60px;
+        height: 60px!important;
         margin: 0 4px;
-        width: 60px;
+        width: 60px!important; background-size:60px!important;
     }
     .bott-arrow #sw_reset {
-        background: rgba(0, 0, 0, 0) url("images/resatb.png") no-repeat scroll 0 0 / 100% auto;
+        background: rgba(0, 0, 0, 0) url("images/resatb.png")no-repeat;
         border: medium none;
         box-shadow: none;
         cursor: pointer;
         font-size: 0;
-        height: 60px;
+        height: 60px!important;
         margin: 0 4px;
-        width: 60px;
+        width: 60px!important; background-size:60px!important;
     }
     .routebtn {
         background: #f7931e none repeat scroll 0 0;
@@ -235,9 +235,9 @@
             <div style="clear:both;"></div>
             <div style="width:277px; padding-left:2%; margin:15px auto; ">
                 <div class="bott-arrow">
-                    <input type="button" value="Start" id="sw_start" ng-click="start()" />
-                    <input style="display:none;" type="button" value="Pause" id="sw_pause" ng-click="pause()" />
-                    <input style="display:none;" type="button" value="Stop"  id="sw_stop" ng-click="stop()" />
+                    <input type="button" value="Start" id="sw_start" ng-click="start()" style="width:60px; height:60px;" />
+                    <input style="display:none;" type="button" value="Pause" id="sw_pause" ng-click="pause()"  style="width:60px; height:60px;"/>
+                    <input style="display:none;" type="button" value="Stop"  id="sw_stop" ng-click="stop()"  style="width:60px; height:60px;"/>
                     <input style="display:none;" type="button" value="Reset" id="sw_reset" />
                 </div>
 

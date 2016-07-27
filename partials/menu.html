@@ -13,7 +13,7 @@
             <li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-group" ng-click="$spMenu.hide()">Add Groups</a></li>
             <li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-route" ng-click="$spMenu.hide()">Add Routes</a></li>
             <li class="topcoat-list__item"><a href="#/forum-listing" ng-click="$spMenu.hide()">Forum</a></li>
-            <li ng-show="sessUser" class="topcoat-list__item"><a href="javascript:void(0);" onClick="showdailypoll()" ng-click="$spMenu.hide()">Daily Poll</a></li>
+            <li ng-show="sessUser" class="topcoat-list__item"><a href="javascript:void(0);" ng-click="showdailypoll()" ng-click="$spMenu.hide()">Daily Poll</a></li>
             <li class="topcoat-list__item"><a href="#/eventmap" ng-click="$spMenu.hide()">Event Map</a></li>
             <li ng-show="sessUser" class="topcoat-list__item"><a href="#/mysports/{{sessUser}}" ng-click="$spMenu.hide()">My Sports</a></li>
             <li ng-show="sessUser" class="topcoat-list__item"><a href="#/edit-profile" ng-click="$spMenu.hide()">Update Profile</a></li>
@@ -28,3 +28,49 @@
             
         </ul>
     </div>
+
+
+    <script type="text/ng-template" id="polldetpop">
+        <div class="popupbox2">
+            <a href="javascript:void(0)" class="cancelbtn1" ng-click="modalClosepoll()"><img src="images/close.png"></a>
+
+            <div class="album-body " style="background: url('{{baseUrl}}/uploads/pollback/thumb/{{curPoll.background_img}}') no-repeat scroll 0 0 / cover rgba(0, 0, 0, 0);">
+                <div class="album-wrpper">
+                    <h2>{{curPoll.poll_ques}}</h2>
+
+                    <div ng-show="curPoll.ans_arr.length" ng-repeat="item in curPoll.ans_arr">
+                        <input type="radio" class="redio-box radio_ans" name="radio_vote" ng-disabled="!sessUser" ng-checked="item.ans_id == curPoll.sel_ans" ng-click="changeans(item.ans_id)"> <label>{{item.poll_answer}}</label>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="vote-btn" >
+                        <a href="javascript:void(0);" id="votenext" ng-click="nextpoll()" ng-hide="sessUser">NEXT</a>
+                        <a href="javascript:void(0);" id="vote" ng-click="votepoll(curPoll.ques_id)" ng-show="sessUser">VOTE</a>
+                    </div>
+
+                    <a href="javascript:void(0);" ng-click="showpollresult(curPoll.ques_id)" style="line-height: 40px; text-align: center; font-size:12px; color:#111; display:block; width: 100px; margin:0px auto; ">View Results</a>
+
+                </div>
+
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="polldetrespop">
+        <div class="popupbox2">
+            <a href="javascript:void(0)" class="cancelbtn1" ng-click="modalClosepoll()"><img src="images/close.png"></a>
+
+            <div class="album-wrpper">
+
+                <h4>Question : {{polldetres.ques}}</h4>
+
+                <canvas id="pie" class="chart chart-pie"
+                        chart-data="data123" chart-labels="labels123" chart-options="options">
+                </canvas>
+
+                <div class="labels">
+                    <div style="background-color: #F7931E; color: #ffffff;" class="chart-label" ng-repeat="item in label555">{{item.label}} : {{item.voteno}}</div>
+                </div>
+            </div>
+        </div>
+    </script>

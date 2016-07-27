@@ -2,16 +2,17 @@
 
 /* Controllers */
 
-var homeControllers1 = angular.module('homeControllers', ['angularValidator','ngDialog','ngCookies','ngFileUpload','ngAnimate', 'ngTouch','uiGmapgoogle-maps','ngSanitize','com.2fdevs.videogular','youtube-embed','highcharts-ng','shoppinpal.mobile-menu','ui.bootstrap','colorpicker.module', 'wysiwyg.module','angular-img-cropper','readMore','ngEmoticons','ngTagsInput','ngFacebook']);
+var homeControllers1 = angular.module('homeControllers', ['angularValidator','ngDialog','ngCookies','ngFileUpload','ngAnimate', 'ngTouch','uiGmapgoogle-maps','ngSanitize','com.2fdevs.videogular','youtube-embed','highcharts-ng','shoppinpal.mobile-menu','ui.bootstrap','colorpicker.module', 'wysiwyg.module','angular-img-cropper','readMore','ngEmoticons','ngTagsInput','ngFacebook','chart.js']);
 //var homeControllers1 = angular.module('homeControllers', ['ngCookies']);
 
+
 homeControllers1.config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
-  GoogleMapApi.configure({
+    GoogleMapApi.configure({
 //    key: 'your api key',
-    v: '3.17',
-    libraries: 'weather,geometry,visualization'
-  });
-}])
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
+}]);
 
 homeControllers1.config(['$facebookProvider', function($facebookProvider) {
     $facebookProvider.setAppId('434078603403320').setPermissions(['public_profile','user_friends','email','manage_pages','publish_pages','publish_actions','publish_stream']);
@@ -26,7 +27,12 @@ homeControllers1.run(['$rootScope', '$cookieStore','$q','$http','$window','$time
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    $rootScope.$on('$locationChangeStart', function () {
+    $rootScope.$on('$routeChangeStart', function () {
+        $rootScope.stateIsLoading = true;
+
+    });
+    $rootScope.$on('$routeChangeSuccess', function () {
+        $rootScope.stateIsLoading = false;
 
     });
     $rootScope.$on('$locationChangeSuccess',function(){
@@ -476,7 +482,33 @@ homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDia
 		$location.path('/login');
 	};
 
+    $scope.showtermsploicy = function(id){
 
+        var header = '';
+        if(id=='policy')
+            header = 'Privacy Policy';
+        if(id=='terms')
+            header = 'Terms And Condition';
+
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/cms/admin/conditionmanager/bringcondition',
+            data    : $.param({'id':id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            ngDialog.open({
+                template: '<div><strong style="font-size: 16px; color:#C97413; font-weight: normal; text-align:center; display:block; font-weight:bold; text-transform:uppercase; font-size:22px;">'+header+'</strong></div>'+data,
+                plain:true,
+                showClose:true,
+                closeByDocument: false,
+                closeByEscape: false
+            });
+        }).error(function (result) {
+            $scope.showtermsploicy(id);
+        });
+    }
 
 
 
@@ -494,7 +526,7 @@ homeControllers1.service('loggedInStatus', function () {  var loggedIn = "";
 	};
 });
 
-homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog,$timeout) {
+homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog,$timeout,$rootScope) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 	
@@ -555,6 +587,9 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
     }
   
 	$scope.submitloginForm = function() {
+
+        $rootScope.stateIsLoading = true;
+
 		if (typeof ($scope.form.remember) != 'undefined' && $scope.form.remember == true) {
 			$cookieStore.put('login_email',$scope.form.email);
 			$cookieStore.put('login_password',$scope.form.password);
@@ -569,7 +604,7 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
            data    : $.param($scope.form),  // pass in data as strings
            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
        }) .success(function(data) {
-            console.log(data);
+            $rootScope.stateIsLoading = false;
             if(typeof (data.id) != 'undefined'){
                 loggedInStatus.setStatus("true");
                 $cookieStore.put('login_email1',$scope.form.email);
@@ -1457,7 +1492,7 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
 				
 				if(result != ''){
 
-                    $scope.fbPost(result);
+                    $scope.postfb1(result);
 
                 }else{
                     //var url = $scope.baseUrl+'/user/profile/fbgetAT/value/'+value+'/sessid/'+$scope.sessUser+'/type/'+type+'/page/experience/device/'+$scope.isMobileApp;
@@ -1468,11 +1503,11 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
                     }else{
                         if($scope.fbStatus) {
                             $scope.getAuthResponse = $facebook.getAuthResponse();
-                            $scope.fbPost($scope.getAuthResponse.accessToken);
+                            $scope.postfb1($scope.getAuthResponse.accessToken);
                         } else {
                             $facebook.login().then(function(){
                                 $scope.getAuthResponse = $facebook.getAuthResponse();
-                                $scope.fbPost($scope.getAuthResponse.accessToken);
+                                $scope.postfb1($scope.getAuthResponse.accessToken);
                             });
                         }
                     }
@@ -1510,7 +1545,7 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
         }).success(function (result) {
             if(typeof (result.error) != 'undefined'){
                 //var url = $scope.baseUrl+'/user/profile/fbgetAT/value/'+value+'/sessid/'+$scope.sessUser+'/type/'+type+'/page/profile/device/'+$scope.isMobileApp;
-                $scope.dialog1.close();
+                //$scope.dialog1.close();
                 /*if($scope.isMobileApp){
                     $cookieStore.put('fbShareNext',1);
                     var url = 'http://torqkd.com/fbgetAccessToken';
@@ -1702,6 +1737,12 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -1765,6 +1806,12 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -1844,6 +1891,19 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
 
 
     $scope.signUpfinish = function(){
+        $scope.email = 'test@torkq.com';
+        if(typeof ($cookieStore.get('login_email')) != 'undefined'){
+            $scope.email = $cookieStore.get('login_email');
+        }
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/sendWelcomeMail',
+            data    : $.param({'email':$scope.email}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+
+        });
         $location.path('/complete');
     }
 
@@ -5538,7 +5598,11 @@ if($scope.sessUser > 0){
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -5648,7 +5712,11 @@ if($scope.sessUser > 0){
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -5825,6 +5893,11 @@ if($scope.sessUser > 0){
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -6164,7 +6237,128 @@ if($scope.sessUser > 0){
         $scope.sportsMenu = result;
     });
 
+/******************************poll [start]*******************************************/
 
+var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
 
 
 });
@@ -7913,6 +8107,11 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -7983,6 +8182,11 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -11738,6 +11942,11 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -12116,6 +12325,11 @@ homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParam
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -13412,6 +13626,11 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -13909,6 +14128,12 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -13973,6 +14198,12 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
         file.upload.progress(function (evt) {
             // Math.min is to fix IE which reports 200% sometimes
             file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+            if(file.progress <100){
+                file.progresstext = file.progress + '%';
+            }else{
+                file.progresstext = '99%';
+            }
         });
 
         file.upload.xhr(function (xhr) {
@@ -14339,6 +14570,7 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
     }
 
     $scope.begin = function(){
+
         if($scope.sports_id == ''){
             $scope.dialog1 = ngDialog.open({
                 template: '<div>Please Select Sports.</div>',
@@ -14363,11 +14595,48 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
             $timeout(function(){ $scope.dialog2.close();}, 2000);
 
         }else{
-            $scope.showFportion = false;
-            $scope.showLportion = true;
+            if( navigator.geolocation ) {
+                var optn = {
+                    enableHighAccuracy: true,
+                    timeout: 2000,
+                    maximumAge: 2000
+                };
 
-            $location.path('/add-route1/'+$scope.sports_id+'/'+encodeURI($scope.route_name));
+                var watchID = navigator.geolocation.watchPosition(tracklocation, fail, optn);
+
+                $scope.showFportion = false;
+                $scope.showLportion = true;
+
+                $location.path('/add-route1/'+$scope.sports_id+'/'+encodeURI($scope.route_name));
+
+
+            }else{
+                $scope.dialog3 = ngDialog.open({
+                    template: '<div>Please share location , then begin.</div>',
+                    plain:true,
+                    showClose:false,
+                    closeByDocument: false,
+                    closeByEscape: false,
+                    className : 'confirmPopup',
+                });
+
+                $timeout(function(){ $scope.dialog3.close();}, 2000);
+            }
         }
+
+        /*if( navigator.geolocation ) {
+
+
+            var optn = {
+                enableHighAccuracy: true,
+                timeout: 2000,
+                maximumAge: 2000
+            };
+
+            var watchID = navigator.geolocation.watchPosition(tracklocation, fail, optn);
+
+
+        }*/
     }
 
 
@@ -14432,6 +14701,7 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
         $scope.userDet = $cookieStore.get('rootuserdet');
         $scope.sessUser = $scope.userDet.id;
     }
+
 
 
     /************************Notifications****************************/
@@ -14563,55 +14833,66 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
     //$scope.st_lat = 22;
     //$scope.st_long = 88;
 
-
-    var center = new google.maps.LatLng($scope.st_lat,$scope.st_long);
+    $timeout(function(){
+        $scope.mapload();
+    },1000);
 
     var map, path = new google.maps.MVCArray(), service = new google.maps.DirectionsService(), poly;
-
-    var myOptions = {
-        zoom: 9,
-        center: center,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-        mapTypeControlOptions: {
-            mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.SATELLITE]
-        },
-        disableDoubleClickZoom: true,
-        scrollwheel: false,
-        draggableCursor: "crosshair"
-    }
+    var center;
+    var myOptions = {};
+    var mapDim = {};
 
 
+    $scope.mapload =function(){
+        if($scope.st_lat == '' || $scope.st_long== ''){
+            $scope.st_lat = $('#lat').val();
+            $scope.st_long = $('#long').val();
+
+            $timeout(function(){
+                $scope.mapload();
+            },1000);
+        }else{
+            center = new google.maps.LatLng($scope.st_lat,$scope.st_long);
 
 
 
+            myOptions = {
+                zoom: 9,
+                center: center,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+                mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.SATELLITE]
+                },
+                disableDoubleClickZoom: true,
+                scrollwheel: false,
+                draggableCursor: "crosshair"
+            }
 
-    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-    poly = new google.maps.Polyline({
-        geodesic: true,
-        strokeColor: '#F7931E',
-        strokeOpacity:1.0,
-        strokeWeight: 4
-    });
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            poly = new google.maps.Polyline({
+                geodesic: true,
+                strokeColor: '#F7931E',
+                strokeOpacity:1.0,
+                strokeWeight: 4
+            });
 
-    poly.setMap(map);
-
-
-    var mapDim = {
-        height: $('#map-canvas').height(),
-        width: $('#map-canvas').width()
-    }
+            poly.setMap(map);
 
 
+            mapDim = {
+                height: $('#map-canvas').height(),
+                width: $('#map-canvas').width()
+            }
+        }
+
+
+    };
 
 
     $scope.startlocation = function(){
 
-        if( navigator.geolocation ) {
-
-
-
-
-            var optn = {
+        if( navigator.geolocation  ) {
+        var optn = {
                 enableHighAccuracy: true,
                 timeout: 2000,
                 maximumAge: 2000
@@ -14619,12 +14900,8 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
             var watchID = navigator.geolocation.watchPosition(tracklocation, fail, optn);
 
-
-
-
-
-
         }
+
 
         var locLength = $scope.location.length;
 
@@ -14779,7 +15056,7 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
 
 
     }
-
+/*
     $scope.addRoutes = function(){
 
         var s = $('#sw_s').text();
@@ -14793,6 +15070,15 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
         $('#form_duration').val(h+':'+m+':'+s);
         $('#form_distance').val($scope.distance);
 
+        $scope.form = {
+            'sess_user' : $scope.sessUser,
+            'end_point' : [],
+            'route_name' : $scope.locName,
+            'duration' : h+':'+m+':'+s,
+            'distance' : $scope.distance,
+            'sports_id' : $scope.spId,
+        }
+
         angular.forEach($scope.location, function(val2, key) {
             var pos = new google.maps.LatLng(val2.latitude,val2.longitude);
             if(key == 0){
@@ -14801,12 +15087,62 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
                 $('#form_st_point').val(pos);
             }
 
-             $('#end_p').append('<input type="hidden" name="end_point[]" value="'+pos+'">');
+            $('#end_p').append('<input type="hidden" name="end_point[]" value="'+pos+'">');
         });
 
 
         $('#addRouteMap').attr('action',$scope.baseUrl+'/user/ajs/addRoutes');
         $('#addRouteMap').submit();
+
+    }
+*/
+
+    $scope.addRoutes = function(){
+
+        var s = $('#sw_s').text();
+        var m = $('#sw_m').text();
+        var h = $('#sw_h').text();
+
+        $scope.form = {
+            'sess_user' : $scope.sessUser,
+            'end_point' : [],
+            'route_name' : $scope.locName,
+            'duration' : h+':'+m+':'+s,
+            'distance' : $scope.distance,
+            'sports_id' : $scope.spId,
+            'st_point' : '',
+            'st_lat' : '',
+            'st_long' : ''
+        }
+
+        angular.forEach($scope.location, function(val2, key) {
+            var pos = new google.maps.LatLng(val2.latitude,val2.longitude);
+            if(key == 0){
+                $('#form_st_lat').val(val2.latitude);
+                $('#form_st_long').val(val2.longitude);
+                $('#form_st_point').val(pos);
+
+                $scope.form.st_point = '('+val2.latitude+','+val2.longitude+')';
+                $scope.form.st_lat = val2.latitude;
+                $scope.form.st_long = val2.longitude;
+            }
+
+            var ept = '('+val2.latitude+','+val2.longitude+')';
+            $scope.form.end_point.push(ept);
+        });
+
+
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/addRoutes123',
+            data    : $.param($scope.form),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }).success(function (result) {
+            $location.path('/routes/'+$scope.sessUser);
+        }).error(function (result) {
+            $scope.addRoutes();
+        });
 
     }
 

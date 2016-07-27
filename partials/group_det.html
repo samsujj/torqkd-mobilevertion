@@ -116,7 +116,7 @@
     <div class="status-input" id="statusinput" ng-show="sessUser">
         <div ng-show="isPhoto" style="padding-bottom:15px;">
             <input ng-show="!isMobileApp" type="button" class="browsebtn" value="Click To Browse" ngf-drop ngf-select ng-model="statusImage" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"><br>
-            <div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progress + '%'"></div>
+            <div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progresstext"></div>
             </div>
             <a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/photo/sess_id/{{sessUser}}">Click To Browse</a>
         </div>
@@ -128,7 +128,7 @@
             <input type="text" placeholder="Type to search / enter Youtube video url" ng-model="youtubeTxt" class="searchbox" ><br>
             <input type="button" value="search" ng-click="youtubeSearch()" class="searchbtn"/><div  class="btnor">OR</div>
             <input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="statusVideo" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-            <div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progress + '%'"></div>
+            <div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progresstext"></div>
             </div>
             <a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/video/sess_id/{{sessUser}}">Click To Browse</a>
         </div>

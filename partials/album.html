@@ -70,7 +70,7 @@
     </div>
 
     </div>
-    <div class="progress" style="margin-bottom: 5px !important; margin-top: 5px !important;" ng-show="image[0].progress >= 0">	<div style="width:{{image[0].progress}}%; background:#F69830; font-size: 16px;padding-left:10px;" ng-bind="image[0].progress + '%'"></div></div>
+    <div class="progress" style="margin-bottom: 5px !important; margin-top: 5px !important;" ng-show="image[0].progress >= 0">	<div style="width:{{image[0].progress}}%; background:#F69830; font-size: 16px;padding-left:10px;" ng-bind="image[0].progresstext"></div></div>
 
 
     <div class="status-input" ng-show="isStatusInput" style="overflow:hidden;" >
@@ -165,7 +165,7 @@
             <input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="video123" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
 		
             <a ng-show="isMobileApp" href="javascript:void(0);" ng-click="andriodUp()" class="browsebtn">Click To Browse</a>
-            <div class="progress" ng-show="video123[0].progress >= 0">	<div style="width:{{video123[0].progress}}%; background:#F69830;" ng-bind="video123[0].progress + '%'"></div></div>
+            <div class="progress" ng-show="video123[0].progress >= 0">	<div style="width:{{video123[0].progress}}%; background:#F69830;" ng-bind="video123[0].progresstext"></div></div>
        
 	     </div>
 	    </div>

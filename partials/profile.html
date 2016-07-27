@@ -80,9 +80,87 @@
 		padding:3px 12px;
 		animation:0.5s ease 0s normal none 1 running ngdialog-flyin;
 	}
+
+
+
+	/*******************style from header[start]************************/
+	.showmsgblog{
+		background: url("../images/msgarrow.png") no-repeat  164px top;
+		width:324px;
+		padding-top:8px;
+		position: absolute;
+		top: 42px;
+		z-index: 999;
+		left: -152px;
+	}
+	.showmsgblog .showmsgwrapper{
+		border:solid 5px #fff;
+		color:#000;
+		display:block;
+		width:100%;
+		padding:0;
+		background: #ebebeb!important;
+		box-shadow:0 0 5px #999898;
+	}
+	.showmsgblog .showmsgwrapper li{
+		display:block;
+		background: #ebebeb!important;
+	}
+	.showmsgblog .showmsgwrapper .msg_photo{
+		width:50px;
+		float:left;
+	}
+	.showmsgblog .showmsgwrapper .msg_text{
+		float: right;
+		position: relative;
+		width: 216px;
+		padding: 0 27px 0 0;
+		line-height: 15px;
+	}
+	.showmsgblog .showmsgwrapper .msgclose{
+		color: #333!important;
+		display: block!important;
+		line-height: 13px!important;
+		right: 2px!important;
+		text-align: center!important;
+		top: 2px!important;
+		width: 16px!important;
+		font-family: Arial, Helvetica, sans-serif!important;
+		position: absolute;
+		font-size: 14px!important;
+		height: 16px;
+	}
+	/*******************style from header[end]************************/
 </style>
-<div class="mobile-top-con" ng-include="'partials/header.html'"></div>
-  
+<!--<div class="mobile-top-con" ng-include="'partials/header.html'"></div>-->
+
+<!--*********************header[start]********************************-->
+<div class="mobile-top-con">
+	<div class="logo" >
+		<a href="#/index" ng-if="(sessUser==0)">
+			<img alt="#" src="images/logo_main.png"/>
+		</a>
+		<a ng-href="#/profile/{{sessUser}}" ng-if="(sessUser!=0)" >
+			<img alt="#" src="images/logo_main.png"/>
+		</a>
+	</div>
+
+	<div class="mobile-menu">
+		<a href="javascript:void(0)" ng-click="$spMenu.toggle()">
+			<img src="images/menu.png" alt="#">
+		</a>
+	</div>
+
+	<div ng-show="sessUser" class="logout">
+		<a href="#/edit-profile">
+			<img alt="#" src="images/gear2.png" >
+		</a>
+	</div>
+
+	<div class="clear"></div>
+</div>
+<!--*********************header[end]********************************-->
+
   
 <div id="sp-nav" ng-include="'partials/menu.html'"></div>
 
@@ -101,7 +179,7 @@
 		</ul>
     </div>
 	<div class="clear"></div>
-	<div class="progress" ng-show="statusImage1[0].progress >= 0" style="margin-bottom: 2px !important; margin-left: 1% !important; width: 95% !important;">	<div style="width:{{statusImage1[0].progress}}%; background:#F69830; font-size: 16px;padding-left:10px;" ng-bind="statusImage1[0].progress + '%'"></div>
+	<div class="progress" ng-show="statusImage1[0].progress >= 0" style="margin-bottom: 2px !important; margin-left: 1% !important; width: 95% !important;">	<div style="width:{{statusImage1[0].progress}}%; background:#F69830; font-size: 16px;padding-left:10px;" ng-bind="statusImage1[0].progresstext"></div>
 	</div>
 
 	<div class="Stats-slider"  ng-show="sessUser==currentUser">
@@ -156,7 +234,7 @@
 		</div>
         <div ng-show="isPhoto" style="padding-bottom:15px;">
 			<input ng-show="!isMobileApp" type="button" class="browsebtn" value="Click To Browse" ngf-drop ngf-select ng-model="statusImage" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*'" ngf-drop-available="dropAvailable" ngf-capture="camera"><br>
-			<div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progress + '%'"></div>
+			<div class="progress" ng-show="statusImage[0].progress >= 0">	<div style="width:{{statusImage[0].progress}}%; background:#F69830;" ng-bind="statusImage[0].progresstext"></div>
 			</div>
 			<a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="http://torqkd.com/upload/">Click To Browse</a>
 		</div>
@@ -171,7 +249,7 @@
 			</form>
 			<div  class="btnor">OR</div>
 			<input ng-show="!isMobileApp" class="browsebtn" type="button" value="Click To Browse" ngf-drop ngf-select ng-model="statusVideo" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
-			<div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progress + '%'"></div>
+			<div class="progress" ng-show="statusVideo[0].progress >= 0">	<div style="width:{{statusVideo[0].progress}}%; background:#F69830;" ng-bind="statusVideo[0].progresstext"></div>
 			</div>
 			<a ng-show="isMobileApp" class="browsebtn" style="display:block;" href="http://torqkd.com/videoupload/">Click To Browse</a>
             </div>
@@ -295,13 +373,370 @@
 
 
 
-<div ng-include="'partials/social_tab.html'"></div>
+<!--<div ng-include="'partials/social_tab.html'"></div>-->
 
-<div class="banner2" ng-include="'partials/experience_6.html'"></div>
+	<!--------------------------social tab ['start']------------------------------------->
+	<style>
+		.embed-responsive {
+			position: relative;
+			display: block;
+			height: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		.embed-responsive.embed-responsive-16by9 {
+			padding-bottom: 56.25%;
+		}
+		.embed-responsive-item {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			border: 0;
+		}
+		#mapconmain{ padding:0px 0 0 30px;}
+		#mapconmain img{ display:block; margin:5px auto;}
+		#mapconmain h2.ng-binding{
+			color: #f79213;
+			font-family: "veneerregular";
+			font-size: 20px;
+			line-height: 22px; padding:5px 0 0 0;
+		}
+		#mapconmain .date-contain{ padding:5px 0;}
+		#mapconmain .date-contain h5 {
+			color: #616564;
+			font-family: "veneerregular";
+			font-size: 16px;
+			font-weight: normal;
+			line-height:18px;
+			margin: 0 !important;
+			padding-bottom: 2px;
+		}
+		#mapconmain .date-contain h5 span {
+			color: #929497;
+			font-family: reservation;
+			font-size: 12px;
+		}
+		.angular-google-map-container img{
+			background: none !important;
+		}
+		.angular-google-map-container{
+			height: 400px;
+			width: 400px;
+		}
+	</style>
+
+	<div>
+		<div>
+			<div id="tabs">
+				<ul>
+					<li ng-repeat="tab in tabs"
+						ng-class="{active:isActiveTab(tab.url)}"
+						ng-click="onClickTab(tab)"><span>{{tab.title}}</span></li>
+				</ul>
+				<div id="mainView">
+					<div ng-include="currentTab"></div>
+				</div>
+			</div>
+			<script type="text/ng-template" id="social.tpl.html">
+
+				<div id="viewOne">
+
+
+					<div ng-class-odd="'blog1'" ng-class-even="'blog2'" ng-repeat="item in statusList track by item.id" >
+						<div class="left-img" data-original-title="">
+							<img style=" max-width:50px; max-height:50px;" alt="" src="{{item.user_image}}">
+
+							<div class="mobile-name-view">
+								<strong>{{item.user_name}}</strong>
+								<a style="color: #333333 !important;" ng-if="item.tagpeople.length"> - with </a>
+								<a  ng-if="item.tagpeople.length && item.tagpeople[0].id != 0" href="javascript:void(0);" style="font-weight: bold; color: #333333 !important;">{{item.tagpeople[0].name}}</a>
+								<a  ng-if="item.tagpeople.length && item.tagpeople[0].id == 0" href="javascript:void(0);" style="font-weight: bold; color: #333333 !important;">{{item.tagpeople[0].name}}</a>
+								<a style="color: #333333 !important;" ng-if="item.tagpeople.length > 1"> and </a>
+								<a ng-if="item.tagpeople.length == 2 && item.tagpeople[1].id != 0" href="javascript:void(0);" style="font-weight: bold; color: #333333 !important;">{{item.tagpeople[1].name}}</a>
+								<a ng-if="item.tagpeople.length == 2 && item.tagpeople[1].id == 0" href="javascript:void(0)" style="font-weight: bold; color: #333333 !important;">{{item.tagpeople[1].name}}</a>
+								<a ng-show="item.tagpeople.length > 2" href="javascript:void(0)" style="font-weight: bold; color: #333333 !important;" uib-tooltip-html="tagpeopleText11(item)" tooltip-placement="bottom" tooltip-trigger="click" ng-click="openTagPeopleList(item)">{{item.tagpeople.length - 1}} others</a>
+								<br>
+								<span>{{item.timespan}}</span>
+							</div>
+							<div class="clear"></div>
+							<img class="closeBtn" src="images/deletebutton.png" ng-show="item.user_id==sessUser" ng-click="delStatus($index)" />
+						</div>
+						<!--<div class="text-contain" ng-if="item.type!='route'">{{item.msg}}</div>-->
+						<div ng-bind-html="item.msg | newlines" class="text-contain"></div>
+
+						<div class="text-contain" ng-if="item.type=='route'">
+							<div class="rowone ">
+								{{item.routes.sport_name}} <br />
+								<img src="{{item.routes.sport_image}}" style="max-width: 46px;"  alt="" />
+							</div>
+							<div class="rowtwo ">
+								<h2>{{item.routes.route_name}}</h2>
+								<div class="date-contain">
+									<h5>
+										<span>DATE</span><br />
+										{{item.routes.date}}
+									</h5>
+									<h5>
+										<span>TIME</span><br />
+										{{item.routes.duration}}
+									</h5>
+									<h5>
+										<span>DISTANCE</span><br />
+										{{item.routes.distance}} miles
+									</h5>
+								</div>
+							</div>
+							<div class="clear"></div>
+						</div>
+
+						<img style="position:absolute; margin-top:-2px;" alt="" src="images/arrow.png" ng-if="item.type">
+
+						<div class="blogimg">
+							<img src="{{baseUrl}}/uploads/status_img/{{item.value}}?version={{item.time}}" ng-if="item.type=='image'" style="cursor: pointer;" ng-click="showPhoto(item,$index)" alt="">
+							<!--<videogular ng-if="item.type=='mp4'" ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+item.value), type: 'video/mp4'}]">
+                            <vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
+                            </videogular>-->
+							<div ng-if="!isMobileApp && item.type=='mp4'">
+								<!--<video controls  poster="{{item.s_img}}">
+                                <source ng-src="{{getVidSOurce(item.value,item.basepath)}}" type="video/mp4">
+                                </video>-->
+								<videogular ng-init="vidsources = [{src: (baseUrl+'/uploads/video/converted/'+item.value), type: 'video/mp4'}]" >
+									<vg-media vg-src="vidsources" vg-native-controls="true" ></vg-media>
+								</videogular>
+							</div>
+							<div ng-if="isMobileApp && item.type=='mp4'">
+								<div class="social_img_con">
+									<img src="{{item.s_img}}"  style="width:100%;"/>
+									<a href="http://torqkd.com?redirectvideoplay={{getVidSOurce(item.value,item.basepath)}}"><img src="images/playVideo.png" style="position: absolute; width: 16%;  left:42%; top:40%;" /></a>
+								</div>
+							</div>
+							<div class="embed-responsive embed-responsive-16by9 video-wrapper" ng-if="item.type=='youtube'" style="position: relative;" id="youtubeBody{{item.id}}">
+								<!--<youtube-video class="embed-responsive-item" video-id="item.value"></youtube-video>-->
+								<img src="https://i.ytimg.com/vi/{{item.value}}/mqdefault.jpg" width="100%">
+								<img src="images/youplay.png" class="paly_video"  ng-click="showYoutubevdo(item.id,item.value)" style="cursor:pointer; width: 20%; z-index: 100; top: 40%; position: absolute; left: 40%;">
+							</div>
+							<div class="rowthree" id="map{{item.id}}" ng-if="item.type=='route'">
+								<ui-gmap-google-map center="item.routes.map.center" zoom="item.routes.map.zoom" pan="true" draggable="true">
+									<ui-gmap-markers models="item.routes.marker" coords="'self'" icon="'icon'" idkey='id' ></ui-gmap-markers>
+									<ui-gmap-polyline ng-if="item.routes.location.length" path="item.routes.location" draggable="false" geodesic="true" stroke="item.routes.map.lineStyle" fit="true"></ui-gmap-polyline>
+								</ui-gmap-google-map>
+							</div>
+						</div>
+
+						<div class="bottom-like-contain">
+							<div class="linknew-box">
+								<ul>
+									<li class="commend-div" ng-click="showDetails = !showDetails"><img src="images/n1.png" alt="" width="26px"/></li>
+									<li><a href="javascript:void(0);" ng-click="(item.c_user) ?  statusLike(item) :'';"><img ng-src="{{item.is_like == 0 && 'images/n2.png' || 'images/n2-1.png'}}" alt="" width="26px"/></a></li>
+									<li><a href="javascript:void(0);" ng-click="shareStaus(item)"><img src="images/n3.png" alt="" width="26px" style="margin-top:2px;"/></a></li>
+								</ul>
+								<div class="clear"></div>
+							</div>
+							<div class="like-con2">
+            <span class="dropdown" ng-if="sessUser == item.user_id" style="width:auto; display:inline-block; float:none; padding:0 4px; width:44px;">
+                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none; outline:none;">
+                    <img src="images/share1_icon_active.png" uib-tooltip="Community" tooltip-placement="bottom" tooltip-trigger="click" style="width:18px; margin-top:-2px;" ng-show="item.share_with==1">
+                    <img src="images/share2_icon_active.png" uib-tooltip="Friends" tooltip-placement="bottom" tooltip-trigger="click" style="width:15px; margin-top:0px;"  ng-show="item.share_with==2">
+                    <img src="images/share3_icon_active.png" uib-tooltip="Friends Of Friends" tooltip-placement="bottom" tooltip-trigger="click" style="width:18px; margin-top:0px;" ng-show="item.share_with==3">
+                    <img src="images/share4_icon_active.png" uib-tooltip="Private Me Only" tooltip-placement="bottom" tooltip-trigger="click" style="width:12px; margin-top:0px;" ng-show="item.share_with==4">
+                    <img src="images/ad2new.png" style="padding-left:4px;">
+                </a>
+                <ul class="dropdown-menu dropdown-menu_share">
+                    <li class="share1"><a href="javascript:void(0)" style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeShareWith(item,1)" ng-class="(item.share_with==1) ? 'active' : ''"><span>Community</span></a></li>
+                    <li class="share2"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeShareWith(item,2)" ng-class="(item.share_with==2) ? 'active' : ''"><span>Friends</span></a></li>
+                    <li class="share3"><a href="javascript:void(0)"  style="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeShareWith(item,3)" ng-class="(item.share_with==3) ? 'active' : ''"><span>Friends Of Friends</span></a></li>
+                    <li class="share4"><a href="javascript:void(0)"   sstyle="font-size:10px!important; text-transform:uppercase; font-weight:normal!important;"  ng-click="changeShareWith(item,4)" ng-class="(item.share_with==4) ? 'active' : ''"><span>Private Me Only</span></a></li>
+                </ul>
+            </span>
+								<span class="dropdown" ng-if="sessUser != item.user_id" style="width:auto; display:inline; float:none; padding:0 4px;">
+                <a href="javascript:void(0)" class="dropdown-toggle" style="text-decoration:none; outline:none;">
+                    <img src="images/share1_icon_active.png" uib-tooltip="Community" tooltip-placement="bottom" tooltip-trigger="click" style="width:18px; margin-top:-2px;" ng-show="item.share_with==1">
+                    <img src="images/share2_icon_active.png" uib-tooltip="Friends" tooltip-placement="bottom" tooltip-trigger="click" style="width:15px; margin-top:0px;"  ng-show="item.share_with==2">
+                    <img src="images/share3_icon_active.png" uib-tooltip="Friends Of Friends" tooltip-placement="bottom" tooltip-trigger="click" style="width:18px; margin-top:0px;" ng-show="item.share_with==3">
+                    <img src="images/share4_icon_active.png" uib-tooltip="Private Me Only" tooltip-placement="bottom" tooltip-trigger="click" style="width:12px; margin-top:0px;" ng-show="item.share_with==4">
+                </a>
+            </span>
+								{{item.like_no}} LIKE - {{item.comment.length}} <a href="javascript:void(0);" ng-click="showDetails = !showDetails">Comment{{(item.comment.length >1)?'s':''}}
+							</a>
+							</div>
+							<div class="clear"></div>
+							<div class="commend-box-pro" ng-show="showDetails" style="display:block; padding-left:0px; padding-right:0px;">
+								<div class="commend-box" ng-repeat="comment in item.comment track by comment.id">
+									<div style="width:44px; float:left; height:auto; margin-left:2px;" class="com-img">
+										<img src="{{comment.user_image}}"  alt="" style=" margin-top:2px; max-width:35px; max-height:35px;" />
+									</div>
+									<div class="combodyu">
+										<div class="date-link">
+											<a href="javascript:void(0)">{{comment.time}}</a>
+											<img class="closeCBtn" src="images/deletebutton1.png" class="closeBtn" ng-show="comment.user_id==sessUser" ng-click="delComment($parent.$index,$index)" />
+										</div>
+										<div class="nprofilename2"> <strong><a href="#" class="name_a" style="font-weight:bold;">{{comment.user_name}}</a></strong></div>
+										<div class="clear"></div>
+										<div ng-bind-html="comment.body | newlines | emoticons:{'linkTarget':'_blank','newLine':true} " class="ng-emoticons"></div>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div ng-show="item.c_user" class="commendboxpro" >
+									<div class="profile-img2" style="width:38px; margin:0 5px 0 0;">
+										<img style=" max-width:35px; max-height:35px;" alt="" src="{{item.c_user_image}}" >
+									</div>
+									<!--<textarea class="cmnt_textarea" placeholder="Write a comment..." ng-model="item.pstval" data-original-title=""></textarea>-->
+									<div class="popup-text-box1">
+										<div style=" height: auto; position: relative;">
+											<div id="commentdiv000{{item.id}}" class="commentemo" ng-keyup="setcommentval($event,item)" style="border: solid 2px #97989a; border-radius: 5px; min-height: 38px; height: auto !important; padding: 6px; overflow: hidden; float: left; text-align: left; background:#fff;  " contentEditable="true"></div>
+											<a href="javascript:void(0)" ng-click="showemojisdiv123(item.id)"> <img src="images/emo.png"  class="emocss"  style="background:none; width:22px;"/></a>
+										</div>
+										<a class=" mob-post2" href="javascript:void(0);" ng-click="postComment(item)" style="margin-top:18px; margin-right:0px;">POST</a>
+									</div>
+									<div class="clear"></div>
+									<div>
+										<div id="emojisdiv{{item.id}}" style="display: none;">
+											<div class="emojisdiv">
+												<a href="javascript:void(0)" ng-repeat="emoitem in emojisArr" ng-click="emoinsert(item,emoitem)" class="emoticon emoticon-{{emoitem}}" title=":{{emoitem}}:" ></a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+
+					<span class="empty" ng-show="statusList.length == 0 && !statusLoad">No results found.</span>
+
+					<div ng-show="viewMore==1" class="viewMore"><a href="javascript:void(0);" ng-click="viewMoreStatus()">View More</a></div>
+
+					<div ng-show="viewMoreLoad" class="viewMore"><img src="images/loading_list.gif" /></div>
+
+					<div ng-show="statusLoad" class="viewMore"><img src="images/loading_list.gif" /></div>
+
+
+					<script type="text/ng-template" id="photoComment">
+						<div class="popupbox2">
+							<a href="javascript:void(0)" class="cancelbtn1" ng-click="modalClose()"><img src="images/close.png"></a>
+							<div class="photo-popup" style="mmargin: 0 auto; width:100%;text-align:center;overflow: inherit;height: auto; padding:0; ">
+								<img alt="" style="max-width:100%; max-height:75%;" src="{{photoDet.imgSrc}}" />
+								<div class="poprt">
+									<div style="background-color:#D1D3D4;" class="comment-area">
+										<div class="comment_top">
+											<div class="profile-img">
+												<img  src="{{photoDet.userImage}}" alt="" style=" max-width:50px; max-height:50px;" />
+											</div>
+											<div class="profile-text">
+												<div class="name-text">{{photoDet.userName}}</div>
+												<div class="text-contain">{{photoDet.timeSpan}}</div>
+												<div class="clear"></div>
+											</div>
+
+											<div class="clear"></div>
+											<div style="font-size:16px; text-align:left; padding-top:8px; padding-left: 4px; color: #000;">{{photoDet.msg}}</div>
+											<div class="cmnt_share">
+												<a href="javascript:void(0);">Comment{{(photoDet.commentList.length >1)?'s':''}} [{{photoDet.commentList.length}}]</a> - <a href="javascript:void(0);" ng-click="(photoDet.c_user) ?  statusLike1(photoDet) :'';">{{(photoDet.is_like)?'Unlike':'Like'}} [{{photoDet.like_no}}] </a>
+												<b style="font-weight:bold;display:inline-block; " >&bull;</b>
+												<a href="javascript:void(0);" style="display: inline-block; position: relative;" ng-click="shareStaus(photoDet)">Share</a>
+											</div>
+										</div>
+										<div class="commen_body">
+											<div ng-repeat="com in photoDet.commentList track by com.id" class="commend-box">
+												<div style="width:50px; float:left; height:auto;">
+													<img style=" margin-top:2px; max-width:35px; max-height:35px;" alt="" src="{{com.user_image}}" />
+												</div>
+												<div class="combodyu">
+													<div class="date-link">
+														<a href="javascript:void(0);">{{com.time}}</a>
+														<img class="closeCBtn" src="images/deletebutton1.png" class="closeBtn" ng-show="com.user_id==sessUser" ng-click="delComment(photoDet.sIndex,$index)" />
+													</div>
+													<div class="nprofilename">
+														<strong>
+															<a href="#/profile/{{com.user_id}}" data-original-title="">{{com.user_name}}</a>
+														</strong>
+													</div>
+													<div class="clear"></div>
+													<div ng-bind-html="com.body | newlines | emoticons:{'linkTarget':'_blank','newLine':true} " class="ng-emoticons"></div>
+												</div>
+												<div class="clear"></div>
+											</div>
+										</div>
+										<div ng-show="sessUser" class="commendboxpro">
+											<div class="profile-img2">
+												<img style=" max-width:35px; max-height:35px;" alt="" src="{{photoDet.cUserImage}}">
+											</div>
+											<div class="popup-text-box1">
+												<!--<textarea placeholder="Write a comment..." ng-model="photoDet.pstval" id="pstVal" ></textarea>-->
+												<!--<a href="javascript:void(0);" ng-click="postComment1(photoDet)" class="mob-post2">POST</a>-->
+												<div class="popup-text-box1">
+													<!--<textarea placeholder="Write a comment..." ng-model="photoDet.pstval"  ></textarea>-->
+													<div style=" height: auto; position: relative;">
+														<div id="pcommentdiv000" ng-keyup="setcommentval($event,photoDet)" style=" border:solid 2px #97989a; border-radius:5px; min-height: 38px; height: auto !important;padding: 6px; overflow: hidden; float: left; text-align: left; " contentEditable="true"></div>
+														<a href="javascript:void(0)" ng-click="showemojisdivsada()"> <img src="images/emo.png" class="emocss"  /></a>
+													</div>
+													<a href="javascript:void(0);" ng-click="postComment1(photoDet)" class="mob-post2">POST</a>
+												</div>
+												<div style="position: relative;">
+													<div ng-show="showemojisdiv" style=" bottom: 1px; position: absolute; right: 0; width:90%; background-color: #FFFFFF; padding: 5px;border: 2px solid #97989a !important; border-radius: 5px !important; ">
+														<div class="emojisdiv" style="height: 200px;overflow: auto">
+															<a href="javascript:void(0)" ng-repeat="emoitem in emojisArr" ng-click="emoinsert(photoDet,emoitem)" class="emoticon emoticon-{{emoitem}}" title=":{{emoitem}}:"  ></a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			</script>
+			<div style=" width:170px; height:204px; display: none;" id="mapconmain" >
+
+			</div>
+
+
+			<img src="images/emojis.png" style="display: none;">
+
+
+
+
+
+		</div>
+			</script>
+
+			<script type="text/ng-template" id="events.tpl.html">
+				<div id="viewTwo" ng-include="'partials/events.html'"></div>
+			</script>
+
+			<script type="text/ng-template" id="groups.tpl.html">
+				<div id="viewThree" ng-include="'partials/groups.html'"></div>
+			</script>
+			<script type="text/ng-template" id="stats.tpl.html">
+				<div id="viewFour" ng-include="'partials/stats.html'"></div>
+			</script>
+		</div>
+	</div>
+	<!--------------------------social tab ['end']--------------------------------------->
+
+<!--<div class="banner2" ng-include="'partials/experience_6.html'"></div>-->
+	<div class="banner2">
+		<simple-slider class="gallery2" transition-property="opacity" start-value="0" visible-value="1" end-value="0">
+			<a ng-repeat="item in bannerslides1 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)"><img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" /></a>
+		</simple-slider>
+	</div>
 <div style="clear:both;"></div>
 
-<div class="banner3" ng-include="'partials/experience_7.html'"></div>
-<div style="clear:both;"></div>
+<!--<div class="banner3" ng-include="'partials/experience_7.html'"></div>-->
+	<div class="banner3">
+		<simple-slider class="gallery3" transition-property="opacity" start-value="0" visible-value="1" end-value="0">
+			<a ng-repeat="item in bannerslides2 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)"><img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" /></a>
+		</simple-slider>
+	</div>
+
+
+
+	<div style="clear:both;"></div>
 
 
 
@@ -328,8 +763,10 @@
 			</script>
 
 
- 
-<span>&copy;TORKQ</span>
+
+
+
+	 <span>&copy;TORKQ</span>
 <span>|</span>
 <span>
 <a href="javascript:void(0);"  ng-click="showtermsploicy('terms')">TERMS </a>
@@ -341,3 +778,4 @@
 </div>
 </div>
 </div>
+

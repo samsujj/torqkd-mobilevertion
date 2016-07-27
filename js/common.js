@@ -9,13 +9,20 @@ function setValuelong(obj){
     $('#long').val(obj);
 
 }
+function fail(){
 
+    //alert('Unable to Locate');
+    
+
+}
 function tracklocation(position) {
     var pos = new google.maps.LatLng(position.coords.latitude,
         position.coords.longitude);
+       // alert(position.coords.latitude+'-=-'+position.coords.longitude);
     $('#lat').val(position.coords.latitude);
     $('#long').val(position.coords.longitude);
 }
+
 
 
 
