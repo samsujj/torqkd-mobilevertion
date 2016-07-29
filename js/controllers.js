@@ -174,7 +174,7 @@ homeControllers1.filter('newlines', function () {
 });
 
 
-homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore,$cookies,loggedInStatus) {
+homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore,$cookies,loggedInStatus,$modal) {
 
 
 
@@ -449,7 +449,7 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
 
 });
 
-homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('homeCtrl', function($scope,$http, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -526,7 +526,7 @@ homeControllers1.service('loggedInStatus', function () {  var loggedIn = "";
 	};
 });
 
-homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog,$timeout,$rootScope) {
+homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieStore,$cookies,loggedInStatus,ngDialog,$timeout,$rootScope,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 	
@@ -664,7 +664,7 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
 
 });
 
-homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,loggedInStatus,$cookieStore,$cookies) {
+homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,loggedInStatus,$cookieStore,$cookies,$modal) {
     $scope.userId = 0;
     if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
         $scope.userDet = $cookieStore.get('rootuserdet');
@@ -689,7 +689,7 @@ homeControllers1.controller('logoutCtrl', function($scope, $http, $routeParams, 
 
 });
 
-homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
+homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -744,7 +744,7 @@ homeControllers1.controller('FPasswordCtrl', function($scope,$http,$location,$co
 
 });
 
-homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
+homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -803,7 +803,7 @@ homeControllers1.controller('FPassword2Ctrl', function($scope,$http,$location,$c
 
 });
 
-homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
+homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout,$modal) {
 
     $scope.form = {
         sess_f_id : $cookieStore.get('sess_f_id'),
@@ -874,7 +874,7 @@ homeControllers1.controller('CPasswordCtrl', function($scope,$http,$location,$co
 
 });
 
-homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout) {
+homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cookieStore,$cookies,ngDialog,$timeout,$modal) {
 
 
     //$('html, body').animate({ scrollTop: offheight+65 }, 2000);
@@ -1026,7 +1026,7 @@ homeControllers1.controller('SignUpCtrl', function($scope,$http,$location,$cooki
 
 });
 
-homeControllers1.controller('ActivityCtrl', function($scope,$http,$location,ngDialog,$timeout,$cookieStore) {
+homeControllers1.controller('ActivityCtrl', function($scope,$http,$location,ngDialog,$timeout,$cookieStore,$modal) {
 
 
 
@@ -1122,7 +1122,7 @@ homeControllers1.controller('ActivityCtrl', function($scope,$http,$location,ngDi
 
 });
 
-homeControllers1.controller('ConnectCtrl', function($scope,$http,$location,ngDialog,$timeout,$filter,$cookieStore) {
+homeControllers1.controller('ConnectCtrl', function($scope,$http,$location,ngDialog,$timeout,$filter,$cookieStore,$modal) {
 
 
 
@@ -1365,7 +1365,7 @@ homeControllers1.controller('ConnectCtrl', function($scope,$http,$location,ngDia
 
 });
 
-homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialog,$timeout,$cookieStore,$facebook) {
+homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialog,$timeout,$cookieStore,$facebook,$modal) {
 
     //$timeout(function(){ $location.hash('contain3');}, 2000);
 
@@ -1619,7 +1619,7 @@ homeControllers1.controller('nextCtrl', function($scope, $http,$location,ngDialo
 
 });
 
-homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $compile, Upload,$window,ngDialog,$location,$cookieStore,loggedInStatus) {
+homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $compile, Upload,$window,ngDialog,$location,$cookieStore,loggedInStatus,$modal) {
 
 
     if(typeof ($cookieStore.get('newUserId')) != 'undefined'){
@@ -1910,7 +1910,7 @@ homeControllers1.controller('addimageCtrl', function($scope, $http, $timeout, $c
 });
 
 
-homeControllers1.controller('completeCtrl', function($scope, $http, $timeout, $compile, Upload,$window,ngDialog,$location,$cookieStore,loggedInStatus) {
+homeControllers1.controller('completeCtrl', function($scope, $http, $timeout, $compile, Upload,$window,ngDialog,$location,$cookieStore,loggedInStatus,$modal) {
 
     $('html, body').animate({ scrollTop: 0 },1000);
     if(typeof ($cookieStore.get('newUserId')) != 'undefined'){
@@ -3630,6 +3630,136 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
     }
 
 
+
+
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
+
+
 });
 
 
@@ -4185,10 +4315,12 @@ if($scope.sessUser > 0){
             method: 'POST',
 			async:   false,
             url: $scope.baseUrl+'/user/ajs/getstatdetails',
+            //url: $scope.nodeUrl+'/getstatdetails',
 			data    : $.param({'userid':$routeParams.userid}),
 			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
         }).success(function (result) {
 			$scope.statDet = result;
+
     });
 
 	$scope.bannerslides1 = [];
@@ -4230,9 +4362,15 @@ if($scope.sessUser > 0){
     }).success(function (result) {
         $scope.statusLoad = false;
         $scope.statusList = result.status;
-        if(result.totalCount > $scope.statusList.length){
+        /*if(result.totalCount > $scope.statusList.length){
             $scope.viewMore = 1;
             $scope.offset = 5;
+        }*/
+        $scope.offset = 5;
+        if(result.status.length){
+            $scope.viewMore = 1;
+        }else{
+            $scope.viewMore = 0;
         }
     });
 
@@ -4266,9 +4404,15 @@ if($scope.sessUser > 0){
            }).success(function (result) {
                $scope.statusLoad = false;
                $scope.statusList = result.status;
-               if(result.totalCount > $scope.statusList.length){
+               /*if(result.totalCount > $scope.statusList.length){
                    $scope.viewMore = 1;
                    $scope.offset = 5;
+               }*/
+               $scope.offset = 5;
+               if(result.status.length){
+                   $scope.viewMore = 1;
+               }else{
+                   $scope.viewMore = 0;
                }
            });
 
@@ -5472,9 +5616,15 @@ if($scope.sessUser > 0){
                 }).success(function (result) {
                     $scope.statusLoad = false;
                     $scope.statusList = result.status;
-                    if(result.totalCount > $scope.statusList.length){
+                    /*if(result.totalCount > $scope.statusList.length){
                         $scope.viewMore = 1;
                         $scope.offset = 5;
+                    }*/
+                    $scope.offset = 5;
+                    if(result.status.length){
+                        $scope.viewMore = 1;
+                    }else{
+                        $scope.viewMore = 0;
                     }
                 });
 
@@ -6026,10 +6176,16 @@ if($scope.sessUser > 0){
         }).success(function (result) {
 			$scope.viewMoreLoad = 0;
 			$scope.statusList=$scope.statusList.concat(result.status);
-			if(result.totalCount > $scope.statusList.length){
+			/*if(result.totalCount > $scope.statusList.length){
 				$scope.viewMore = 1;
 				$scope.offset = $scope.offset+5;
-			}
+			}*/
+            $scope.offset = 5;
+            if(result.status.length){
+                $scope.viewMore = 1;
+            }else{
+                $scope.viewMore = 0;
+            }
 		});
 	}
 	
@@ -6361,9 +6517,11 @@ var modalInstancepoll;
     /******************************poll [end]*******************************************/
 
 
+
+
 });
 
-homeControllers1.controller('friendListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('friendListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -6583,9 +6741,142 @@ homeControllers1.controller('friendListCtrl', function($scope, $http, $routePara
     });
 
 
+
+
+
+
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
+
+
+
 });
 
-homeControllers1.controller('connectionCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('connectionCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -6823,6 +7114,132 @@ homeControllers1.controller('connectionCtrl', function($scope, $http, $routePara
     }).success(function (result) {
         $scope.sportsMenu = result;
     });
+
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
@@ -8327,6 +8744,128 @@ homeControllers1.controller('albumCtrl', function($scope, $http, $routeParams, $
 
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
 
 
 
@@ -9008,6 +9547,131 @@ homeControllers1.controller('photoCtrl', function($scope, $http, $routeParams,$m
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
 homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog,$modal, $timeout,$location,$cookieStore) {
@@ -9402,10 +10066,134 @@ homeControllers1.controller('videoCtrl', function($scope, $http, $routeParams, $
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
-homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9573,10 +10361,134 @@ homeControllers1.controller('sportCtrl', function($scope, $http, $routeParams, $
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
-homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9756,12 +10668,134 @@ homeControllers1.controller('forumCtrl', function($scope, $http, $routeParams, $
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
 
 
 });
 
 
-homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -9991,10 +11025,134 @@ homeControllers1.controller('forumDetCtrl', function($scope, $http, $routeParams
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
-homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10189,10 +11347,135 @@ homeControllers1.controller('moveTopicCtrl', function($scope, $http, $routeParam
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
 
-homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10391,10 +11674,136 @@ homeControllers1.controller('newTopicCtrl', function($scope, $http, $routeParams
     });
 
 
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
 
-homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$sce,$cookieStore) {
+homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$sce,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -10903,12 +12312,136 @@ homeControllers1.controller('topicDetCtrl', function($scope, $http, $routeParams
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
 
 
-homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -11497,11 +13030,133 @@ homeControllers1.controller('routesCtrl', function($scope, $http, $routeParams, 
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
 
 
 });
 
-homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$sce,$cookieStore) {
+homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$sce,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -11687,9 +13342,134 @@ homeControllers1.controller('eventDetCtrl', function($scope, $http, $routeParams
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
-homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore) {
+homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -12029,10 +13809,135 @@ homeControllers1.controller('eventAddCtrl', function($scope, $http, $routeParams
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
 
-homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore) {
+homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$log,Upload,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -12430,6 +14335,131 @@ homeControllers1.controller('eventEditCtrl', function($scope, $http, $routeParam
     }).success(function (result) {
         $scope.sportsMenu = result;
     });
+
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
 
 
 });
@@ -13357,12 +15387,136 @@ homeControllers1.controller('groupDetCtrl', function($scope, $http, $routeParams
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
 
 
-homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,Upload,$cookieStore) {
+homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,Upload,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -13761,6 +15915,130 @@ homeControllers1.controller('groupAddCtrl', function($scope, $http, $routeParams
     }).success(function (result) {
         $scope.sportsMenu = result;
     });
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
 
 
 });
@@ -14372,8 +16650,132 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
 
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 });
-homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore) {
+homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -14679,8 +17081,133 @@ homeControllers1.controller('routeAddCtrl', function($scope, $http, $routeParams
 
 
 
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 });
-homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore) {
+homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,uiGmapGoogleMapApi,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -15216,9 +17743,134 @@ homeControllers1.controller('routeAdd1Ctrl', function($scope, $http, $routeParam
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
-homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
@@ -15779,9 +18431,133 @@ homeControllers1.controller('sportDetCtrl', function($scope, $http, $routeParams
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 });
 
-homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -15935,10 +18711,134 @@ homeControllers1.controller('sportUserCtrl', function($scope, $http, $routeParam
         $scope.sportsMenu = result;
     });
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
-homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
+homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore,$modal ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -16197,10 +19097,134 @@ homeControllers1.controller('postDetCtrl', function($scope,$routeParams, $http,$
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 
 });
 
-homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
+homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore,$modal ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -16461,9 +19485,135 @@ homeControllers1.controller('postDetCtrl1', function($scope,$routeParams, $http,
 
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
+
 });
 
-homeControllers1.controller('fileListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('fileListCtrl', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
     $scope.sessUser = 0;
 
     if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
@@ -16472,10 +19622,135 @@ homeControllers1.controller('fileListCtrl', function($scope, $http, $routeParams
     }
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 
 });
 
-homeControllers1.controller('comingsoon', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore) {
+homeControllers1.controller('comingsoon', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     $scope.sessUser = 0;
 
@@ -16484,10 +19759,135 @@ homeControllers1.controller('comingsoon', function($scope, $http, $routeParams, 
         $scope.sessUser = $scope.userDet.id;
     }
 
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
 });
 
 
-homeControllers1.controller('test', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$modal,$cookieStore) {
+homeControllers1.controller('test', function($scope, $http, $routeParams, $rootScope, ngDialog, $timeout,$location,$cookieStore,$modal) {
 
     var modalInstance;
 
@@ -16553,7 +19953,7 @@ homeControllers1.controller('test', function($scope, $http, $routeParams, $rootS
 
 });
 
-homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore ) {
+homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,  uiGmapGoogleMapApi,$timeout,$location,Upload,$rootScope,$route,$cookieStore,$modal ) {
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
 
@@ -16813,6 +20213,131 @@ homeControllers1.controller('hastagCtrl', function($scope,$routeParams, $http,$i
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 
 });
 
@@ -17063,6 +20588,131 @@ homeControllers1.controller('settingsCtrl', function($scope, $http, $routeParams
     });
 
 
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
 });
 
 homeControllers1.controller('allnotificationCtrl', function($scope, $http, $routeParams, $rootScope,$cookieStore, ngDialog, $timeout,$location,Upload,$window,$modal) {
@@ -17223,6 +20873,130 @@ homeControllers1.controller('allnotificationCtrl', function($scope, $http, $rout
     }).success(function (result) {
         $scope.sportsMenu = result;
     });
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
 
 
 });
