@@ -104,7 +104,7 @@ torqdTest.config(['$routeProvider',
       }).
       when('/eventmap', {
         templateUrl: 'partials/eventmap.html',
-        controller: 'expCtrl'
+        controller: 'eventmapCtrl'
       }).
         when('/forum-listing', {
             templateUrl: 'partials/forumlisting.html',

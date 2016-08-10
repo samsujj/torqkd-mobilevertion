@@ -14,6 +14,76 @@
 }
 
 
+ .angular-google-map-container {
+     width: 100%;
+     height: 400px;
+ }
+
+/* fix for Twitter Bootstrap handling of responsive images */
+.angular-google-map img {
+    max-width: none;
+}
+
+.angular-google-map {
+    top: 80px;
+
+}
+
+.shrink {
+    font-size: 8;
+}
+
+.true:hover {
+    background-color: lightgreen;
+}
+
+.false:hover {
+    background-color: lightpink;
+}
+
+.marker-labels {
+    color: red;
+    background-color: white;
+    font-family: "Lucida Grande", "Arial", sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid black;
+    white-space: nowrap;
+}
+
+
+.custom-info-window{
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 20px;
+    /*border: 1px solid white;*/
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    width: 200px;
+    margin-top: 15px;
+    margin-left: -130px;
+}
+.custom-info-window a{
+    color: white;
+    text-decoration: underline;
+}
+.custom-info-window:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 15px 15px;
+    border-color: rgba(0,0,0,0.5) transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: -15px;
+    left: 118px;
+}
+
+
+
 </style>
 
 <div class="mobile-top-con" ng-include="'partials/header.html'"></div>
@@ -24,8 +94,45 @@
   
 <div id="sp-page" style="padding:0;" >
 
-<div class="albums-div" style="padding:0; width:100%;" ng-include="'partials/experience_5.html'"></div>
+<div class="albums-div" style="padding:0; width:100%;">
+
+    <div style="border: solid 8px #fff;">
+
+        <div class="iframe_h2">Events</div>
+        <div id="map-canvas">
+            <ui-gmap-google-map id="map"
+                                center="map.center"
+                                pan="map.pan"
+                                zoom="map.zoom"
+                                draggable="true"
+            >
+                <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" idkey='id' events="map.markerEvents" >
+
+                </ui-gmap-markers>
+
+                <ui-gmap-window
+                        idKey="map.openedCanadaWindows.id"
+                        coords ='map.openedCanadaWindows'
+                        show="map.openedCanadaWindows.doShow"
+                        closeclick="map.openedCanadaWindows.closeClick">
+                    <div id="infoWin">
+                        {{map.openedCanadaWindows.latitude}}, {{map.openedCanadaWindows.longitude}}
+                        {{map.openedCanadaWindows.a1}}
+                    </div>
+                </ui-gmap-window>
+
+
+            </ui-gmap-google-map>
+
+
+        </div>
+
+    </div>
+
+</div>
 
 
 
 </div>
+
+<img src="images/map-icon.png" style="display: none">

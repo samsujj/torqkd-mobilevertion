@@ -2288,10 +2288,17 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 	$http({
             method: 'POST',
             async:   false,
-            url: $scope.baseUrl+'/user/ajs/getCurLocation',
+            url: $scope.baseUrl+'/user/ajs/getCurLocation2',
             data    : $.param({'sess_user':$scope.sessUser}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
+        $scope.markerIndex = 0;
+        $scope.allmarker = result.markers;
+        $scope.slicemarker = $scope.allmarker.slice($scope.markerIndex, 10);
+
+        $timeout(function(){
+            $scope.markerpush();
+        },10000);
 
 			$scope.map = {
 			  dragZoom: {options: {}},
@@ -2305,7 +2312,7 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 			  refresh: false,
 			  events: {},
 			  bounds: {},
-			  markers: result.marker,
+			  markers: $scope.slicemarker,
               openedCanadaWindows:{},
               onWindowCloseClick: function(gMarker, eventName, model){
                    if(model.dowShow !== null && model.dowShow !== undefined)
@@ -2333,8 +2340,28 @@ homeControllers1.controller('expCtrl', function($scope, $http,$interval,ngDialog
 		
 
 		});
-		
 
+    var promise;
+    $scope.markerpush = function(){
+
+
+        var i;
+        for(i=$scope.markerIndex; i<($scope.markerIndex+10);i++){
+            if(typeof ($scope.allmarker[i]) != 'undefined')
+                $scope.slicemarker.push($scope.allmarker[i]);
+        }
+
+        $scope.markerIndex += 10;
+        console.log($scope.slicemarker.length);
+        if($scope.slicemarker.length < $scope.allmarker.length){
+            promise = $timeout(function(){
+                $scope.markerpush();
+            },5000);
+        }else{
+            console.log('marker load complete');
+        }
+
+    }
 	
 
 	$http({
@@ -4185,16 +4212,6 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         }
     }
 
-    $http({
-        method: 'POST',
-        async:   false,
-        url: $scope.baseUrl+'/user/ajs/alluserList55555',
-        data    : $.param({'sess_user':$scope.sessUser}),
-        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-    }).success(function (result) {
-        $scope.taguserList = result;
-    });
-
 
     $scope.loadUsers = function($query) {
         var sports = $scope.taguserList;
@@ -4248,56 +4265,34 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 		$scope.isMobileApp = data;
     })
 
-if($scope.sessUser > 0){
-    $timeout(function(){
-        $scope.getNotListRec();
-    },3000);
+
+    $scope.statusList = [];
+    $scope.eventList = [];
+    $scope.groupList = [];
+
+    $scope.statusLoad = true;
 
     $http({
-        method  : 'POST',
+        method: 'POST',
         async:   false,
-        url     : $scope.baseUrl+'/user/ajs/getTempFile',
-        data    : $.param({'userid':$scope.sessUser}),
+        url: $scope.baseUrl+'/user/ajs/getStatus',
+        data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-    }) .success(function(result) {
-        if(typeof(result.id) != 'undefined'){
-
-            if(result.type == 'image'){
-                $scope.isPhoto = 0;
-                $scope.photoval = result.value;
-                $scope.statusType = 'image';
-                $scope.statusValue = result.value;
-                $scope.isStatusInput = 1;
-                $scope.isRotateBtn = 1;
-                $scope.status_id = result.id;
-                $scope.tagpeople = [];
-            }
-            if(result.type == 'video'){
-                $scope.videoval1 = '';
-                $scope.photoval = '';
-                $scope.localfilepath = result.localfilepath;
-                $scope.videoTempval = result.tempImage;
-                $scope.videoval2 = result.value;
-                $scope.videoval3 = 1;
-                $scope.isPhoto = 0;
-                $scope.isVideo = 0;
-
-                $scope.isPhoto = 0;
-                $scope.statusType = 'video';
-                $scope.statusValue = result.value;
-                $scope.isStatusInput = 1;
-                $scope.status_id = result.id;
-                $scope.tagpeople = [];
-            }
-
-            //$location.hash('statusinput');
-            var fgddf = $( '#statusinput' ).offset().top;
-            fgddf = parseInt(fgddf)-parseInt(70);
-            $('html, body').animate({ scrollTop: fgddf }, 2000);
-
+    }).success(function (result) {
+        $scope.statusLoad = false;
+        $scope.statusList = result.status;
+        /*if(result.totalCount > $scope.statusList.length){
+         $scope.viewMore = 1;
+         $scope.offset = 5;
+         }*/
+        $scope.offset = 5;
+        if(result.status.length){
+            $scope.viewMore = 1;
+        }else{
+            $scope.viewMore = 0;
         }
     });
-}
+
 
 	$scope.openBanner = function(url){
         if($scope.isMobileApp){
@@ -4309,7 +4304,7 @@ if($scope.sessUser > 0){
     }
 
 
-	$scope.statDet = [];
+	//$scope.statDet = [];
 
 	$http({
             method: 'POST',
@@ -4347,32 +4342,64 @@ if($scope.sessUser > 0){
 			$scope.bannerslides2 = result;
     });
 
-    $scope.statusList = [];
-    $scope.eventList = [];
-    $scope.groupList = [];
-
-    $scope.statusLoad = true;
-
     $http({
         method: 'POST',
         async:   false,
-        url: $scope.baseUrl+'/user/ajs/getStatus',
-        data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
+        url: $scope.baseUrl+'/user/ajs/alluserList55555',
+        data    : $.param({'sess_user':$scope.sessUser}),
         headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     }).success(function (result) {
-        $scope.statusLoad = false;
-        $scope.statusList = result.status;
-        /*if(result.totalCount > $scope.statusList.length){
-            $scope.viewMore = 1;
-            $scope.offset = 5;
-        }*/
-        $scope.offset = 5;
-        if(result.status.length){
-            $scope.viewMore = 1;
-        }else{
-            $scope.viewMore = 0;
-        }
+        $scope.taguserList = result;
     });
+
+
+    if($scope.sessUser > 0 && $scope.sessUser==$scope.currentUser){
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.baseUrl+'/user/ajs/getTempFile',
+            data    : $.param({'userid':$scope.sessUser}),
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+        }) .success(function(result) {
+            if(typeof(result.id) != 'undefined'){
+
+                if(result.type == 'image'){
+                    $scope.isPhoto = 0;
+                    $scope.photoval = result.value;
+                    $scope.statusType = 'image';
+                    $scope.statusValue = result.value;
+                    $scope.isStatusInput = 1;
+                    $scope.isRotateBtn = 1;
+                    $scope.status_id = result.id;
+                    $scope.tagpeople = [];
+                }
+                if(result.type == 'video'){
+                    $scope.videoval1 = '';
+                    $scope.photoval = '';
+                    $scope.localfilepath = result.localfilepath;
+                    $scope.videoTempval = result.tempImage;
+                    $scope.videoval2 = result.value;
+                    $scope.videoval3 = 1;
+                    $scope.isPhoto = 0;
+                    $scope.isVideo = 0;
+
+                    $scope.isPhoto = 0;
+                    $scope.statusType = 'video';
+                    $scope.statusValue = result.value;
+                    $scope.isStatusInput = 1;
+                    $scope.status_id = result.id;
+                    $scope.tagpeople = [];
+                }
+
+                //$location.hash('statusinput');
+                var fgddf = $( '#statusinput' ).offset().top;
+                fgddf = parseInt(fgddf)-parseInt(70);
+                $('html, body').animate({ scrollTop: fgddf }, 2000);
+
+            }
+        });
+    }
 
 
     $scope.tabs = [{
@@ -4433,17 +4460,76 @@ if($scope.sessUser > 0){
 
            });
        }
-       if(tab.url == 'groups.tpl.html'){
-           $http({
-               method: 'POST',
-               async:   false,
-               url: $scope.baseUrl+'/user/ajs/getGroups',
-               data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
-               headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
-           }).success(function (result) {
-               $scope.groupList = result;
-           });
-       }
+        if(tab.url == 'groups.tpl.html'){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/getGroups',
+                data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                $scope.groupList = result;
+            });
+        }
+        if(tab.url == 'stats.tpl.html'){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/getUserStat',
+                data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).success(function (result) {
+                $scope.stats = result;
+
+                angular.forEach($scope.stats, function(val, key) {
+                    var highchartsNG = {
+                        options: {
+                            chart: {
+                                type: 'line'
+                            }
+                        },
+                        series: [{
+                            data: val.data,
+                            name : '<div style="color:#555555;">Month</div>',
+                            color : '#F79213'
+                        }],
+                        title: {
+                            text: '<div style="color:#555555;">Last 6 Months</div>'
+                        },
+                        loading: false,
+
+                        xAxis: {
+                            categories: val.mon
+                        },
+
+                        yAxis : {
+                            title: {
+                                text :  '<div style="color:#555555;">Activity</div>',
+                            }
+                        },
+
+                        tooltip : {
+                            valueSuffix : ''
+                        },
+                    }
+
+                    var chartdata = {
+                        sports_id : val.sports_id,
+                        sport_name : val.sport_name,
+                        imag_name : val.imag_name,
+                        activity_no : val.activity_no,
+                        total_dis : val.total_dis,
+                        total_time : val.total_time,
+                        statDet : val.statDet,
+                    }
+
+                    $scope.highchartsNG.push(highchartsNG);
+                    $scope.chartdata.push(chartdata);
+                });
+
+
+            });
+        }
     }
     
     $scope.isActiveTab = function(tabUrl) {
@@ -5362,63 +5448,6 @@ if($scope.sessUser > 0){
 
 	
 
-	$http({
-            method: 'POST',
-			async:   false,
-            url: $scope.baseUrl+'/user/ajs/getUserStat',
-			data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser}),
-			headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } 
-        }).success(function (result) {
-			$scope.stats = result;
-
-			angular.forEach($scope.stats, function(val, key) {
-				var highchartsNG = {
-					options: {
-						chart: {
-							type: 'line'
-						}
-					},
-					series: [{
-						data: val.data,
-						name : '<div style="color:#555555;">Month</div>',
-						color : '#F79213'
-					}],
-					title: {
-						text: '<div style="color:#555555;">Last 6 Months</div>'
-					},
-					loading: false,
-					
-					xAxis: {
-						categories: val.mon
-					},
-					
-					yAxis : {
-						title: {
-							text :  '<div style="color:#555555;">Activity</div>',
-						}
-					},
-					
-					tooltip : {
-						valueSuffix : ''
-					},
-				}
-				
-				var chartdata = {
-					sports_id : val.sports_id,
-					sport_name : val.sport_name,
-					imag_name : val.imag_name,
-					activity_no : val.activity_no,
-					total_dis : val.total_dis,
-					total_time : val.total_time,
-                    statDet : val.statDet,
-				}
-				
-				$scope.highchartsNG.push(highchartsNG);
-				$scope.chartdata.push(chartdata);
-			});
-
-	
-	});
 
     $scope.statDet1 = [{'id':898},{'id':998}];
 
@@ -5445,7 +5474,7 @@ if($scope.sessUser > 0){
     };
 	
 
-
+/*
 	$http({
             method: 'POST',
 			async:   false,
@@ -5456,7 +5485,7 @@ if($scope.sessUser > 0){
 			$scope.frndno = result.frndno;
 			$scope.frnddet = result.frnddet;
     });
-
+*/
 
 	$scope.userDet = function(item){
 		var sphtml = '';
@@ -21000,3 +21029,252 @@ homeControllers1.controller('allnotificationCtrl', function($scope, $http, $rout
 
 
 });
+
+
+
+homeControllers1.controller('eventmapCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,$modal,  uiGmapGoogleMapApi,$timeout,$rootScope,$facebook,$cookieStore ) {
+
+    $('html, body').animate({ scrollTop: 0 }, 1000);
+
+    $scope.sessUser = 0;
+    $scope.isMobileApp = '';
+    $scope.curTime = new Date().getTime();
+    $scope.isExp = 1;
+
+    $scope.viewMoreEvent = 0;
+    $scope.offsetevent = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
+
+    $http({
+        method  : 'POST',
+        async:   false,
+        url     : $scope.baseUrl+'/user/ajs/checkMobile',
+    }) .success(function(data) {
+        $scope.isMobileApp = data;
+    });
+
+
+    $http({
+        method: 'POST',
+        async:   false,
+        url: $scope.baseUrl+'/user/ajs/getCurLocation2',
+        data    : $.param({'sess_user':$scope.sessUser}),
+        headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+    }).success(function (result) {
+        $scope.markerIndex = 0;
+        $scope.allmarker = result.markers;
+        $scope.slicemarker = $scope.allmarker.slice($scope.markerIndex, 10);
+
+            $timeout(function(){
+                $scope.markerpush();
+            },10000);
+
+        $scope.map = {
+            dragZoom: {options: {}},
+            control:{},
+            center: {
+                latitude: result.latitude,
+                longitude: result.longitude
+            },
+            pan: true,
+            zoom: 9,
+            refresh: false,
+            events: {},
+            bounds: {},
+            markers: $scope.slicemarker,
+            openedCanadaWindows:{},
+            onWindowCloseClick: function(gMarker, eventName, model){
+                if(model.dowShow !== null && model.dowShow !== undefined)
+                    return model.doShow = false;
+
+            },
+            markerEvents: {
+                click:function(gMarker, eventName, model){
+                    angular.element( document.querySelector( '#infoWin' ) ).html(model.infoHtml);
+                    model.doShow = true;
+                    $scope.map.openedCanadaWindows = model;
+                }
+            }
+
+        };
+
+        if(typeof($scope.map.markers) != 'undefined'){
+            $scope.map.markers.forEach(function(model){
+                model.closeClick = function(){
+                    model.doShow = false;
+                };
+            });
+        }
+
+
+
+    });
+
+    var promise;
+    $scope.markerpush = function(){
+
+
+        var i;
+        for(i=$scope.markerIndex; i<($scope.markerIndex+10);i++){
+            if(typeof ($scope.allmarker[i]) != 'undefined')
+                $scope.slicemarker.push($scope.allmarker[i]);
+        }
+
+        $scope.markerIndex += 10;
+        console.log($scope.slicemarker.length);
+        if($scope.slicemarker.length < $scope.allmarker.length){
+            promise = $timeout(function(){
+                $scope.markerpush();
+            },5000);
+        }else{
+            console.log('marker load complete');
+        }
+
+    }
+
+
+    $http({
+        method: 'GET',
+        async:   false,
+        url: $scope.baseUrl+'/user/ajs/GetParentSports',
+    }).success(function (result) {
+        $scope.slides = result;
+        $scope.sportsMenu = result;
+    });
+
+
+    /******************************poll [start]*******************************************/
+
+    var modalInstancepoll;
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetpop',
+                scope : $scope
+
+            });
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+
+    $scope.modalClosepoll = function(){
+        modalInstancepoll.dismiss('cancel');
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        if($scope.curansval > 0){
+            $http({
+                method: 'POST',
+                async:   false,
+                url: $scope.baseUrl+'/user/ajs/savevotenew',
+                data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }).success(function (result) {
+                $scope.curansval = 0;
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+            modalInstancepoll.dismiss('cancel');
+
+            modalInstancepoll = $modal.open({
+                animation: true,
+                templateUrl: 'polldetrespop',
+                scope : $scope
+
+            });
+
+        });
+    }
+
+    /******************************poll [end]*******************************************/
+
+
+
+
+
+});
+
+

@@ -162,9 +162,75 @@
 <!--*********************header[end]********************************-->
 
   
-<div id="sp-nav" ng-include="'partials/menu.html'"></div>
+<div id="sp-nav">
 
-  
+	<div class="topcoat-list-container">
+
+		<ul class="topcoat-list">
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/allnotification" ng-click="$spMenu.hide()">Notifications</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/profile/{{sessUser}}" ng-click="$spMenu.hide()">Profile</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/friend-list/{{sessUser}}" ng-click="$spMenu.hide()">Friends</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/connection/{{sessUser}}" ng-click="$spMenu.hide()">Community</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/album/{{sessUser}}" ng-click="$spMenu.hide()">Album</a></li>
+
+			<li ng-hide="sessUser" class="topcoat-list__item"><a href="#/photo" ng-click="$spMenu.hide()">Photo</a></li>
+
+			<li class="topcoat-list__item"><a href="#/video" ng-click="$spMenu.hide()">TORKQ TV</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/routes/{{sessUser}}" ng-click="$spMenu.hide()">View Routes</a></li>
+
+			<li ng-hide="sessUser" class="topcoat-list__item"><a href="#/routes" ng-click="$spMenu.hide()">View Routes</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-event" ng-click="$spMenu.hide()">Add Events</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-group" ng-click="$spMenu.hide()">Add Groups</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/add-route" ng-click="$spMenu.hide()">Add Routes</a></li>
+
+			<li class="topcoat-list__item"><a href="#/forum-listing" ng-click="$spMenu.hide()">Forum</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="javascript:void(0);" ng-click="showdailypoll()" ng-click="$spMenu.hide()">Daily Poll</a></li>
+
+			<li class="topcoat-list__item"><a href="#/eventmap" ng-click="$spMenu.hide()">Event Map</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/mysports/{{sessUser}}" ng-click="$spMenu.hide()">My Sports</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/edit-profile" ng-click="$spMenu.hide()">Update Profile</a></li>
+
+			<li class="topcoat-list__item" style="position: relative; " ng-click="showsportsMenu = !showsportsMenu"><a href="javascript:void(0);">Sports</a>
+
+				<ul class="sub_menu"  ng-show="showsportsMenu">
+
+					<li ng-repeat="n in sportsMenu"><a href="#/sport/{{n.id}}" ng-click="$spMenu.hide()">{{n.sport_name}}</a></li>
+
+				</ul>
+
+			</li>
+
+			<li class="topcoat-list__item"><a href="#/experience" ng-click="$spMenu.hide()">The Experience</a></li>
+
+			<li ng-show="sessUser" class="topcoat-list__item"><a href="#/logout" ng-click="$spMenu.hide()">Logout</a></li>
+
+
+
+
+
+		</ul>
+
+	</div>
+
+
+
+</div>
+
+<div ng-include="'partials/menu1.html'"></div>
+
+
 <div id="sp-page" >
 <div class="experience-wrapper">
 
@@ -186,18 +252,25 @@
 		<h4>Stats</h4>
 		<simple-slider  class="Stats-slider-contain">
 			<div ng-repeat="item in statDet track by item.id" >
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#DFE2E2 !important;">
-  <tr>
-    <th  colspan="4">{{item.sport_name}}</th>
-  </tr>
-  
-  <tr>
-    <td> <div class="strongtext">{{item.total_dis}}</div><div class="spantext">Distance</div></td>
-     <td> <div class="strongtext">{{item.total_time}}</div><div class="spantext">Time</div></td>
-      <td> <div class="strongtext">{{item.activity_no}}</div><div class="spantext">Activities</div></td>
-       <td>  <div class="strongtext">{{item.event_no}}</div><div class="spantext">Events</div></td>
-  </tr>
-</table>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#DFE2E2 !important;">
+					<tr>
+						<th  colspan="4">{{item.sport_name}}</th>
+					</tr>
+					<tr>
+						<td>
+							<div class="strongtext">{{item.total_dis}}</div><div class="spantext">Distance</div>
+						</td>
+						<td>
+							<div class="strongtext">{{item.total_time}}</div><div class="spantext">Time</div>
+						</td>
+						<td>
+							<div class="strongtext">{{item.activity_no}}</div><div class="spantext">Activities</div>
+						</td>
+						<td>
+							<div class="strongtext">{{item.event_no}}</div><div class="spantext">Events</div>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</simple-slider>
 		<div class="empty" ng-show="statDet.length==0">NO ACTIVITIES ADDED.</div>
@@ -321,7 +394,7 @@
 		<div class="clear"></div>
 	</div>
 
-	
+<!--
 	
 	<div  ng-show="sessUser!=currentUser && isLoad==1" class="friends-div">
 		<h3 style="margin-right:0px;">Friends :</h3>
@@ -335,15 +408,14 @@
 			
 				</div>
 			
-		<!--	<div style="height: 55px; width: 1px; float: left;" data-original-title="">&nbsp;</div>-->
-			
+
 			<div class="seemoredivbtn"><a href="javascript:void(0);" class="seemorediv">See More</a></div>
 			
 			<div class="clear"></div>
 		
 		</div>
 
-
+-->
 	
 	<div class="showalbumformobile" ng-show="sessUser!=currentUser && isLoad==1">
 	
@@ -696,7 +768,7 @@
 			</div>
 
 
-			<img src="images/emojis.png" style="display: none;">
+<!--			<img src="images/emojis.png" style="display: none;">-->
 
 
 
