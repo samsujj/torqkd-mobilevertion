@@ -51,7 +51,7 @@
             <img ng-show="evetDet.image" src="{{baseUrl}}/uploads/event_image/thumb/{{evetDet.image}}"  style=" margin: 10px 0; display:block; float:left;  max-width:300px;max-height:300px;" />
             <div style="clear:both;"></div>
             <div style="clear:both;overflow: hidden;"></div>
-            <a ng-show="evetDet.register_url" class="viewgrp" href="{{evetDet.register_url}}" target="_blank" style="background: #f7941e none repeat scroll 0 0;
+            <a ng-show="evetDet.register_url" class="viewgrp" href="javascript:void(0);" target="_blank" style="background: #f7941e none repeat scroll 0 0;
     border: 2px solid #fff;
     box-shadow: none;
     clear: both;
@@ -62,7 +62,7 @@
     font-size: 22px!important;
     margin: 5px auto;
     overflow: hidden;
-    padding: 7px 9px 4px 9px!important;" data-original-title="">Register</a>
+    padding: 7px 9px 4px 9px!important;" ng-click="openregisterUrl(evetDet.register_url)">Register</a>
 
 
             <a class="viewgrp" ng-show="sessUser==evetDet.created_by" href="#/edit-event/{{evetDet.id}}" style="background: #f7941e none repeat scroll 0 0;

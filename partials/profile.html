@@ -228,7 +228,7 @@
 
 </div>
 
-<div ng-include="'partials/menu1.html'"></div>
+<!--<div ng-include="'partials/menu1.html'"></div>-->
 
 
 <div id="sp-page" >
@@ -238,10 +238,10 @@
 		<ul>
 			<li><a href="#/add-route">GPS</a></li>
 			<!--<li ng-show="isMobileApp"><a href="{{baseUrl}}/user/profile/autoImgUp/page/profile/type/photo/sess_id/{{sessUser}}">CAMERA</a></li>-->
-			<li ng-show="isMobileApp"><a href="http://torqkd.com/upload/">CAMERA</a></li>
-			<li ng-show="!isMobileApp"><input type="button" class="browsebtn" value="CAMERA" ngf-drop ngf-select ng-model="statusImage1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*,video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
+			<li ng-hide="!isMobileApp"><a href="http://torqkd.com/upload/">CAMERA</a></li>
+			<li ng-hide="isMobileApp"><input type="button" class="browsebtn" value="CAMERA" ngf-drop ngf-select ng-model="statusImage1" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'image/*,video/*'" ngf-drop-available="dropAvailable" ngf-capture="camera">
 			</li>
-			
+
 		</ul>
     </div>
 	<div class="clear"></div>
@@ -375,19 +375,19 @@
 	<div class="top-banner-contain" ng-show="sessUser!=currentUser  && isLoad==1">
 		<div class="usercontain2">
 			<div class="user-contain2-img">
-				<img src="{{userdet.user_image}}"  alt="" />
+				<img src="{{baseUrl}}/user/ajs1/getiamgeencode?image={{userdet.user_image}}&version={{ctime222}}"  alt="" />
 			</div>
 			
 			<h2>{{userdet.user_name}}</h2>
 			
 			<div class="usericonimage">
-				<img ng-repeat="item in userdet.user_sports track by item.id"  src="{{item.imag_name}}" style="float: none;margin-bottom:4px;"  alt="" />
+				<img ng-repeat="item in userdet.user_sports | limitTo:6 track by item.id"  src="{{item.imag_name}}" style="float: none;margin-bottom:4px;"  alt="" />
 				<a href="#/mysports/{{currentUser}}" class="pliocn" style=" color:#f7931e; text-decoration:none; font-weight:bold; font-size: 20px; display: block;">+</a>
 			</div>
 		</div>
 		
 		<div class="userbanner2">
-			<img src="{{userdet.user_backimage}}" />
+			<img src="{{baseUrl}}/user/ajs1/getiamgeencode?image={{userdet.user_backimage}}&version={{ctime222}}" />
 		</div>
 		
 		
@@ -417,7 +417,7 @@
 
 -->
 	
-	<div class="showalbumformobile" ng-show="sessUser!=currentUser && isLoad==1">
+	<div class="showalbumformobile" style="display: none;" ng-show="sessUser!=currentUser && isLoad==1">
 	
 			<div class="link6">
             
@@ -792,18 +792,30 @@
 	<!--------------------------social tab ['end']--------------------------------------->
 
 <!--<div class="banner2" ng-include="'partials/experience_6.html'"></div>-->
-	<div class="banner2">
+	<div class="banner2" style="width: 90%; margin: 10px auto 0; height: auto;">
+		<div class="adspace">
 		<simple-slider class="gallery2" transition-property="opacity" start-value="0" visible-value="1" end-value="0">
-			<a ng-repeat="item in bannerslides1 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)"><img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" /></a>
+			<!--<a ng-repeat="item in bannerslides1 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)"><img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" /></a>-->
+			<a ng-repeat="item in bannerslides1 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)" adv_id="{{item.id}}" style="position: absolute; top:0;left: 0;">
+				<div class="bannerdiv225" style="background-image: url({{baseUrl}}/user/ajs1/getiamgeencode?image={{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}); background-size: cover; width:100%;"></div>
+			</a>
 		</simple-slider>
+			</div>
 	</div>
 <div style="clear:both;"></div>
 
 <!--<div class="banner3" ng-include="'partials/experience_7.html'"></div>-->
-	<div class="banner3">
-		<simple-slider class="gallery3" transition-property="opacity" start-value="0" visible-value="1" end-value="0">
-			<a ng-repeat="item in bannerslides2 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)"><img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" /></a>
+	<div class="banner3" style="width: 90%; margin: 10px auto 0; height: auto;">
+		<div class="adspace">
+		<simple-slider class="gallery3" transition-property="opacity" start-value="0" visible-value="1" end-value="0" style="height: 100%;">
+			<!--<a ng-repeat="item in bannerslides2 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)">
+			<img src="{{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}" />
+			</a>-->
+			<a ng-repeat="item in bannerslides2 track by item.id" href="javascript:void(0);" ng-click="openBanner(item.banner_url)" adv_id="{{item.id}}">
+				<div class="bannerdiv225" style="background-image: url({{baseUrl}}/user/ajs1/getiamgeencode?image={{baseUrl}}/uploads/advertise_image/thumb/{{item.b_image}}); background-size: cover; width:100%;"></div>
+			</a>
 		</simple-slider>
+			</div>
 	</div>
 
 
@@ -837,6 +849,96 @@
 
 
 
+	 <script type="text/ng-template" id="polldetpop">
+
+		 <div class="popupbox2 popupbox2_mobile">
+
+			 <a href="javascript:void(0)" class="cancelbtn1" ng-click="modalClosepoll()"><img src="images/close.png"></a>
+
+
+
+			 <div class="album-body " style="background: url('{{baseUrl}}/uploads/pollback/thumb/{{curPoll.background_img}}') no-repeat scroll 0 0 / cover rgba(0, 0, 0, 0);">
+
+				 <div class="album-wrpper">
+
+					 <h2>{{curPoll.poll_ques}}</h2>
+
+
+
+					 <div ng-show="curPoll.ans_arr.length" ng-repeat="item in curPoll.ans_arr">
+
+						 <input type="radio" class="redio-box radio_ans" name="radio_vote" ng-disabled="!sessUser" ng-checked="item.ans_id == curPoll.sel_ans" ng-click="changeans(item.ans_id)"> <label>{{item.poll_answer}}</label>
+
+						 <div class="clear"></div>
+
+					 </div>
+
+
+
+					 <div class="vote-btn" >
+
+						 <a href="javascript:void(0);" id="votenext" ng-click="nextpoll()" ng-hide="sessUser" style="display: block;">NEXT</a>
+
+						 <a href="javascript:void(0);" id="vote" ng-click="votepoll(curPoll.ques_id)" ng-show="sessUser" style="display: block;">VOTE</a>
+
+					 </div>
+
+
+
+					 <a href="javascript:void(0);" ng-click="showpollresult(curPoll.ques_id)" style="line-height: 40px; text-align: center; font-size:12px; color:#111; display:block; width: 100px; margin:0px auto; ">View Results</a>
+
+
+
+				 </div>
+
+
+
+			 </div>
+
+		 </div>
+
+	 </script>
+
+
+
+	 <script type="text/ng-template" id="polldetrespop">
+
+		 <div class="popupbox2 popupbox3_mobile">
+
+			 <a href="javascript:void(0)" class="cancelbtn2" ng-click="modalClosepoll()"><img src="images/close.png"></a>
+
+
+
+			 <div class="album-wrpper">
+
+
+
+				 <h4>Question : {{polldetres.ques}}</h4>
+
+
+
+				 <canvas id="pie" class="chart chart-pie"
+
+						 chart-data="data123" chart-labels="labels123" chart-options="options">
+
+				 </canvas>
+
+
+
+				 <div class="labels">
+
+					 <div style="background-color: #F7931E; color: #ffffff;" class="chart-label" ng-repeat="item in label555">{{item.label}} : {{item.voteno}}</div>
+
+				 </div>
+
+			 </div>
+
+		 </div>
+
+	 </script>
+
+
+	 <img src="images/emojis.png" style="display: none;">
 
 	 <span>&copy;TORKQ</span>
 <span>|</span>

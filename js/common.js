@@ -21,6 +21,10 @@ function tracklocation(position) {
        // alert(position.coords.latitude+'-=-'+position.coords.longitude);
     $('#lat').val(position.coords.latitude);
     $('#long').val(position.coords.longitude);
+
+    var d = new Date();
+    var n = d.getTime();
+    console.log(n/1000);
 }
 
 

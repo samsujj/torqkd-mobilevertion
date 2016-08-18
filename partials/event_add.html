@@ -243,17 +243,6 @@
                 </div>
 
 
-                <div class="form-group">
-                    <div class="col-sm-10" style="width:100%; padding:0; margin-bottom:20px;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
-
-                        <select id="Event_state" name="Evet[state]" class = "form-control input10" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
-                            <option value="">SELECT YOUR STATE</option>
-                        </select>
-
-
-                    </div>
-                </div>
-
                 <div class="clear"></div>
 
                 <div class="form-group">
@@ -267,9 +256,29 @@
 
 
 
-                <select style=" margin-bottom:20px;" id="Event_country" name="Event[country]" class = "form-control input10" ng-model = "form.country">
-                    <option value="">UNITED STATES</option>
-                </select>
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0; margin-bottom:20px;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+
+                        <select id="Event_country" name="Evet[country]" class = "form-control input10" validate-on="blur" ng-model = "form.country" required-message="'Country cannot be blank.'" required ng-options="item.name for item in countrylist  track by item.id" ng-change="changeCountry(form.country)">
+                            <option value="">SELECT YOUR COUNTRY</option>
+                        </select>
+
+
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-10" style="width:100%; padding:0; margin-bottom:20px;">      <span style="float: right; display:block; width: 10px; color:#ff0000; margin-top:15px; font-size:16px; ">*</span>
+
+                        <select id="Event_state" name="Evet[state]" class = "form-control input10" validate-on="blur" ng-model = "form.state" required-message="'State cannot be blank.'" required ng-options="item.name for item in statelist  track by item.id">
+                            <option value="">SELECT YOUR STATE</option>
+                        </select>
+
+
+                    </div>
+                </div>
+
 
 
                 <div class="form-group">
