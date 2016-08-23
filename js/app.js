@@ -202,6 +202,14 @@ torqdTest.config(['$routeProvider',
             templateUrl: 'partials/allnotification.html',
             controller: 'allnotificationCtrl'
         }).
+        when('/dailypoll', {
+            templateUrl: 'partials/dailypoll.html',
+            controller: 'dailypollCtrl'
+        }).
+        when('/dailypoll-result/:id', {
+            templateUrl: 'partials/dailypollres.html',
+            controller: 'dailypollresCtrl'
+        }).
       otherwise({
         redirectTo: '/index'
       });

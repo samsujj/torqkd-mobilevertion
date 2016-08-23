@@ -297,15 +297,21 @@ homeControllers1.controller('indexCtrl', function($scope,$http, $rootScope, ngDi
                        data    : $.param({'email':$scope.email,'password':$scope.password}),  // pass in data as strings
                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                    }) .success(function(data) {
-                       console.log(data);
-                       if(typeof (data.id) != 'undefined'){
+                       if(typeof (data.userdetails) != 'undefined' && typeof (data.userdetails.id) != 'undefined'){
                            loggedInStatus.setStatus("true");
                            $cookieStore.put('login_email1',$scope.email);
                            $cookieStore.put('login_password1',$scope.password);
 
-                           $cookieStore.put('rootuserdet',data);
+                           $cookieStore.put('rootuserdet',data.userdetails);
 
-                           $location.path('/profile/'+data.id);
+                           $cookieStore.put('statusList1',data.statusdetail.status[0]);
+                           $cookieStore.put('statusList2',data.statusdetail.status[1]);
+                           $cookieStore.put('statusList3',data.statusdetail.status[2]);
+                           $cookieStore.put('statusList4',data.statusdetail.status[3]);
+                           $cookieStore.put('statusList5',data.statusdetail.status[4]);
+                           $cookieStore.put('statDet',data.statusdetail.statdet);
+
+                           $location.path('/profile/'+data.userdetails.id);
                        }else{
                            $location.path('/home');
                        }
@@ -589,14 +595,23 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(data) {
             console.log(data);
-            if(typeof (data.id) != 'undefined'){
+            if(typeof (data.userdetails) != 'undefined' && typeof (data.userdetails.id) != 'undefined'){
                 loggedInStatus.setStatus("true");
                 $cookieStore.put('login_email1',$scope.form.email);
                 $cookieStore.put('login_password1',$scope.form.password);
 
-                $cookieStore.put('rootuserdet',data);
+                $cookieStore.put('rootuserdet',data.userdetails);
 
-                $location.path('/profile/'+data.id);
+
+                $cookieStore.put('statusList1',data.statusdetail.status[0]);
+                $cookieStore.put('statusList2',data.statusdetail.status[1]);
+                $cookieStore.put('statusList3',data.statusdetail.status[2]);
+                $cookieStore.put('statusList4',data.statusdetail.status[3]);
+                $cookieStore.put('statusList5',data.statusdetail.status[4]);
+                $cookieStore.put('statDet',data.statusdetail.statdet);
+
+
+                $location.path('/profile/'+data.userdetails.id);
             }
         }).error(function (result) {
             $scope.chkLoginfunc();
@@ -622,14 +637,22 @@ homeControllers1.controller('loginCtrl',function($scope,$http,$location,$cookieS
            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
        }) .success(function(data) {
             $rootScope.stateIsLoading = false;
-            if(typeof (data.id) != 'undefined'){
+            if(typeof (data.userdetails) != 'undefined' && typeof (data.userdetails.id) != 'undefined'){
                 loggedInStatus.setStatus("true");
                 $cookieStore.put('login_email1',$scope.form.email);
                 $cookieStore.put('login_password1',$scope.form.password);
 
-                $cookieStore.put('rootuserdet',data);
+                $cookieStore.put('rootuserdet',data.userdetails);
 
-                $location.path('/profile/'+data.id);
+                $cookieStore.put('statusList1',data.statusdetail.status[0]);
+                $cookieStore.put('statusList2',data.statusdetail.status[1]);
+                $cookieStore.put('statusList3',data.statusdetail.status[2]);
+                $cookieStore.put('statusList4',data.statusdetail.status[3]);
+                $cookieStore.put('statusList5',data.statusdetail.status[4]);
+                $cookieStore.put('statDet',data.statusdetail.statdet);
+
+
+                $location.path('/profile/'+data.userdetails.id);
             }else{
 				   $scope.msgFlag = true;
 			   }
@@ -1957,14 +1980,22 @@ homeControllers1.controller('completeCtrl', function($scope, $http, $timeout, $c
                 headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
             }) .success(function(data) {
                 console.log(data);
-                if(typeof (data.id) != 'undefined'){
+                if(typeof (data.userdetails) != 'undefined' && typeof (data.userdetails.id) != 'undefined'){
                     loggedInStatus.setStatus("true");
                     $cookieStore.put('login_email1',$scope.email);
                     $cookieStore.put('login_password1',$scope.password);
 
-                    $cookieStore.put('rootuserdet',data);
+                    $cookieStore.put('rootuserdet',data.userdetails);
 
-                    $location.path('/profile/'+data.id);
+                    $cookieStore.put('statusList1',data.statusdetail.status[0]);
+                    $cookieStore.put('statusList2',data.statusdetail.status[1]);
+                    $cookieStore.put('statusList3',data.statusdetail.status[2]);
+                    $cookieStore.put('statusList4',data.statusdetail.status[3]);
+                    $cookieStore.put('statusList5',data.statusdetail.status[4]);
+                    $cookieStore.put('statDet',data.statusdetail.statdet);
+
+
+                    $location.path('/profile/'+data.userdetails.id);
                 } else{
                     //window.location.href=$scope.baseUrl+'/torqkd_demo/#/home';
                     $location.path('/home');
@@ -4289,7 +4320,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 
     $scope.statusLoad = true;
 
-    if(typeof ($cookieStore.get('statusList1')) != 'undefined' || typeof ($cookieStore.get('statusList2')) != 'undefined' || typeof ($cookieStore.get('statusList3')) != 'undefined'  || typeof ($cookieStore.get('statusList4')) != 'undefined' || typeof ($cookieStore.get('statusList5')) != 'undefined'){
+    if((typeof ($cookieStore.get('statusList1')) != 'undefined' || typeof ($cookieStore.get('statusList2')) != 'undefined' || typeof ($cookieStore.get('statusList3')) != 'undefined'  || typeof ($cookieStore.get('statusList4')) != 'undefined' || typeof ($cookieStore.get('statusList5')) != 'undefined') && (typeof ($cookieStore.get('statDet')) != 'undefined')){
         $scope.statusLoad = false;
         if(typeof ($cookieStore.get('statusList1')) != 'undefined')
             $scope.statusList.push($cookieStore.get('statusList1'));
@@ -4302,9 +4333,13 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         if(typeof ($cookieStore.get('statusList5')) != 'undefined')
             $scope.statusList.push($cookieStore.get('statusList5'));
 
+        $scope.statDet = $cookieStore.get('statDet');
+
+        console.log($cookieStore.get('statDet'))
+
         $timeout(function(){
             $scope.getStatus123();
-        },5000)
+        },10)
     }else{
         $timeout(function(){
             $scope.getStatus123();
@@ -4316,17 +4351,19 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
         $http({
             method: 'POST',
             async:   false,
-            url: $scope.baseUrl+'/user/ajs/getStatus',
+            url: $scope.baseUrl+'/user/ajs/getStatusnStat',
             data    : $.param({'userid':$routeParams.userid,'sess_user':$scope.sessUser,'offset':0}),
             headers : { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).success(function (result) {
             $scope.statusLoad = false;
             $scope.statusList = result.status;
+            $scope.statDet = result.statdet;
             $cookieStore.put('statusList1',result.status[0]);
             $cookieStore.put('statusList2',result.status[1]);
             $cookieStore.put('statusList3',result.status[2]);
             $cookieStore.put('statusList4',result.status[3]);
             $cookieStore.put('statusList5',result.status[4]);
+            $cookieStore.put('statDet',result.statdet);
             /*if(result.totalCount > $scope.statusList.length){
              $scope.viewMore = 1;
              $scope.offset = 5;
@@ -4348,7 +4385,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
 
 
 
-
+/*
     if(typeof ($cookieStore.get('statdet')) != 'undefined'){
         $scope.statDet = $cookieStore.get('statdet');
     }else{
@@ -4369,7 +4406,7 @@ homeControllers1.controller('profileCtrl', function($scope,$routeParams,$modal, 
             $scope.statDet = result;
             $cookieStore.put('statdet',result);
         });
-    }
+    }*/
 
 
     $scope.openBanner = function(url){
@@ -16661,6 +16698,8 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
             $scope.profileImgName = response.data;
 
             var ctime = (new Date).getTime();
+            $('.progress').addClass('ng-hide');
+            $scope.profileImg = $scope.baseUrl+'/uploads/user_image/'+response.data+'?version='+ctime;
 
             $http({
                 method  : 'POST',
@@ -16731,6 +16770,9 @@ homeControllers1.controller('editProfileCtrl', function($scope, $http, $routePar
             $scope.coverImgName = response.data;
 
             var ctime = (new Date).getTime();
+
+            $('.progress').addClass('ng-hide');
+            $scope.coverImg = $scope.baseUrl+'/uploads/user_image/background/'+response.data+'?version='+ctime;
 
             $http({
                 method  : 'POST',
@@ -21522,6 +21564,179 @@ homeControllers1.controller('eventmapCtrl', function($scope, $http,$interval,ngD
 
 
 
+
+});
+
+
+homeControllers1.controller('dailypollCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,$modal,  uiGmapGoogleMapApi,$timeout,$rootScope,$facebook,$cookieStore ) {
+
+    var modalInstancepoll;
+
+    $('html, body').animate({ scrollTop: 0 }, 1000);
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $timeout(function () {
+        $scope.showdailypoll();
+    });
+
+    $scope.sessUser = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
+    $scope.showdailypoll = function(){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolldetnew',
+            data    : $.param({'user_id':$scope.sessUser}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            $scope.totalpoll = result.length;
+            $scope.allpollarr = result;
+            $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+
+        }).error(function (result) {
+            $scope.showdailypoll();
+        });
+    }
+
+    $scope.nextpoll = function(){
+        if($scope.curpollindex < ($scope.totalpoll-1)){
+            $scope.curpollindex = $scope.curpollindex+1;
+        }else{
+            $scope.curpollindex = 0;
+        }
+
+        $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+
+        $scope.curansval = 0;
+    }
+
+    $scope.votepoll = function(ques_id){
+
+        if($scope.curansval > 0 || $scope.curPoll.sel_ans > 0){
+
+            if($scope.curansval > 0){
+
+                $http({
+                    method: 'POST',
+                    async:   false,
+                    url: $scope.baseUrl+'/user/ajs/savevotenew',
+                    data    : $.param({'user_id':$scope.sessUser,'poll_id':ques_id,'ans_id':$scope.curansval}),  // pass in data as strings
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                }).success(function (result) {
+                    $scope.allpollarr[$scope.curpollindex].sel_ans = $scope.curansval;
+                    if($scope.curpollindex < ($scope.totalpoll-1)){
+                        $scope.curpollindex = $scope.curpollindex+1;
+                    }else{
+                        $scope.curpollindex = 0;
+                    }
+                    $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+                    $scope.curansval = 0;
+                }).error(function (result) {
+                    if($scope.curpollindex < ($scope.totalpoll-1)){
+                        $scope.curpollindex = $scope.curpollindex+1;
+                    }else{
+                        $scope.curpollindex = 0;
+                    }
+
+                    $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+                });
+            }else{
+                if($scope.curpollindex < ($scope.totalpoll-1)){
+                    $scope.curpollindex = $scope.curpollindex+1;
+                }else{
+                    $scope.curpollindex = 0;
+                }
+
+                $scope.curPoll = $scope.allpollarr[$scope.curpollindex];
+            }
+
+        }else{
+            ngDialog.open({
+                template: '<div style="text-align:center; font-family: veneerregular; font-size:24px;">Please Select An Answer</div>',
+                plain:true,
+                showClose:true,
+                closeByDocument: true,
+                closeByEscape: true
+            });
+        }
+
+    }
+
+    $scope.changeans = function(curans){
+        $scope.curansval = curans;
+    }
+
+
+});
+
+homeControllers1.controller('dailypollresCtrl', function($scope, $http,$interval,ngDialog,$sce,VG_VOLUME_KEY,$window,$modal,  uiGmapGoogleMapApi,$timeout,$rootScope,$facebook,$cookieStore,$routeParams ) {
+
+    var modalInstancepoll;
+
+    $('html, body').animate({ scrollTop: 0 }, 1000);
+
+    $scope.allpollarr = [];
+    $scope.curpollindex = 0;
+    $scope.totalpoll = 0;
+    $scope.curansval = 0;
+
+    $scope.pollId = $routeParams.id;
+
+    $timeout(function () {
+        $scope.showpollresult($scope.pollId);
+    });
+
+    $scope.sessUser = 0;
+
+    if(typeof ($cookieStore.get('rootuserdet')) != 'undefined'){
+        $scope.userDet = $cookieStore.get('rootuserdet');
+        $scope.sessUser = $scope.userDet.id;
+    }
+
+    $scope.showpollresult = function(ques_id){
+        $http({
+            method: 'POST',
+            async:   false,
+            url: $scope.baseUrl+'/user/ajs/getpolllllResultnew',
+            data    : $.param({'poll_id':ques_id}),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).success(function (result) {
+            console.log(result);
+
+            $scope.polldetres = result;
+
+            $scope.labels123 = [];
+            $scope.data123 = [];
+            $scope.label555 = [];
+
+
+            angular.forEach($scope.polldetres.answer,function(value,key){
+                $scope.labels123.push(value);
+                $scope.data123.push($scope.polldetres.voteno[key]);
+
+                var labelobj = {
+                    'label' : value,
+                    'voteno' : $scope.polldetres.voteno[key]
+                }
+
+                $scope.label555.push(labelobj);
+
+            });
+
+        }).error(function (result) {
+            $scope.showpollresult(ques_id);
+        });
+    }
 
 });
 
